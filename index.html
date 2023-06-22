@@ -307,12 +307,14 @@
       <ul id="toc" class="toc-list-h1">
           <li>
             <a href="#opit" class="toc-h1 toc-link" data-title="OPIT">OPIT</a>
-          </li>
-          <li>
-            <a href="#introduction" class="toc-h1 toc-link" data-title="Introduction">Introduction</a>
-          </li>
-          <li>
-            <a href="#setup" class="toc-h1 toc-link" data-title="Setup">Setup</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#introduction" class="toc-h2 toc-link" data-title="Introduction">Introduction</a>
+                  </li>
+                  <li>
+                    <a href="#setup" class="toc-h2 toc-link" data-title="Setup">Setup</a>
+                  </li>
+              </ul>
           </li>
       </ul>
         <ul class="toc-footer">
@@ -326,8 +328,8 @@
         <h1 id='opit'>OPIT</h1>
 <p>OPit Lan for Windows allows for a Windows device (PC, laptop) to send commands (Payment Request, Settlement, Reports etc) to an Odero Pos terminal.<br/>
 The communication between the two devices is performed through TCP/IP sockets.<br/>
-Both devices have to be connected to the same router / wifi network.<br/></p>
-<h1 id='introduction'>Introduction</h1>
+Both devices have to be connected to the same router / wifi network.</p>
+<h2 id='introduction'>Introduction</h2>
 <p>Welcome to OPIT Lan 0.2.0 for Windows. Please follow the below instructions for setup:<br/>
 1. To use OPIT Lan you will need a dedicated router with DHCP off and statics ips set up on the client tablet and TR400 (this is important)<br/>
 Tutorial on how to set up static ip on Windows can be found <a href="https://pureinfotech.com/set-static-ip-address-windows-10">here</a><br/>
@@ -336,8 +338,8 @@ Tutorial on how to set up static ip on Windows can be found <a href="https://pur
 4. Install app-lan-host-release.apk on TR400 and OpitDesktopSampleApp on Windows.<br/>
 5. Start the OPIT Lan app on TR400<br/>
 6. Start Sample app on windows.<br/>
-7. Send payment request.<br/></p>
-<h1 id='setup'>Setup</h1>
+7. Send payment request.</p>
+<h2 id='setup'>Setup</h2>
 <ol>
 <li>Download OPIT Lan <a href="https://github.com/OderoPos/opit-windows/releases/tag/0.2.0">0.2.0</a> for Windows and unzip the archive.<br/></li>
 <li>Copy archive contents inside the sample project folder.<br/></li>
@@ -348,7 +350,7 @@ in the popup press the 3 dots (...) button from the right -&gt; Choose headers f
 <li>Project -&gt; Properties -&gt; Linker -&gt; Input -&gt; Additional Dependencies -&gt; click on the dropdown -&gt; 
 Edit -&gt; OpitDesktop.lib -&gt; Ok<br/></li>
 <li>Project -&gt; Properties -&gt; Linker -&gt; General -&gt; Additional Library Directories -&gt; click on the dropdown -&gt; Edit -&gt; 
-in the popup press the 3 dots (...) button from the right -&gt; select x64\Debug folder from opit-desktop project<br/></li>
+in the popup press the 3 dots (...) button from the right -&gt; select x64\Debug folder from opit-desktop project</li>
 </ol>
 
       </div>
