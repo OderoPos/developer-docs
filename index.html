@@ -367,9 +367,9 @@ Below you can find the OPit Lan for Windows diagram.
   <li>Client app sends payment request via opened tcp/ip socket and is received on the Odero POS terminal.</li>
   <li>Client app terminates the socket connection.</li>
   <li>Client app receives onDisconnected callback.</li>
-  <li>Odero POS terminal switchs from wifi to gsm data as required bythe bank app in order to perform the transaction on secure connection. Also the host socket server is shut down.</li>
+  <li>Odero POS terminal switchs from wifi to gsm data as required by the bank app in order to perform the transaction on secure connection. Also the host socket server is shut down.</li>
   <li>Odero POS terminal host awaits for response from the bank app.</li>
-  <li>Client app sends connnection ping requests attempting to connect to the socket server on the host device. These attempts fail at this point because the socket server is shud down as described in previous step.</li>
+  <li>Client app sends connnection ping requests attempting to connect to the socket server on the host device. These attempts fail at this point because the socket server is shut down as described in previous step.</li>
   <li>Host app receives response from the bank app, network switch from gsm to wifi occurs and the socket server is started.</li>
   <li>Client app connection request is successful.</li>
   <li>Host app on Odero POS terminal sends the response from the bank app and is received on the client app (windows)</li>
