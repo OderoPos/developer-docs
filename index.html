@@ -392,19 +392,15 @@
     <span class="n">url</span> <span class="s1">'https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/'</span>
 <span class="o">}</span>
 </code></pre></div>
-<p>And also in <code>app/build.gradle</code> the actual dependency should be added: <code>implementation &#39;PaymentGateway:pgw-launcher:1.0.8&#39;</code></p>
+<p>And also in <code>app/build.gradle</code> the actual dependency should be added: <code>implementation &#39;PaymentGateway:pgw-launcher:1.0.9&#39;</code></p>
 
 <blockquote>
 <p>build.gradle</p>
 </blockquote>
 <div class="highlight"><pre class="highlight gradle tab-gradle"><code><span class="k">dependencies</span> <span class="o">{</span>
-<span class="n">implementation</span> <span class="s1">'PaymentGateway:pgw-launcher:1.0.8'</span>
+<span class="n">implementation</span> <span class="s1">'PaymentGateway:pgw-launcher:1.0.9'</span>
 <span class="o">}</span>
-</code></pre></div>
-<ul>
-<li>the pgw-launcher should also add the common lib, if not please add the dependency <code>implementation (&#39;PaymentGateway:common:1.0.8&#39;)</code></li>
-</ul>
-<h3 id='request-payment'>Request payment</h3>
+</code></pre></div><h3 id='request-payment'>Request payment</h3>
 <p>The payment request is done via an ActivityResultLauncher contract.</p>
 
 <blockquote>
@@ -864,9 +860,38 @@ A list with all the integrated apps on the ECR330 will be displayed.</p>
        <span class="p">}</span>
    <span class="p">},</span>
 <span class="p">)</span>
-</code></pre></div>
-<p><TODO: create a sale example> </p>
-<h2 id='sending-a-card-payment'>Sending a card payment</h2>
+
+<span class="c1">//Example of a sale fiscal command</span>
+<span class="nc">FiscalCommand</span><span class="p">.</span><span class="nc">Sale</span><span class="p">(</span>
+    <span class="n">sellerInfo</span> <span class="p">=</span> <span class="nc">SellerInfo</span><span class="p">(</span>
+        <span class="n">cashierName</span> <span class="p">=</span> <span class="s">"John Doe"</span><span class="p">,</span>
+        <span class="n">posNumber</span> <span class="p">=</span> <span class="s">"123413"</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">products</span> <span class="p">=</span> <span class="nf">listOf</span><span class="p">(</span>
+        <span class="nc">FiscalProduct</span><span class="p">(</span>
+            <span class="n">productName</span> <span class="p">=</span> <span class="s">"Product 1"</span><span class="p">,</span>
+            <span class="n">unit</span> <span class="p">=</span> <span class="s">"kg"</span><span class="p">,</span>
+            <span class="n">quantity</span> <span class="p">=</span> <span class="s">"1"</span><span class="p">,</span>
+            <span class="n">pricePerUnit</span> <span class="p">=</span> <span class="s">"10,5"</span><span class="p">,</span>
+            <span class="n">vatId</span> <span class="p">=</span> <span class="s">"B"</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="nc">FiscalProduct</span><span class="p">(</span>
+            <span class="n">productName</span> <span class="p">=</span> <span class="s">"Product 2"</span><span class="p">,</span>
+            <span class="n">unit</span> <span class="p">=</span> <span class="s">"kg"</span><span class="p">,</span>
+            <span class="n">quantity</span> <span class="p">=</span> <span class="s">"1"</span><span class="p">,</span>
+            <span class="n">pricePerUnit</span> <span class="p">=</span> <span class="s">"15,5"</span><span class="p">,</span>
+            <span class="n">vatId</span> <span class="p">=</span> <span class="s">"B"</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">),</span>
+    <span class="n">payments</span> <span class="p">=</span> <span class="nf">listOf</span><span class="p">(</span>
+        <span class="nc">FiscalPayment</span><span class="p">(</span>
+            <span class="n">paymentMethod</span> <span class="p">=</span> <span class="nc">FiscalPayment</span><span class="p">.</span><span class="nc">PaymentMethod</span><span class="p">.</span><span class="nc">Card</span><span class="p">,</span>
+            <span class="n">amount</span> <span class="p">=</span> <span class="s">"26"</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">),</span>
+    <span class="n">cifNumber</span> <span class="p">=</span> <span class="s">"43511483"</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div><h2 id='sending-a-card-payment'>Sending a card payment</h2>
 <p>Please check out <a href="https://developer.pos.odero.ro/#paymentgateway">PaymentGateway</a> docs</p>
 
       </div>
