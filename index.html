@@ -780,6 +780,10 @@ A list with all the integrated apps on the ECR330 will be displayed.</p>
 </code></pre></div>
 <p>After that, the app will be displayed on the main screen of the ECR330 app.</p>
 <h2 id='fiscal-commands'>Fiscal commands</h2>
+<p>libVersion = Check latest version <a href="https://ro-artifactory.devtokeninc.com/ui/native/PublicLibraries/X330/integrationLibs/fiscal">here</a></p>
+
+<p><strong><em>NOTE:</em></strong>  For best compatibility <code>libVersion</code> should match ECR version installed</p>
+
 <blockquote>
 <p>Dependencies</p>
 </blockquote>
@@ -789,14 +793,43 @@ A list with all the integrated apps on the ECR330 will be displayed.</p>
 <span class="o">}</span>
 
 <span class="c1">//in app.gradle</span>
-<span class="n">implementation</span> <span class="s1">'X330.integrationLibs:fiscal:1.3.42'</span>
+<span class="n">implementation</span> <span class="err">'</span><span class="n">X330</span><span class="o">.</span><span class="na">integrationLibs</span><span class="o">:</span><span class="nl">fiscal:</span><span class="n">$libVersion</span>
 </code></pre></div>
 <p>Use <code>EcrCommandExecutor</code> object for sending commands to the ECR and receiving the result.</p>
 
 <p>The fiscal commands are sent to the ECR using the <code>executeFiscalCommand</code> method. The result can be received
- as a <code>Flow</code> or if you want to receiveas a <code>EcrCommandResultListener</code>.</p>
+as a <code>Flow</code> or if you want to receive as a <code>EcrCommandResultListener</code>.</p>
 
 <p>The user screen commands follow the same <code>flow</code>, <code>listener</code> pattern.</p>
+
+<p>Type of fiscal commands</p>
+
+<p><code>SetDateTime</code><br>
+<code>SetCompanyData</code><br>
+<code>GetCompanyData</code><br>
+<code>SetVATRates</code><br>
+<code>GetVATRates</code><br>
+<code>Fiscalise</code><br>
+<code>InitElectronicJournal</code><br>
+<code>TechnicalReport</code><br>
+<code>ZReport</code><br>
+<code>XReport</code><br>
+<code>InitJournal</code><br>
+<code>Journal</code><br>
+<code>JournalExport</code><br>
+<code>XJournal</code><br>
+<code>CustomerData</code><br>
+<code>PeriodicReport</code><br>
+    - <code>ByDate</code><br>
+    - <code>ByZ</code><br>
+<code>XMLReport</code><br>
+<code>GetDailyTotals</code><br>
+<code>GetStatus</code><br>
+<code>GetSoftwareVersion</code><br>
+<code>LoadProfile</code><br>
+<code>ResetFiscalMemory</code><br>
+<code>Sale</code><br>
+<code>CashOperation</code>  </p>
 
 <blockquote>
 <p>Fiscal commands</p>
