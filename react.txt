@@ -1,0 +1,464 @@
+React Native Setup Guide
+
+This guide provides step-by-step instructions for setting up a React Native application using @react-native-community/cli and integrating a native module library.
+
+1. Creating a React Native Application
+
+To create a new React Native project, execute the following command:
+
+npx @react-native-community/cli init TestReactOderoInApp
+
+This will generate a project with both ios and android directories. For additional details on React Native, refer to the official documentation: React Native Docs
+
+2. Creating a Library for Native Modules
+
+To create a new library for native modules, run:
+
+npx create-react-native-library@latest <lib_name>
+
+For this guide, we will use odero-pay-sdk. After executing the command, you will be prompted with several options:
+
+✔ Looks like you're under a project folder. Do you want to create a local library? … yes
+✔ Where do you want to create the library? … modules/odero-pay-sdk
+✔ What is the name of the npm package? … react-native-odero-pay-sdk
+✔ What is the description for the package? … odero-pay-sdk
+✔ What type of library do you want to develop? › Legacy Native Module
+✔ Which languages do you want to use? › Kotlin & Swift
+✔ Project created successfully at modules/odero-pay-sdk!
+
+3. Configuring Dependencies
+
+Android Configuration
+
+In build.gradle (modules/odero-pay-sdk/android/src/main), add the following repository:
+
+maven {
+    url 'https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/'
+}
+
+Then, add the following implementation dependency:
+
+implementation "Odero.oderopaysdk:oderopaysdkandroid:0.0.1"
+
+iOS Configuration
+
+In ios/Podfile, add:
+
+pod 'OderoPaySDKIOS', :podspec => 'https://raw.githubusercontent.com/OderoPos/react-odero-mobilesdk/main/OderoPaySDKIOS/0.1.4/OderoPaySDKIOS.podspec'
+
+Additionally, update the podspec file located at modules/odero-pay-sdk/OderoPaySdk.podspec:
+
+s.dependency "OderoPaySDKIOS", "0.1.4"
+
+4. Exporting the Module
+
+Add the following line to index.tsx (modules/odero-pay-sdk/src/index.tsx):
+
+module.exports = { OderoPaySdk };
+
+5. Bridging Implementation	Now we will setup bridging code, this way we will be able to use native code (swift and kotlin) in javascripta. Android modules/odero-pay-sdk/android/src/main/java/com/oderopaysdk/OderoPaySdkModule.kt
+
+package com.oderopaysdk
+
+import android.app.Activity
+import android.content.Intent
+import android.graphics.Color
+import androidx.core.graphics.toColor
+import com.facebook.react.bridge.Arguments
+import com.facebook.react.bridge.BaseActivityEventListener
+import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.bridge.ReactContextBaseJavaModule
+import com.facebook.react.bridge.ReactMethod
+import com.facebook.react.bridge.ReadableMap
+import com.facebook.react.bridge.WritableNativeMap
+import com.facebook.react.modules.core.DeviceEventManagerModule
+import com.oderopaysdk.OderoPaySdk
+import com.oderopaysdk.PaymentCallback
+import com.oderopaysdk.appearance.BillingInformation
+import com.oderopaysdk.appearance.CardDetails
+import com.oderopaysdk.appearance.CardMeta
+import com.oderopaysdk.appearance.Field
+import com.oderopaysdk.appearance.PaymentButton
+import com.oderopaysdk.appearance.PaymentInfo
+
+class OderoPaySdkModule(private val reactContext: ReactApplicationContext) :
+    ReactContextBaseJavaModule(reactContext) {
+    private val LOAD_PAYMENT_DATA_REQUEST_CODE = 101
+    private val SCREEN_3DS_REQUEST_CODE = 102
+
+    private val OderoPaySdk by lazy {
+        currentActivity?.let {
+            OderoPaySdk(
+                it,
+                LOAD_PAYMENT_DATA_REQUEST_CODE,
+                SCREEN_3DS_REQUEST_CODE
+            )
+        }
+    }
+    private var eventEmitter: DeviceEventManagerModule.RCTDeviceEventEmitter? = null
+
+    init {
+        reactContext.addActivityEventListener(object : BaseActivityEventListener() {
+            override fun onActivityResult(
+                activity: Activity,
+                requestCode: Int,
+                resultCode: Int,
+                intent: Intent?
+            ) {
+                when (requestCode) {
+                    LOAD_PAYMENT_DATA_REQUEST_CODE -> {
+                        OderoPaySdk?.handleGooglePayActivityResult(resultCode, intent)
+                    }
+
+                    SCREEN_3DS_REQUEST_CODE -> {
+                        OderoPaySdk?.handle3DSScreenActivityResult(resultCode, intent)
+                    }
+                }
+            }
+        })
+    }
+
+    override fun initialize() {
+        eventEmitter =
+            reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+        super.initialize()
+    }
+
+    override fun getName(): String {
+        return NAME
+    }
+
+    @ReactMethod
+    fun addListener(eventName: String) {
+        OderoPaySdk?.addListener(object : PaymentCallback {
+            override fun receiveError(
+                errorString: String?,
+                message: String?,
+                detailedMessage: String?
+            ) {
+                sendEvent(
+                    eventName, errorString = errorString,
+                    message = message, detailedMessage = detailedMessage
+                )
+            }
+
+            override fun receiveStatus(result: String) {
+                sendEvent(eventName, status = result)
+            }
+        })
+    }
+
+    private fun sendEvent(
+        eventName: String,
+        status: String? = null,
+        errorString: String? = null,
+        message: String? = null,
+        detailedMessage: String? = null
+    ) {
+        val params = Arguments.createMap().apply {
+            status?.let {
+                putString("status", status)
+            }
+            errorString?.let {
+                message?.let {
+                    detailedMessage?.let {
+                        putMap("error", WritableNativeMap().apply {
+                            putString("errorString", errorString)
+                            putString("message", message)
+                            putString("detailedMessage", detailedMessage)
+                        })
+                    }
+                }
+            }
+        }
+        eventEmitter?.emit(eventName, params)
+    }
+
+
+    @ReactMethod
+    fun removeListeners() {
+        OderoPaySdk?.removeListeners()
+    }
+
+    @ReactMethod
+    fun closePaymentSheet() {
+        OderoPaySdk?.closePaymentSheet()
+    }
+
+    @ReactMethod
+    @JvmOverloads
+    fun showPaymentSheet(
+        sessionId: String,
+        appearance: ReadableMap,
+        applePayMerchant: String? = null
+    ) {
+        OderoPaySdk?.let { sdk ->
+            val background = appearance.getString("background")?.let {
+                Color.parseColor(it).toColor()
+            }
+            val borderWidth = appearance.getInt("borderWidth")
+            val borderColor =
+                appearance.getString("borderColor")?.let { Color.parseColor(it).toColor() }
+            val cardDetails = getCardDetails(appearance)
+            val billingInformation = getBillingInformation(appearance)
+
+            val paymentInfo =
+                PaymentInfo(background, borderWidth, borderColor, cardDetails, billingInformation)
+            sdk.showPaymentSheet(sessionId, paymentInfo)
+        }
+    }
+
+    private fun getBillingInformation(appearance: ReadableMap?): BillingInformation? {
+        return appearance?.getMap("billingInformationComponent")?.let { billing ->
+            BillingInformation(
+                billing.getString("title"),
+                billing.getInt("titleSize"),
+                billing.getString("titleColor")?.let { Color.parseColor(it).toColor() },
+                getField(billing.getMap("email")),
+                getField(billing.getMap("phone")),
+                getField(billing.getMap("country")),
+                getField(billing.getMap("city")),
+                getField(billing.getMap("address"))
+            )
+        }
+    }
+
+    private fun getCardDetails(appearance: ReadableMap?): CardDetails? {
+        return appearance?.getMap("cardDetailsComponent")?.let { cardDetails ->
+            CardDetails(
+                cardDetails.getString("title"),
+                cardDetails.getInt("titleSize"),
+                cardDetails.getString("titleColor")?.let { Color.parseColor(it).toColor() },
+                getField(cardDetails.getMap("cardNumber")),
+                getField(cardDetails.getMap("expirationDate")),
+                getField(cardDetails.getMap("securityCode")),
+                getField(cardDetails.getMap("cardHolder")),
+                cardDetails.getMap("saveCard")?.let { cardMeta ->
+                    CardMeta(
+                        cardMeta.getString("color")?.let { Color.parseColor(it).toColor() },
+                        cardMeta.getString("title"),
+                        cardMeta.getInt("titleSize"),
+                        cardMeta.getString("titleColor")?.let { Color.parseColor(it).toColor() }
+                    )
+                },
+                cardDetails.getMap("paymentButton")?.let { paymentButton ->
+                    PaymentButton(
+                        paymentButton.getString("title")
+                    )
+                }
+            )
+        }
+    }
+
+    private fun getField(appearance: ReadableMap?): Field? {
+        return appearance?.let {
+            Field(
+                it.getString("hint"),
+                it.getInt("hintSize"),
+                it.getString("hintError"),
+                it.getString("hintColor")?.let { Color.parseColor(it).toColor() }
+            )
+        }
+    }
+
+    companion object {
+        const val NAME = "OderoPaySdk"
+    }
+}	
+
+modules/odero-pay-sdk/android/src/main/java/com/oderopaysdk/OderoPaySdkPackage.kt
+class OderoPaySdkPackage : ReactPackage {
+    override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> {
+        return listOf(OderoPaySdkModule(reactContext))
+    }
+
+    override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
+        return listOf()
+    }
+}
+
+B. iOS 
+modules/odero-pay-sdk/ios/OderoPaySdk.mm
+#import <React/RCTBridgeModule.h>
+#import <React/RCTEventEmitter.h>
+
+@interface RCT_EXTERN_MODULE(OderoPaySdk, RCTEventEmitter)
+
+RCT_EXTERN_METHOD(showPaymentSheet:(NSString *)sessionId
+        appearance:(NSDictionary *)appearance
+        applePayMerchantId:(NSString *)applePayMerchantId)
+
+RCT_EXTERN_METHOD(closePaymentSheet)
+
++ (BOOL)requiresMainQueueSetup
+{
+    return YES;
+}
+
+@end
+
+modules/odero-pay-sdk/ios/OderoPaySdk-Bridging-Header.h
+
+#import <React/RCTBridgeModule.h>
+#import <React/RCTViewManager.h>
+
+modules/odero-pay-sdk/ios/OderoPaySdk.swift
+
+import Foundation
+import React
+import OderoPaySDKIOS
+
+@objc(OderoPaySdk)
+class OderoPaySdk: RCTEventEmitter {
+    private let oderoPaySDK = OderoPaySDK()
+    private var hasListeners = false
+
+    override init() {
+        super.init()
+        // Observe the PaymentEvent from NotificationCenter
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handlePaymentEvent(_:)),
+            name: Notification.Name("PaymentEvent"),
+            object: nil
+        )
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
+    override func supportedEvents() -> [String]! {
+        return ["PaymentEvent"]
+    }
+
+    override func startObserving() {
+        hasListeners = true
+    }
+
+    override func stopObserving() {
+        hasListeners = false
+    }
+
+    @objc private func handlePaymentEvent(_ notification: Notification) {
+        guard hasListeners else {
+            print("No listeners registered for PaymentEvent")
+            return
+        }
+        guard let userInfo = notification.userInfo else {
+            print("No userInfo found in PaymentEvent notification")
+            return
+        }
+        sendEvent(withName: "PaymentEvent", body: userInfo)
+    }
+
+    @objc func showPaymentSheet(_ sessionId: String, appearance: NSDictionary, applePayMerchantId: String?) {
+        DispatchQueue.main.async {
+            let paymentAppearance = self.parseAppearance(from: appearance)
+            self.oderoPaySDK.showPaymentSheet(
+                sessionId: sessionId,
+                appearance: paymentAppearance,
+                applePayMerchantId: applePayMerchantId ?? ""
+            )
+        }
+    }
+
+    @objc func closePaymentSheet() {
+        DispatchQueue.main.async {
+            self.oderoPaySDK.closePaymentSheet()
+        }
+    }
+
+    private func parseAppearance(from dictionary: NSDictionary) -> PaymentAppearance {
+        return PaymentAppearance(
+            background: dictionary["background"] as? String,
+            borderWidth: dictionary["borderWidth"] as? String,
+            borderColor: dictionary["borderColor"] as? String,
+            cardDetailsComponent: parseCardDetails(from: dictionary["cardDetailsComponent"] as? NSDictionary),
+            billingInformationComponent: parseBillingInformation(from: dictionary["billingInformationComponent"] as? NSDictionary)
+        )
+    }
+
+    private func parseCardDetails(from dictionary: NSDictionary?) -> PaymentAppearance.CardDetailsComponent? {
+        guard let dict = dictionary else { return nil }
+        return PaymentAppearance.CardDetailsComponent(
+            title: dict["title"] as? String,
+            titleSize: dict["titleSize"] as? String,
+            titleColor: dict["titleColor"] as? String,
+            cardNumber: parseField(from: dict["cardNumber"] as? NSDictionary),
+            expirationDate: parseField(from: dict["expirationDate"] as? NSDictionary),
+            securityCode: parseField(from: dict["securityCode"] as? NSDictionary),
+            cardHolder: parseField(from: dict["cardHolder"] as? NSDictionary),
+            saveCard: parseSaveCard(from: dict["saveCard"] as? NSDictionary),
+            paymentButton: parsePaymentButton(from: dict["paymentButton"] as? NSDictionary)
+        )
+    }
+
+    private func parseBillingInformation(from dictionary: NSDictionary?) -> PaymentAppearance.BillingInformationComponent? {
+        guard let dict = dictionary else { return nil }
+        return PaymentAppearance.BillingInformationComponent(
+            title: dict["title"] as? String,
+            titleSize: dict["titleSize"] as? String,
+            titleColor: dict["titleColor"] as? String,
+            email: parseField(from: dict["email"] as? NSDictionary),
+            phone: parseField(from: dict["phone"] as? NSDictionary),
+            country: parseField(from: dict["country"] as? NSDictionary),
+            city: parseField(from: dict["city"] as? NSDictionary),
+            address: parseField(from: dict["address"] as? NSDictionary)
+        )
+    }
+
+    private func parseField(from dictionary: NSDictionary?) -> PaymentAppearance.Field? {
+        guard let dict = dictionary else { return nil }
+        return PaymentAppearance.Field(
+            hint: dict["hint"] as? String,
+            hintSize: dict["hintSize"] as? String,
+            hintError: dict["hintError"] as? String,
+            hintColor: dict["hintColor"] as? String
+        )
+    }
+
+    private func parseSaveCard(from dictionary: NSDictionary?) -> PaymentAppearance.SaveCard? {
+        guard let dict = dictionary else { return nil }
+        return PaymentAppearance.SaveCard(
+            color: dict["color"] as? String,
+            title: dict["title"] as? String,
+            titleSize: dict["titleSize"] as? String,
+            titleColor: dict["titleColor"] as? String
+        )
+    }
+
+    private func parsePaymentButton(from dictionary: NSDictionary?) -> PaymentAppearance.PaymentButton? {
+        guard let dict = dictionary else { return nil }
+        return PaymentAppearance.PaymentButton(
+            title: dict["title"] as? String
+        )
+    }
+}
+
+6. Installing Dependencies
+
+Run the following command in the project root:
+
+yarn install
+
+7. Linking the Native Module
+
+Navigate to modules/odero-pay-sdk and execute:
+
+yarn link
+
+Then, in the project root, link the package:
+
+yarn link "react-native-odero-pay-sdk"
+
+8. Installing iOS Dependencies
+
+Navigate to the ios directory and install the necessary pods:
+
+pod install
+
+9. Finalizing the Setup
+
+Congratulations! You have successfully set up your React Native application with the odero-pay-sdk native module.
+
