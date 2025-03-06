@@ -1014,7 +1014,7 @@ as a <code>Flow</code> or if you want to receive as a <code>EcrCommandResultList
 <h2 id='sdk-setup'>SDK Setup</h2>
 <p>The SDK supports integration with iOS, Android, and React Native platforms. Follow the platform-specific installation and configuration instructions below.</p>
 
-<div class="platform-buttons" style="margin: 20px 0; border-bottom: 1px solid #e0e0e0; padding-bottom: 10px; padding-left: 28px;">
+<div class="platform-buttons" style="margin: 20px 0; padding-bottom: 10px; padding-left: 28px;">
   <button id="ios-btn" class="platform-btn" style="padding: 10px 20px; margin-right: 5px; background-color: #2E3336; color: white; border: none; border-radius: 3px 3px 3px 3px; cursor: pointer; font-weight: bold; transition: all 0.3s ease;">iOS</button>
   <button id="android-btn" class="platform-btn" style="padding: 10px 20px; margin-right: 5px; background-color: #2E3336; color: white; border: none; border-radius: 3px 3px 3px 3px; cursor: pointer; font-weight: bold; transition: all 0.3s ease;">Android</button>
   <button id="react-native-btn" class="platform-btn" style="padding: 10px 20px; background-color: #2E3336; color: white; border: none; border-radius: 3px 3px 3px 3px; cursor: pointer; font-weight: bold; transition: all 0.3s ease;">React Native</button>
@@ -1144,172 +1144,161 @@ as a <code>Flow</code> or if you want to receive as a <code>EcrCommandResultList
 
 <h3 id='ios-setup'>iOS Integration</h3>
 
-<blockquote>
-<p>Add to Podfile</p>
-</blockquote>
-<div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="c1"># Uncomment the next line to define a global platform for your project</span>
-<span class="n">platform</span> <span class="ss">:ios</span><span class="p">,</span> <span class="s1">'13.0'</span>
+<blockquote><p>Add the following lines to your <code>Podfile</code>:</p></blockquote>
 
-<span class="n">target</span> <span class="s1">'YourApp'</span> <span class="k">do</span>
-  <span class="c1"># Comment the next line if you don't want to use dynamic frameworks</span>
-  <span class="n">use_frameworks!</span>
+<div class="highlight">
+  <pre class="highlight ruby tab-ruby">
+    <code>
+      <span class="c1"># Uncomment the next line to define a global platform for your project</span>
+      <span class="n">platform</span> <span class="ss">:ios</span><span class="p">,</span> <span class="s1">'13.0'</span>
 
-  <span class="c1"># Pods for YourApp</span>
-  <span class="n">pod</span> <span class="s1">'OderoPaySDKIOS'</span><span class="p">,</span> <span class="ss">:podspec</span> <span class="o">=></span> <span class="s1">'https://raw.githubusercontent.com/OderoPos/react-odero-mobilesdk/main/OderoPaySDKIOS/0.1.4/OderoPaySDKIOS.podspec'</span>
-<span class="k">end</span></code></pre></div>
+      <span class="n">target</span> <span class="s1">'YourApp'</span> <span class="k">do</span>
+        <span class="c1"># Comment the next line if you don't want to use dynamic frameworks</span>
+        <span class="n">use_frameworks!</span>
 
-<p>Configure your iOS project by adding the Odero Pay SDK dependency using CocoaPods.</p>
+        <span class="c1"># Pods for YourApp</span>
+        <span class="n">pod</span> <span class="s1">'OderoPaySDKIOS'</span><span class="p">,</span> <span class="ss">:podspec</span> <span class="o">=></span> <span class="s1">'https://raw.githubusercontent.com/OderoPos/react-odero-mobilesdk/main/OderoPaySDKIOS/0.1.4/OderoPaySDKIOS.podspec'</span>
+      <span class="k">end</span>
+    </code>
+  </pre>
+</div>
+
+<p>This section guides you through the steps to integrate the Odero Pay SDK into your iOS project using CocoaPods. Follow the instructions below to set up the SDK and configure your project.</p>
 
 <h4>Prerequisites</h4>
+
+<p>Before proceeding with the integration, ensure that your development environment meets the following requirements:</p>
+
 <ul>
-  <li>Xcode 14.0 or later</li>
-  <li>iOS 13.0 or later</li>
-  <li>CocoaPods 1.10.0 or later</li>
+  <li><strong>Xcode 14.0 or later</strong>: Make sure you have the latest version of Xcode installed.</li>
+  <li><strong>iOS 13.0 or later</strong>: The Odero Pay SDK supports iOS 13.0 and above.</li>
+  <li><strong>CocoaPods 1.10.0 or later</strong>: Ensure that you have a compatible version of CocoaPods installed.</li>
 </ul>
 
-<p>After adding the pod dependency shown in the right section, execute <code>pod install</code> command in your terminal.</p>
 
-<p>After installation, always open the <code>.xcworkspace</code> file instead of the <code>.xcodeproj</code> file to work with your project.</p>
+<h3>Step 1: Update Your Podfile</h3>
+
+<p>To add the Odero Pay SDK as a dependency, you need to modify your <code>Podfile</code>. In the right section you can see the example of how to configure the <code>Podfile</code></p>
+
+
+<p>This configuration specifies the iOS platform version and adds the Odero Pay SDK as a dependency for your app target. Make sure to replace <code>'YourApp'</code> with the actual name of your project.</p>
+
+<h3>Step 2: Install the Dependency</h3>
+
+<p>After updating your <code>Podfile</code>, you need to install the dependency using CocoaPods. Open your terminal and navigate to your project directory. Then, run the following command:</p>
+<p><strong><code>pod install</code></strong></p>
+
+<p>This command will download and integrate the Odero Pay SDK into your project.</p>
+
+<h3>Step 3: Open Your Project in Xcode</h3>
+
+<p>Once the installation is complete, always open your project using the <code>.xcworkspace</code> file instead of the <code>.xcodeproj</code> file. This ensures that the CocoaPods dependencies are properly linked to your project.</p>
+
+<p>To open your project, use the following command in the terminal:</p>
+
+<p><strong><code>open YourApp.xcworkspace</code></strong></p>
+
+<p>Alternatively, you can manually open the <code>.xcworkspace</code> file from Finder.</p>
+
+<p>By following these steps, you will successfully integrate the Odero Pay SDK into your iOS project.</p>
 
 <h3 id='android-setup'>Android Integration</h3>
 
-<blockquote>
-  <p>Step 1: Add the Maven Repository in <strong>settings.gradle</strong> of your app</p>
-</blockquote>
+<blockquote><p>Step 1: Add the Maven Repository in <strong>settings.gradle</strong> of your app</p></blockquote>
 
 <div class="highlight">
-  <pre style="background-color: #000000; color: #d4d4d4; font-size: 12px;"><code class="language-kotlin">
-pluginManagement {
-    repositories {
-        google()
-        mavenCentral()
-        maven {
-            url = uri("https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/")
-        }
-    }
-}
+  <pre class="highlight kotlin tab-kotlin">
+    <code>
+      <span class="c1">// Configure plugin management repositories</span>
+      <span class="n">pluginManagement</span> <span class="p">{</span>
+          <span class="n">repositories</span> <span class="p">{</span>
+              <span class="n">google</span><span class="p">()</span>
+              <span class="n">mavenCentral</span><span class="p">()</span>
+              <span class="n">maven</span> <span class="p">{</span>
+                  <span class="n">url</span> <span class="p">=</span> <span class="n">uri</span><span class="p">(</span><span class="s1">"https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/"</span><span class="p">)</span>
+              <span class="p">}</span>
+          <span class="p">}</span>
+      <span class="p">}</span>
 
-dependencyResolutionManagement {
-    repositories {
-        google()
-        mavenCentral()
-        maven {
-            url = uri("https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/")
-        }
-    }
-}
-  </code></pre>
+      <span class="c1">// Configure dependency resolution repositories</span>
+      <span class="n">dependencyResolutionManagement</span> <span class="p">{</span>
+          <span class="n">repositories</span> <span class="p">{</span>
+              <span class="n">google</span><span class="p">()</span>
+              <span class="n">mavenCentral</span><span class="p">()</span>
+              <span class="n">maven</span> <span class="p">{</span>
+                  <span class="n">url</span> <span class="p">=</span> <span class="n">uri</span><span class="p">(</span><span class="s1">"https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/"</span><span class="p">)</span>
+              <span class="p">}</span>
+          <span class="p">}</span>
+      <span class="p">}</span>
+    </code>
+  </pre>
 </div>
 
 <blockquote>
-<p>Step 2: Declare the Dependency</p>
-</blockquote>
-<div class="highlight"><pre style="background-color: #000000; color: #d4d4d4; font-size: 12px;"><code class="language-kotlin">
-dependencies {
-  implementation 'Odero.oderopaysdk:oderopaysdkandroid:0.0.1'
-}
-  </code></pre>
-</div>
+  <p>Step 2: Declare the Dependency</p>
+  </blockquote>
+  
+  <div class="highlight">
+    <pre class="highlight kotlin tab-kotlin">
+      <code>
+        <span class="n">dependencies</span> <span class="p">{</span>
+          <span class="n">implementation</span> <span class="s1">'Odero.oderopaysdk:oderopaysdkandroid:0.0.1'</span>
+        <span class="p">}</span>
+      </code>
+    </pre>
+  </div>
 
-<blockquote>
-<p>Step 3: Sync Project</p>
-</blockquote>
-<div class="highlight"><pre style="background-color: #000000; color: #d4d4d4; font-size: 12px;" class="highlight shell tab-shell"><code>File > Sync Project with Gradle Files
-
-# Or in terminal:
-gradle build</code></pre></div>
-
-<p>Configure your Android project by adding the Odero Pay SDK dependency using Gradle.</p>
+<p>This guide walks you through the steps to integrate the Odero Pay SDK into your Android project using Gradle. Follow the instructions below to configure your project and add the SDK as a dependency.</p>
 
 <h4>Prerequisites</h4>
+
 <ul>
-  <li>Android Studio Arctic Fox or later</li>
-  <li>Minimum SDK version 21</li>
-  <li>Gradle version 7.0 or later</li>
+  <li><strong>Studio Arctic Fox or later</strong></li>
+  <li><strong>Minimum SDK version 21</strong></li>
+  <li><strong>Gradle version 7.0 or later</strong></li>
+</ul>
+
+<h3>Step 1: Add the Maven Repository in <code>settings.gradle</code></h3>
+
+<p>To enable your project to fetch the Odero Pay SDK, you need to add the Maven repository to your settings.gradle file. Update the file as shown in the Step 1 as shown in the right section</p>
+
+
+<h4>Explanation:</h4>
+
+<ul>
+  <li><code>pluginManagement</code>: Configures repositories for Gradle plugins.</li>
+  <li><code>dependencyResolutionManagement</code>: Configures repositories for project dependencies.</li>
+  <li><code>maven</code>: Adds the custom Maven repository hosted at https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/.</li>
+</ul>
+
+<h3>Step 2: Declare the Dependency</h3>
+
+<p>Once the repository is added, declare the Odero Pay SDK as a dependency in your build.gradle file (usually the app module). Add the step 2 to the dependencies block shown in the right section</p>
+
+<ul>
+  <li><code>Odero.oderopaysdk:oderopaysdkandroid:0.0.1</code>: Specifies the SDK's group ID, artifact ID, and version</li>
+</ul>
+
+<h3>Step 3: Sync Your Project</h3>
+
+<p>After adding the repository and dependency, sync your project to apply the changes. You can do this in one of the following ways:</p>
+<h4>Option 1: Using Android Studio</h4>
+<ol>
+  <li>Go to <strong>File > Sync Project with Gradle Files</strong>.</li>
+  <li>Wait for the sync process to complete.</li>
+</ol>
+<h4>Option 2: Using the Terminal</h4>
+<p>Run the following command in your project's root directory:</p>
+<p><strong><code>gradle build</code></strong></p>
+
+<ul>
+  <li>Syncing ensures that Gradle downloads the Odero Pay SDK and makes it available for your project.</li>
 </ul>
 
 <h3 id='react-native-setup'>React Native Integration</h3>
 
-<h4>Prerequisites</h4>
-<ul>
-  <li>React Native 0.63.0 or later</li>
-  <li>Node.js 14 or later</li>
-  <li>Xcode 14.0 or later (for iOS)</li>
-  <li>Android Studio Arctic Fox or later (for Android)</li>
-  <li>CocoaPods 1.10.0 or later (for iOS)</li>
-</ul>
-
-<p>After completing these steps, the Odero Pay SDK will be integrated into your React Native application and ready to import.</p>
-<p>import {OderoMobilesdk} from 'react-native-odero-pay-sdk'</p>
-
-
 <blockquote>
-<p><strong>Step 1: Create React Native Application</strong></p>
-</blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code>npx @react-native-community/cli init TestReactOderoInApp</code></pre></div>
-
-<blockquote>
-  <p><strong>Step 2: Create Native Module Library</strong></p>
-  <p>Run the following command to create the native module library in the project root directory:</p>
-</blockquote>
-
-<div class="highlight"><pre class="highlight shell tab-shell"><code>npx create-react-native-library@latest odero-pay-sdk</code></pre></div>
-
-<div class="terminal">
-  <pre>
-For this example, we will use odero-pay-sdk as our library name. After executing the command, you will be prompted with several options:
-
-✔ Looks like you're under a project folder. Do you want to create a local library? … yes
-✔ Where do you want to create the library? … modules/odero-pay-sdk
-✔ What is the name of the npm package? … react-native-odero-pay-sdk
-✔ What is the description for the package? … odero-pay-sdk
-✔ What type of library do you want to develop? › Legacy Native Module
-✔ Which languages do you want to use? › Kotlin & Swift
-✔ Project created successfully at modules/odero-pay-sdk!
-  </pre>
-</div>
-
-
-<blockquote>
-  <p><strong>Step 3: Configure Android Dependencies</strong></p>
-  <p># In modules/odero-pay-sdk/android/build.gradle</p>
-</blockquote>
-<div class="highlight"><pre class="highlight groovy tab-groovy"><code>repositories {
-    mavenCentral()
-    google()
-    maven {
-        url 'https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/'
-    }
-}
-
-dependencies {
-    implementation "Odero.oderopaysdk:oderopaysdkandroid:0.0.1"
-}</code></pre></div>
-
-<blockquote>
-  <p><strong>Step 4: Configure iOS Dependencies</strong></p>
-  <p># In ios/Podfile</p>
-</blockquote>
-
-<div class="highlight"><pre class="highlight ruby tab-ruby"><code>pod 'OderoPaySDKIOS', :podspec => 'https://raw.githubusercontent.com/OderoPos/react-odero-mobilesdk/main/OderoPaySDKIOS/0.1.4/OderoPaySDKIOS.podspec'</code></pre></div>
-
-<blockquote>
-  <p># In modules/odero-pay-sdk/OderoPaySdk.podspec</p>
-</blockquote>
-<div class="highlight"><pre class="highlight ruby tab-ruby"><code>s.dependency "OderoPaySDKIOS", "0.1.4"</code></pre></div>
-
-<blockquote>
-  <p><strong>Step 5: Export the Module</strong></p>
-  <p># In modules/odero-pay-sdk/src/index.tsx</p>
-</blockquote>
-<div class="highlight"><pre class="highlight javascript tab-javascript"><code>module.exports = { OderoPaySdk };</code></pre></div>
-
-<blockquote>
-  <p><strong>Step 6: Implement Native Bridge Code</strong></p>
-  <p>Now we will setup bridging code, this way we will be able to use native code (swift and kotlin) in javascript</p>
-  <p><strong>Android</strong></p>
-  <p> In OderoPaySdkModule.kt</p>
-  <p># modules/odero-pay-sdk/android/src/main/java/com/oderopaysdk/OderoPaySdkModule.kt</p>
+  <p><strong>OderoPaySdkModule.kt</strong></p>
 </blockquote>
 
 <div class="highlight"><pre class="highlight kotlin tab-kotlin"><code>package com.oderopaysdk
@@ -1522,8 +1511,7 @@ class OderoPaySdkModule(private val reactContext: ReactApplicationContext) :
 </code></pre></div>
 
 <blockquote>
-  <p> In OderoPaySdkPackage.kt</p>
-  <p># modules/odero-pay-sdk/android/src/main/java/com/oderopaysdk/OderoPaySdkPackage.kt</p>
+  <p><strong>OderoPaySdkPackage.kt</strong></p>
 </blockquote>
 
 <div class="highlight"><pre class="highlight kotlin tab-kotlin"><code>class OderoPaySdkPackage : ReactPackage {
@@ -1538,9 +1526,7 @@ class OderoPaySdkModule(private val reactContext: ReactApplicationContext) :
 </code></pre></div>
 
 <blockquote>
-  <p><strong>IOS</strong></p>
-  <p> In OderoPaySdk.mm</p>
-  <p># modules/odero-pay-sdk/ios/OderoPaySdk.mm</p>
+  <p><strong>OderoPaySdk.mm</strong></p>
 </blockquote>
 
 <div class="highlight"><pre class="highlight objectivec tab-objectivec"><code>#import &lt;React/RCTBridgeModule.h&gt;
@@ -1562,16 +1548,14 @@ RCT_EXTERN_METHOD(closePaymentSheet)
 @end</code></pre></div>
 
 <blockquote>
-  <p> In OderoPaySdk-Bridging-Header.h</p>
-  <p># modules/odero-pay-sdk/ios/OderoPaySdk-Bridging-Header.h</p>
+  <p><strong>OderoPaySdk-Bridging-Header.h</strong></p>
 </blockquote>
   
 <div class="highlight"><pre class="highlight objectivec tab-objectivec"><code>#import &lt;React/RCTBridgeModule.h&gt;
 #import &lt;React/RCTViewManager.h&gt;</code></pre></div>
 
 <blockquote>
-  <p> In OderoPaySdk.swift</p>
-  <p># modules/odero-pay-sdk/ios/OderoPaySdk.swift</p>
+  <p><strong>OderoPaySdk.swift</strong></p>
 </blockquote>
 
 <div class="highlight"><pre class="highlight objectivec tab-objectivec"><code>import Foundation
@@ -1706,30 +1690,119 @@ class OderoPaySdk: RCTEventEmitter {
     }
 }
 </code></pre></div>
+
+<h3>Step 1: Initialize the React Native Project</h3>
+<p>This step is optional if you already have a React Native project. If you don't have one, you can create a new one using the following command:</p>
+
+<p><strong><code>npx @react-native-community/cli init TestReactOderoInApp</code></strong></p>
+
+<p>This command will create a new React Native project with the name <code>TestReactOderoInApp</code>.</p>
+
+<h3>Step 2: Create Native Module Library</h3>
+<p>Run the following command to create the native module library in the project root directory:</p>
+
+<p><strong><code>npx create-react-native-library@latest odero-pay-sdk</code></strong></p>
+
+<p>This command will create a new native module library with the name <code>odero-pay-sdk</code>.</p>
+
+<h4>Output will look like this:</h4>
+
+<ul>
+  <li>✔ Looks like you're under a project folder. Do you want to create a local library? … yes</li>
+  <li>✔ Where do you want to create the library? … modules/odero-pay-sdk</li>
+  <li>✔ What is the name of the npm package? … react-native-odero-pay-sdk</li>
+  <li>✔ What is the description for the package? … odero-pay-sdk</li>
+  <li>✔ What type of library do you want to develop? › Legacy Native Module</li>
+  <li>✔ Which languages do you want to use? › Kotlin & Swift</li>
+  <li>✔ Project created successfully at modules/odero-pay-sdk!</li>
+</ul>
+
+<h3>Step 3: Configure Android Dependencies</h3>
+<p>Add the Odero Pay SDK dependency to your Android project.</p>
+<p> Update the <code>build.gradle</code> located in <code>modules/odero-pay-sdk/android/build.gradle</code> inside <code>repositories {}</code> block with following:</p>
+<p><code>
+  <strong>mavenCentral();</strong><br>
+  <strong>google();</strong><br>
+  <strong>maven {</strong><br>
+  &nbsp;&nbsp;<strong>url 'https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/';</strong><br>
+  }<br>
+</code></p>
+    
+<p>Then add following to the same file under <code>dependencies {}</code> block:</p>
+<p><code><strong>implementation "Odero.oderopaysdk:oderopaysdkandroid:0.0.1"</strong></code></p>
   
 
-<blockquote>
-  <p><strong>7: Install Dependencies</strong></p>
-  <p># Install project dependencies in the root directory</p>
-</blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code>yarn install</code></pre></div>
+<h3>Step 4: Configure iOS Dependencies</h3>
+<p>To configure the iOS dependencies, add the following line to the <code>ios/Podfile</code> to include the OderoPay SDK:</p>
+<p><code><strong>pod 'OderoPaySDKIOS', :podspec => 'https://raw.githubusercontent.com/OderoPos/react-odero-mobilesdk/main/OderoPaySDKIOS/0.1.4/OderoPaySDKIOS.podspec'</strong></code></p>
 
-<blockquote>
-  <p><strong>Step 8: Link Native Module</strong></p>
-  <p>Run following command in modules/odero-pay-sdk</p>
-</blockquote>
-  <div class="highlight"><pre class="highlight shell tab-shell"><code>yarn link</code></pre></div>
+<p>Next, in <code>OderoPaySdk.podspec</code> located in modules/odero-pay-sdk/OderoPaySdk.podspec, define the dependency version as follows:</p>
+<p><code><strong>s.dependency "OderoPaySDKIOS", "0.1.4"</strong></code></p>
 
-<blockquote>
-  <p><strong>9: Link Native Module in the Root Directory</strong></p>
-</blockquote>
-  <div class="highlight"><pre class="highlight shell tab-shell"><code>yarn link "react-native-odero-pay-sdk"</code></pre></div>
+<h3>Step 5: Export the Module</h3>
+<p>To ensure that the OderoPaySdk module is accessible throughout your project, add the following line in index.tsx file located in modules/odero-pay-sdk/src/index.tsx:</p>
+<p><code><strong>module.exports = { OderoPaySdk };</strong></code></p>
+<p>This step is essential because it exports the OderoPaySdk module, making it available for use in other parts of your project, allowing you to integrate and interact with the SDK seamlessly.</p>
 
-<blockquote>
-  <p><strong>10: Pod Install</strong></p>
-  <p>Run following command in ios directory</p>
-</blockquote>
-  <div class="highlight"><pre class="highlight shell tab-shell"><code>pod install</code></pre></div>
+<p>After completing these steps, the Odero Pay SDK will be integrated into your React Native application and ready to import.</p>
+<p>import {OderoMobilesdk} from 'react-native-odero-pay-sdk'</p>
+
+<h3>Step 6: Implement Native Bridge Code</h3>
+<p>React Native provides a powerful way to integrate native libraries (written in Java, Swift, Objective-C, etc.) into your app through a concept called "Bridging." Bridging allows you to access and utilize native code within your React Native app, enabling the use of native functionality not directly available through JavaScript.</p>
+<p>To do so, add the related code shown in the right section for the following files:</p>
+
+<ul>
+  <li><strong>OderoPaySdkModule.kt</strong></li>
+  <p><code>modules/odero-pay-sdk/android/src/main/java/com/oderopaysdk/OderoPaySdkModule.kt</code></code></p>
+</ul>
+
+<ul>
+  <li><strong>OderoPaySdkPackage.kt</strong></li>
+  <p><code>modules/odero-pay-sdk/android/src/main/java/com/oderopaysdk/OderoPaySdkPackage.kt</code></code></p>
+</ul>
+
+<ul>
+  <li><strong>OderoPaySdk.mm</strong></li>
+  <p><code>modules/odero-pay-sdk/ios/OderoPaySdk.mm</code></code></p>
+</ul>
+
+<ul>
+  <li><strong>OderoPaySdk-Bridging-Header.h</strong></li>
+  <p><code>modules/odero-pay-sdk/ios/OderoPaySdk-Bridging-Header.h</code></code></p>
+</ul>
+
+<ul>
+  <li><strong>OderoPaySdk.swift</strong></li>
+  <p><code>modules/odero-pay-sdk/ios/OderoPaySdk.swift</code></code></p>
+</ul>
+
+
+  
+<h3>Step 7: Install Dependencies</h3>
+<p>Install project dependencies in the root directory by running the following command:</p>
+<p><code><strong>yarn install</strong></code></p>
+<p>or</p>
+<p><code><strong>npm install</strong></code></p>
+
+<h3>Step 8: Link Native Module</h3>
+<p>Run following command in <code>modules/odero-pay-sdk</code></p>
+<p><code><strong>yarn link</strong></code></p>
+<p>or</p>
+<p><code><strong>npm link</strong></code></p>
+
+<h3>Step 9: Link Native Module in the Root Directory</h3>
+<p>Run following command in the root directory</p>
+<p><code><strong>yarn link "react-native-odero-pay-sdk"</strong></code></p>
+<p>or</p>
+<p><code><strong>npm link "react-native-odero-pay-sdk"</strong></code></p>
+
+<h3>Step 10: Pod Install</h3>
+<p>Run following command in ios directory</p>
+<p><code><strong>pod install</strong></code></p>
+
+<h3>Congratulations!</h3>
+<p>Odero Pay SDK is integrated into your React Native application and ready to import.</p>
+<p><code><strong>import {OderoMobilesdk} from 'react-native-odero-pay-sdk'</strong></code></p>
 
       </div>
       <div class="dark-box">
