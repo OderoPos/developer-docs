@@ -1301,7 +1301,7 @@ as a <code>Flow</code> or if you want to receive as a <code>EcrCommandResultList
   <p><strong>OderoPaySdkModule.kt</strong></p>
 </blockquote>
 
-<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code>package com.oderopaysdk
+<div class="highlight"><pre class="language-kotlin"><code>package com.oderopaysdk
 
 import android.app.Activity
 import android.content.Intent
@@ -1514,7 +1514,7 @@ class OderoPaySdkModule(private val reactContext: ReactApplicationContext) :
   <p><strong>OderoPaySdkPackage.kt</strong></p>
 </blockquote>
 
-<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code>class OderoPaySdkPackage : ReactPackage {
+<div class="highlight"><pre class="language-kotlin"><code>class OderoPaySdkPackage : ReactPackage {
     override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> {
         return listOf(OderoPaySdkModule(reactContext))
     }
@@ -1529,7 +1529,7 @@ class OderoPaySdkModule(private val reactContext: ReactApplicationContext) :
   <p><strong>OderoPaySdk.mm</strong></p>
 </blockquote>
 
-<div class="highlight"><pre class="highlight objectivec tab-objectivec"><code>#import &lt;React/RCTBridgeModule.h&gt;
+<div class="highlight"><pre class="language-swift"><code>#import &lt;React/RCTBridgeModule.h&gt;
 #import &lt;React/RCTEventEmitter.h&gt;
 
 @interface RCT_EXTERN_MODULE(OderoPaySdk, RCTEventEmitter)
@@ -1551,14 +1551,14 @@ RCT_EXTERN_METHOD(closePaymentSheet)
   <p><strong>OderoPaySdk-Bridging-Header.h</strong></p>
 </blockquote>
   
-<div class="highlight"><pre class="highlight objectivec tab-objectivec"><code>#import &lt;React/RCTBridgeModule.h&gt;
+<div class="highlight"><pre class="language-swift"><code>#import &lt;React/RCTBridgeModule.h&gt;
 #import &lt;React/RCTViewManager.h&gt;</code></pre></div>
 
 <blockquote>
   <p><strong>OderoPaySdk.swift</strong></p>
 </blockquote>
 
-<div class="highlight"><pre class="highlight objectivec tab-objectivec"><code>import Foundation
+<div class="highlight"><pre class="language-swift"><code>import Foundation
 import React
 import OderoPaySDKIOS
 
