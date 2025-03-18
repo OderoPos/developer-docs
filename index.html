@@ -392,13 +392,13 @@
     <span class="n">url</span> <span class="s1">'https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/'</span>
 <span class="o">}</span>
 </code></pre></div>
-<p>And also in <code>app/build.gradle</code> the actual dependency should be added: <code>implementation &#39;PaymentGateway:pgw-launcher:1.0.9&#39;</code></p>
+<p>And also in <code>app/build.gradle</code> the actual dependency should be added: <code>implementation &#39;Odero:pgw-launcher:1.0.13&#39;</code></p>
 
 <blockquote>
 <p>build.gradle</p>
 </blockquote>
 <div class="highlight"><pre class="highlight gradle tab-gradle"><code><span class="k">dependencies</span> <span class="o">{</span>
-<span class="n">implementation</span> <span class="s1">'PaymentGateway:pgw-launcher:1.0.9'</span>
+    <span class="n">implementation</span> <span class="s1">'Odero:pgw-launcher:1.0.13'</span>
 <span class="o">}</span>
 </code></pre></div><h3 id='request-payment'>Request payment</h3>
 <p>The payment request is done via an ActivityResultLauncher contract.</p>
@@ -424,16 +424,19 @@
 
 <span class="p">}</span>
 
-<span class="kd">val</span> <span class="py">paymentLauncher</span> <span class="p">=</span> <span class="nf">registerForActivityResult</span><span class="p">(</span><span class="n">pgwContract</span><span class="p">)</span> <span class="p">{</span>
-<span class="n">paymentResponse</span> <span class="p">:</span> <span class="nc">PaymentResponse</span> <span class="p">-&gt;</span>
-<span class="c1">//payment response</span>
-<span class="p">}</span>
+<span class="kd">val</span> <span class="py">paymentLauncher</span> <span class="p">=</span> <span class="nf">registerForActivityResult</span><span class="p">(</span>
+    <span class="n">contract = pgwContract,</span>
+    <span class="n">onResult = { paymentResponse</span><span class="p">:</span> <span class="nc">PaymentResponse</span> <span class="p">-&gt;</span>
+    <span class="c1">//payment response</span>
+    <span class="p">}</span>
+<span class="p">)</span>
 
 <span class="n">paymentLauncher</span><span class="p">.</span><span class="nf">launch</span><span class="p">(</span><span class="nc">PaymentRequest</span><span class="p">(</span>
                 <span class="n">amount</span> <span class="p">=</span> <span class="mi">12345</span><span class="p">,</span>
                 <span class="n">paymentOptions</span> <span class="p">=</span> <span class="nf">listOf</span><span class="p">(</span><span class="nc">PaymentOption</span><span class="p">.</span><span class="nc">Card</span><span class="p">),</span>
                 <span class="n">currencyCode</span> <span class="p">=</span> <span class="nc">CurrencyCode</span><span class="p">.</span><span class="nc">RON</span>
-            <span class="p">))</span>
+            <span class="p">)</span>
+    <span class="p">)</span>
 </code></pre></div>
 <p>According to the selected payment options <code>PGW</code> will handle the payment and printing. The amount will be internally translated as amount/100 to cover the currency decimal; in this case 12345 will internally converted to 123,45</p>
 <h3 id='handling-paymentresponse'>Handling PaymentResponse</h3>
@@ -498,14 +501,15 @@
     <span class="n">url</span> <span class="s1">'https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/'</span>
 <span class="o">}</span>
 </code></pre></div>
-<p>Add in <code>build.gradle</code> the lib dependencies: <code>implementation &#39;PrinterApp:printer-launcher:1.0.3&#39;</code>
- (the pgw-launcher should also add the common lib, if not please add the dependency <code>implementation &#39;PrinterApp:common:1.0.3&#39;</code>)</p>
+<p>Add in <code>build.gradle</code> the lib dependencies: <code>implementation &#39;PrinterApp:printer-launcher:0.6.2&#39;</code>
+ (the pgw-launcher should also add the common lib, if not please add the dependency <code>implementation &#39;Odero:printer-common:1.0.7&#39;</code>)</p>
 
 <blockquote>
 <p>build.gradle</p>
 </blockquote>
 <div class="highlight"><pre class="highlight gradle tab-gradle"><code><span class="k">dependencies</span><span class="o">{</span>
-    <span class="n">implementation</span> <span class="s1">'PrinterApp:printer-launcher:1.0.3'</span>
+    <span class="n">implementation</span> <span class="s1">'PrinterApp:printer-launcher:0.6.2'</span>
+    <span class="n">implementation</span> <span class="s1">'Odero:printer-common:1.0.7'</span>
 <span class="o">}</span>
 </code></pre></div><h3 id='printing'>Printing</h3>
 <p>There are two distinct flows that have to be implemented</p>
@@ -521,15 +525,15 @@
 <blockquote>
 <p>When printer is ready print the receipts</p>
 </blockquote>
-<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code><span class="kd">val</span> <span class="py">printerErrorCheck</span> <span class="p">=</span> <span class="nf">registerForActivityResul</span><span class="p">(</span><span class="nc">PrinterHealthResultContract</span><span class="p">()){</span>
-<span class="n">printerHealth</span><span class="p">:</span> <span class="nc">PrinterHealthResponse</span><span class="p">?</span> <span class="p">-&gt;</span>
+<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code><span class="kd">val</span> <span class="py">printerErrorCheck</span> <span class="p">=</span> <span class="nf">registerForActivityResul</span><span class="p">(</span>
+    <span class="nc">PrinterHealthResultContract</span><span class="p">()</span>
+    <span class="p">){ </span><span class="n">printerHealth</span><span class="p">:</span> <span class="nc">PrinterHealthResponse</span><span class="p">?</span> <span class="p">-&gt;</span>
 
-<span class="k">if</span><span class="p">(</span><span class="n">printerHealth</span><span class="p">.</span><span class="n">hasErrors</span><span class="p">.</span><span class="nf">not</span><span class="p">()){</span>
-<span class="nf">printReceipts</span><span class="p">()</span>
-<span class="p">}</span><span class="k">else</span>
-<span class="p">{</span>
-    <span class="c1">//treat the error</span>
-<span class="p">}</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">printerHealth</span><span class="p">.</span><span class="n">hasErrors</span><span class="p">.</span><span class="nf">not</span><span class="p">()){</span>
+            <span class="nf">printReceipts</span><span class="p">()</span>
+        <span class="p">} </span><span class="k">else</span><span class="p"> {</span>
+            <span class="c1">//treat the error</span>
+        <span class="p">}</span>
 
 <span class="p">}</span>
 
@@ -542,10 +546,11 @@
 <blockquote>
 <p>Actual printing contract that is used to start the PrinterApp</p>
 </blockquote>
-<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code><span class="kd">val</span> <span class="py">printerLauncher</span> <span class="p">=</span> <span class="nf">registerForActivityResult</span><span class="p">(</span><span class="nc">PrinterResultContract</span><span class="p">())</span> <span class="p">{</span>
-<span class="n">printerResponse</span><span class="p">:</span> <span class="nc">PrinterResponse</span><span class="p">?</span> <span class="p">-&gt;</span>
-<span class="c1">//treat printer response</span>
-<span class="p">}</span>
+<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code><span class="kd">val</span> <span class="py">printerLauncher = PrinterLauncher.</span><span class="nf">registerForPrinterResult</span><span class="p">(</span>
+    <span class="n">onResult = </span><span class="p">{</span> <span class="n">printerResponse</span><span class="p">:</span> <span class="nc">PrinterResponse</span><span class="p">?</span> <span class="p">-&gt;</span>
+    <span class="c1">//treat printer response</span>
+    <span class="p">}</span>
+<span class="p">)</span>
 </code></pre></div>
 <blockquote>
 <p>Receipts example</p>
