@@ -1,0 +1,184 @@
+
+
+<blockquote>
+    <p>settings.gradle</p>
+</blockquote>
+<div class="highlight"><pre class="highlight gradle tab-gradle"><code><span
+        class="n">maven</span> <span class="o">{</span>
+    <span class="n">url</span> <span class="s1">'https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/'</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+
+<blockquote>
+    <p>build.gradle</p>
+</blockquote>
+<div class="highlight"><pre class="highlight gradle tab-gradle"><code><span
+        class="k">dependencies</span> <span
+        class="o">{</span>
+    <span class="n">implementation</span> <span class="s1">'Odero:pgw-launcher:1.0.13'</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+
+<blockquote>
+    <p>Obtaining the PGW contract</p>
+</blockquote>
+<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code><span
+        class="kd">val</span> <span class="py">paymentResultContract</span> <span class="p">=</span> <span
+        class="nc">PGWLauncher</span><span class="p">.</span><span
+        class="nf">getPGWContract</span><span class="p">(</span><span
+        class="n">context</span><span class="p">)</span>
+</code></pre>
+</div>
+<blockquote>
+    <p>Returns null if the PGW app is not installed on the device.</p>
+
+    <p>Payment request</p>
+</blockquote>
+<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code><span
+        class="k">import</span> <span
+        class="nn">ro.odero.paymentgateway.common.data.CurrencyCode</span>
+<span class="k">import</span> <span
+            class="nn">ro.odero.paymentgateway.common.data.PaymentOption</span>
+<span class="k">import</span> <span class="nn">ro.odero.paymentgateway.common.data.request.PaymentRequest</span>
+<span class="k">import</span> <span class="nn">ro.odero.paymentgateway.launcher.PGWLauncher</span>
+
+<span class="kd">val</span> <span class="py">pgwContract</span> <span class="p">=</span> <span
+            class="nc">PGWLauncher</span><span class="p">.</span><span
+            class="nf">getPGWContract</span><span
+            class="p">(</span><span class="n">context</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="n">pgwContract</span> <span
+            class="p">==</span> <span class="k">null</span><span class="p">)</span> <span
+            class="p">{</span>
+
+<span class="p">}</span>
+
+<span class="kd">val</span> <span class="py">paymentLauncher</span> <span class="p">=</span> <span
+            class="nf">registerForActivityResult</span><span class="p">(</span>
+    <span class="n">contract = pgwContract,</span>
+    <span class="n">onResult = { paymentResponse</span><span class="p">:</span> <span class="nc">PaymentResponse</span> <span
+            class="p">-&gt;</span>
+    <span class="c1">//payment response</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+
+<span class="n">paymentLauncher</span><span class="p">.</span><span class="nf">launch</span><span
+            class="p">(</span>
+    <span class="nc">PaymentRequest </span><span class="p">(</span>
+        <span class="n">amount</span> <span class="p">=</span> <span class="mi">12345</span><span
+            class="p">,</span>
+        <span class="n">paymentOptions</span> <span class="p">=</span> <span
+            class="nf">listOf</span><span
+            class="p">(</span><span class="nc">PaymentOption</span><span
+            class="p">.</span><span class="nc">Card</span><span class="p">),</span>
+        <span class="n">currencyCode</span> <span class="p">=</span> <span
+            class="nc">CurrencyCode</span><span
+            class="p">.</span><span class="nc">RON</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+</code></pre>
+</div>
+
+<p>Allows payment requests in a uniform way across all POS family.</p>
+
+<p>The API is agnostic of the underlying payment procedures, which may involve banking, card
+    reading, etc.</p>
+
+<p>The PGW will take care of all the printing during a payment request. The caller does not
+    need to handle it via the printer app.</p>
+
+<p><img src="images/317915137-64b691c7.png" alt="!\[alt text\](Architecture)"/></p>
+<h3 id='setup'>Setup</h3>
+<p>In order to access the PGW app, the following pgw-launcher and common library should be
+    included in the app. To do this add the following maven url to
+    <code>settings.gradle</code> under dependencyResolutionManagement/repositories:</p>
+
+<p>And also in <code>app/build.gradle</code> the actual dependency should be added: <code>implementation
+    &#39;Odero:pgw-launcher:1.0.13&#39;</code></p>
+
+<h3 id='request-payment'>Request payment</h3>
+<p>The payment request is done via an ActivityResultLauncher contract.</p>
+
+<p>According to the selected payment options <code>PGW</code> will handle the payment and
+    printing. The amount will be internally translated as amount/100 to cover the currency
+    decimal; in this case 12345 will internally converted to 123,45</p>
+<h3 id='handling-paymentresponse'>Handling PaymentResponse</h3>
+<p>Check the PaymentResponse based on the payment options sent.</p>
+
+<blockquote>
+    <p>PaymentResponse handling</p>
+</blockquote>
+<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code><span class="n">paymentResponse</span> <span
+        class="p">:</span> <span class="nc">PaymentResponse</span> <span
+        class="p">-&gt;</span>
+
+<span class="k">if</span><span class="p">(</span><span class="n">paymentResponse</span> <span
+            class="k">is</span> <span class="nc">CardPaymentResponse</span><span
+            class="p">)</span><span class="o">..</span><span class="p">.</span>
+
+<span class="k">if</span><span class="p">(</span><span class="n">paymentResponse</span> <span
+            class="k">is</span> <span class="nc">CashPaymentResponse</span><span
+            class="p">)</span><span class="o">..</span><span class="p">.</span>
+
+</code></pre>
+</div>
+<blockquote>
+    <p>Types of PaymentResponse</p>
+</blockquote>
+<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code><span
+        class="k">sealed</span> <span class="kd">class</span> <span
+        class="nc">CardPaymentResponse</span> <span
+        class="p">:</span> <span class="nc">PaymentResponse</span> <span class="p">{</span>
+
+    <span class="kd">data class</span> <span class="nc">Success</span><span class="p">(</span>
+        <span class="kd">val</span> <span class="py">receiptNumber</span><span
+            class="p">:</span> <span class="nc">String</span><span class="p">,</span>
+        <span class="kd">val</span> <span class="py">bankActivityResultCode</span><span
+            class="p">:</span> <span class="nc">Int</span><span class="p">,</span>
+        <span class="kd">val</span> <span class="py">bankStatus</span><span class="p">:</span> <span
+            class="nc">Int</span><span class="p">,</span>
+        <span class="kd">val</span> <span class="py">customerSlip</span><span
+            class="p">:</span> <span class="nc">String</span><span class="p">,</span>
+        <span class="kd">val</span> <span class="py">merchantSlip</span><span
+            class="p">:</span> <span class="nc">String</span><span class="p">,</span>
+    <span class="p">)</span> <span class="p">:</span> <span
+            class="nc">CardPaymentResponse</span><span class="p">()</span>
+
+    <span class="kd">data class</span> <span class="nc">Fail</span><span class="p">(</span>
+        <span class="kd">val</span> <span class="py">receiptNumber</span><span
+            class="p">:</span> <span class="nc">String</span><span class="p">,</span>
+        <span class="kd">val</span> <span class="py">bankActivityResultCode</span><span
+            class="p">:</span> <span class="nc">Int</span><span class="p">,</span>
+        <span class="kd">val</span> <span class="py">bankStatus</span><span class="p">:</span> <span
+            class="nc">Int</span><span class="p">,</span>
+        <span class="kd">val</span> <span class="py">message</span><span class="p">:</span> <span
+            class="nc">String</span><span class="p">,</span>
+    <span class="p">)</span> <span class="p">:</span> <span
+            class="nc">CardPaymentResponse</span><span class="p">()</span>
+<span class="p">}</span>
+
+
+<span class="k">sealed</span> <span class="kd">class</span> <span
+            class="nc">CashPaymentResponse</span> <span class="p">:</span> <span class="nc">PaymentResponse</span> <span
+            class="p">{</span>
+
+    <span class="kd">data class</span> <span class="nc">Success</span><span class="p">(</span>
+        <span class="kd">val</span> <span class="py">receiptNumber</span><span
+            class="p">:</span> <span class="nc">String</span><span class="p">,</span>
+    <span class="p">)</span> <span class="p">:</span> <span
+            class="nc">CashPaymentResponse</span><span class="p">()</span>
+
+    <span class="kd">data class</span> <span class="nc">Fail</span><span class="p">(</span>
+        <span class="kd">val</span> <span class="py">receiptNumber</span><span
+            class="p">:</span> <span class="nc">String</span><span class="p">,</span>
+        <span class="kd">val</span> <span class="py">message</span><span class="p">:</span> <span
+            class="nc">String</span><span class="p">,</span>
+    <span class="p">)</span> <span class="p">:</span> <span
+            class="nc">CashPaymentResponse</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre>
+</div>

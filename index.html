@@ -1,940 +1,439 @@
-
 <!doctype html>
-<html>
-  <head>
+<html lang="en">
+<head>
     <meta charset="utf-8">
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>OderoPOS developer docs</title>
 
     <style media="screen">
-      .highlight table td { padding: 5px; }
-.highlight table pre { margin: 0; }
-.highlight .gh {
-  color: #999999;
-}
-.highlight .sr {
-  color: #f6aa11;
-}
-.highlight .go {
-  color: #888888;
-}
-.highlight .gp {
-  color: #555555;
-}
-.highlight .gs {
-}
-.highlight .gu {
-  color: #aaaaaa;
-}
-.highlight .nb {
-  color: #f6aa11;
-}
-.highlight .cm {
-  color: #75715e;
-}
-.highlight .cp {
-  color: #75715e;
-}
-.highlight .c1 {
-  color: #75715e;
-}
-.highlight .cs {
-  color: #75715e;
-}
-.highlight .c, .highlight .ch, .highlight .cd, .highlight .cpf {
-  color: #75715e;
-}
-.highlight .err {
-  color: #960050;
-}
-.highlight .gr {
-  color: #960050;
-}
-.highlight .gt {
-  color: #960050;
-}
-.highlight .gd {
-  color: #49483e;
-}
-.highlight .gi {
-  color: #49483e;
-}
-.highlight .ge {
-  color: #49483e;
-}
-.highlight .kc {
-  color: #66d9ef;
-}
-.highlight .kd {
-  color: #66d9ef;
-}
-.highlight .kr {
-  color: #66d9ef;
-}
-.highlight .no {
-  color: #66d9ef;
-}
-.highlight .kt {
-  color: #66d9ef;
-}
-.highlight .mf {
-  color: #ae81ff;
-}
-.highlight .mh {
-  color: #ae81ff;
-}
-.highlight .il {
-  color: #ae81ff;
-}
-.highlight .mi {
-  color: #ae81ff;
-}
-.highlight .mo {
-  color: #ae81ff;
-}
-.highlight .m, .highlight .mb, .highlight .mx {
-  color: #ae81ff;
-}
-.highlight .sc {
-  color: #ae81ff;
-}
-.highlight .se {
-  color: #ae81ff;
-}
-.highlight .ss {
-  color: #ae81ff;
-}
-.highlight .sd {
-  color: #e6db74;
-}
-.highlight .s2 {
-  color: #e6db74;
-}
-.highlight .sb {
-  color: #e6db74;
-}
-.highlight .sh {
-  color: #e6db74;
-}
-.highlight .si {
-  color: #e6db74;
-}
-.highlight .sx {
-  color: #e6db74;
-}
-.highlight .s1 {
-  color: #e6db74;
-}
-.highlight .s, .highlight .sa, .highlight .dl {
-  color: #e6db74;
-}
-.highlight .na {
-  color: #a6e22e;
-}
-.highlight .nc {
-  color: #a6e22e;
-}
-.highlight .nd {
-  color: #a6e22e;
-}
-.highlight .ne {
-  color: #a6e22e;
-}
-.highlight .nf, .highlight .fm {
-  color: #a6e22e;
-}
-.highlight .vc {
-  color: #ffffff;
-}
-.highlight .nn {
-  color: #ffffff;
-}
-.highlight .ni {
-  color: #ffffff;
-}
-.highlight .bp {
-  color: #ffffff;
-}
-.highlight .vg {
-  color: #ffffff;
-}
-.highlight .vi {
-  color: #ffffff;
-}
-.highlight .nv, .highlight .vm {
-  color: #ffffff;
-}
-.highlight .w {
-  color: #ffffff;
-}
-.highlight {
-  color: #ffffff;
-}
-.highlight .n, .highlight .py, .highlight .nx {
-  color: #ffffff;
-}
-.highlight .nl {
-  color: #f92672;
-}
-.highlight .ow {
-  color: #f92672;
-}
-.highlight .nt {
-  color: #f92672;
-}
-.highlight .k, .highlight .kv {
-  color: #f92672;
-}
-.highlight .kn {
-  color: #f92672;
-}
-.highlight .kp {
-  color: #f92672;
-}
-.highlight .o {
-  color: #f92672;
-}
+        .highlight table td { padding: 5px; }
+  .highlight table pre { margin: 0; }
+  .highlight .gh {
+    color: #999999;
+  }
+  .highlight .sr {
+    color: #f6aa11;
+  }
+  .highlight .go {
+    color: #888888;
+  }
+  .highlight .gp {
+    color: #555555;
+  }
+  .highlight .gs {
+  }
+  .highlight .gu {
+    color: #aaaaaa;
+  }
+  .highlight .nb {
+    color: #f6aa11;
+  }
+  .highlight .cm {
+    color: #75715e;
+  }
+  .highlight .cp {
+    color: #75715e;
+  }
+  .highlight .c1 {
+    color: #75715e;
+  }
+  .highlight .cs {
+    color: #75715e;
+  }
+  .highlight .c, .highlight .ch, .highlight .cd, .highlight .cpf {
+    color: #75715e;
+  }
+  .highlight .err {
+    color: #960050;
+  }
+  .highlight .gr {
+    color: #960050;
+  }
+  .highlight .gt {
+    color: #960050;
+  }
+  .highlight .gd {
+    color: #49483e;
+  }
+  .highlight .gi {
+    color: #49483e;
+  }
+  .highlight .ge {
+    color: #49483e;
+  }
+  .highlight .kc {
+    color: #66d9ef;
+  }
+  .highlight .kd {
+    color: #66d9ef;
+  }
+  .highlight .kr {
+    color: #66d9ef;
+  }
+  .highlight .no {
+    color: #66d9ef;
+  }
+  .highlight .kt {
+    color: #66d9ef;
+  }
+  .highlight .mf {
+    color: #ae81ff;
+  }
+  .highlight .mh {
+    color: #ae81ff;
+  }
+  .highlight .il {
+    color: #ae81ff;
+  }
+  .highlight .mi {
+    color: #ae81ff;
+  }
+  .highlight .mo {
+    color: #ae81ff;
+  }
+  .highlight .m, .highlight .mb, .highlight .mx {
+    color: #ae81ff;
+  }
+  .highlight .sc {
+    color: #ae81ff;
+  }
+  .highlight .se {
+    color: #ae81ff;
+  }
+  .highlight .ss {
+    color: #ae81ff;
+  }
+  .highlight .sd {
+    color: #e6db74;
+  }
+  .highlight .s2 {
+    color: #e6db74;
+  }
+  .highlight .sb {
+    color: #e6db74;
+  }
+  .highlight .sh {
+    color: #e6db74;
+  }
+  .highlight .si {
+    color: #e6db74;
+  }
+  .highlight .sx {
+    color: #e6db74;
+  }
+  .highlight .s1 {
+    color: #e6db74;
+  }
+  .highlight .s, .highlight .sa, .highlight .dl {
+    color: #e6db74;
+  }
+  .highlight .na {
+    color: #a6e22e;
+  }
+  .highlight .nc {
+    color: #a6e22e;
+  }
+  .highlight .nd {
+    color: #a6e22e;
+  }
+  .highlight .ne {
+    color: #a6e22e;
+  }
+  .highlight .nf, .highlight .fm {
+    color: #a6e22e;
+  }
+  .highlight .vc {
+    color: #ffffff;
+  }
+  .highlight .nn {
+    color: #ffffff;
+  }
+  .highlight .ni {
+    color: #ffffff;
+  }
+  .highlight .bp {
+    color: #ffffff;
+  }
+  .highlight .vg {
+    color: #ffffff;
+  }
+  .highlight .vi {
+    color: #ffffff;
+  }
+  .highlight .nv, .highlight .vm {
+    color: #ffffff;
+  }
+  .highlight .w {
+    color: #ffffff;
+  }
+  .highlight {
+    color: #ffffff;
+  }
+  .highlight .n, .highlight .py, .highlight .nx {
+    color: #ffffff;
+  }
+  .highlight .nl {
+    color: #f92672;
+  }
+  .highlight .ow {
+    color: #f92672;
+  }
+  .highlight .nt {
+    color: #f92672;
+  }
+  .highlight .k, .highlight .kv {
+    color: #f92672;
+  }
+  .highlight .kn {
+    color: #f92672;
+  }
+  .highlight .kp {
+    color: #f92672;
+  }
+  .highlight .o {
+    color: #f92672;
+  }
     </style>
     <style media="print">
-      * {
-        -webkit-transition:none!important;
-        transition:none!important;
-      }
-      .highlight table td { padding: 5px; }
-.highlight table pre { margin: 0; }
-.highlight, .highlight .w {
-  color: #586e75;
-}
-.highlight .err {
-  color: #002b36;
-  background-color: #dc322f;
-}
-.highlight .c, .highlight .ch, .highlight .cd, .highlight .cm, .highlight .cpf, .highlight .c1, .highlight .cs {
-  color: #657b83;
-}
-.highlight .cp {
-  color: #b58900;
-}
-.highlight .nt {
-  color: #b58900;
-}
-.highlight .o, .highlight .ow {
-  color: #93a1a1;
-}
-.highlight .p, .highlight .pi {
-  color: #93a1a1;
-}
-.highlight .gi {
-  color: #859900;
-}
-.highlight .gd {
-  color: #dc322f;
-}
-.highlight .gh {
-  color: #268bd2;
-  background-color: #002b36;
-  font-weight: bold;
-}
-.highlight .k, .highlight .kn, .highlight .kp, .highlight .kr, .highlight .kv {
-  color: #6c71c4;
-}
-.highlight .kc {
-  color: #cb4b16;
-}
-.highlight .kt {
-  color: #cb4b16;
-}
-.highlight .kd {
-  color: #cb4b16;
-}
-.highlight .s, .highlight .sb, .highlight .sc, .highlight .dl, .highlight .sd, .highlight .s2, .highlight .sh, .highlight .sx, .highlight .s1 {
-  color: #859900;
-}
-.highlight .sa {
-  color: #6c71c4;
-}
-.highlight .sr {
-  color: #2aa198;
-}
-.highlight .si {
-  color: #d33682;
-}
-.highlight .se {
-  color: #d33682;
-}
-.highlight .nn {
-  color: #b58900;
-}
-.highlight .nc {
-  color: #b58900;
-}
-.highlight .no {
-  color: #b58900;
-}
-.highlight .na {
-  color: #268bd2;
-}
-.highlight .m, .highlight .mb, .highlight .mf, .highlight .mh, .highlight .mi, .highlight .il, .highlight .mo, .highlight .mx {
-  color: #859900;
-}
-.highlight .ss {
-  color: #859900;
-}
+        * {
+          -webkit-transition:none!important;
+          transition:none!important;
+        }
+        .highlight table td { padding: 5px; }
+  .highlight table pre { margin: 0; }
+  .highlight, .highlight .w {
+    color: #586e75;
+  }
+  .highlight .err {
+    color: #002b36;
+    background-color: #dc322f;
+  }
+  .highlight .c, .highlight .ch, .highlight .cd, .highlight .cm, .highlight .cpf, .highlight .c1, .highlight .cs {
+    color: #657b83;
+  }
+  .highlight .cp {
+    color: #b58900;
+  }
+  .highlight .nt {
+    color: #b58900;
+  }
+  .highlight .o, .highlight .ow {
+    color: #93a1a1;
+  }
+  .highlight .p, .highlight .pi {
+    color: #93a1a1;
+  }
+  .highlight .gi {
+    color: #859900;
+  }
+  .highlight .gd {
+    color: #dc322f;
+  }
+  .highlight .gh {
+    color: #268bd2;
+    background-color: #002b36;
+    font-weight: bold;
+  }
+  .highlight .k, .highlight .kn, .highlight .kp, .highlight .kr, .highlight .kv {
+    color: #6c71c4;
+  }
+  .highlight .kc {
+    color: #cb4b16;
+  }
+  .highlight .kt {
+    color: #cb4b16;
+  }
+  .highlight .kd {
+    color: #cb4b16;
+  }
+  .highlight .s, .highlight .sb, .highlight .sc, .highlight .dl, .highlight .sd, .highlight .s2, .highlight .sh, .highlight .sx, .highlight .s1 {
+    color: #859900;
+  }
+  .highlight .sa {
+    color: #6c71c4;
+  }
+  .highlight .sr {
+    color: #2aa198;
+  }
+  .highlight .si {
+    color: #d33682;
+  }
+  .highlight .se {
+    color: #d33682;
+  }
+  .highlight .nn {
+    color: #b58900;
+  }
+  .highlight .nc {
+    color: #b58900;
+  }
+  .highlight .no {
+    color: #b58900;
+  }
+  .highlight .na {
+    color: #268bd2;
+  }
+  .highlight .m, .highlight .mb, .highlight .mf, .highlight .mh, .highlight .mi, .highlight .il, .highlight .mo, .highlight .mx {
+    color: #859900;
+  }
+  .highlight .ss {
+    color: #859900;
+  }
     </style>
-    <link href="stylesheets/screen-9c19b03a.css" rel="stylesheet" media="screen" />
-    <link href="stylesheets/print-966d6edc.css" rel="stylesheet" media="print" />
-      <script src="javascripts/all-b12a2749.js"></script>
+
+    <link href="stylesheets/screen-9c19b03a.css" rel="stylesheet" media="screen"/>
+    <link href="stylesheets/print-966d6edc.css" rel="stylesheet" media="print"/>
+    <script src="javascripts/all-b12a2749.js"></script>
 
     <script>
-      $(function() { setupCodeCopy(); });
+        $(function() { setupCodeCopy(); });
     </script>
-  </head>
+</head>
 
-  <body class="index" data-languages="[]">
-    <a href="#" id="nav-button">
+<body class="index" data-languages="[]">
+<a href="#" id="nav-button">
       <span>
         NAV
-        <img src="images/navbar-cad8cdcb.png" alt="" />
+        <img src="images/navbar-cad8cdcb.png" alt=""/>
       </span>
-    </a>
-    <div class="toc-wrapper">
-      <img src="images/logo-cc102dc1.png" class="logo" alt="" />
-        <div class="search">
-          <input type="text" class="search" id="input-search" placeholder="Search">
-        </div>
-        <ul class="search-results"></ul>
-      <ul id="toc" class="toc-list-h1">
-          <li>
-            <a href="#app-integration" class="toc-h1 toc-link" data-title="App integration">App integration</a>
-              <ul class="toc-list-h2">
-                  <li>
+</a>
+<div class="toc-wrapper">
+    <img src="images/logo-cc102dc1.png" class="logo" alt=""/>
+    <div class="search">
+        <input type="text" class="search" id="input-search" placeholder="Search">
+    </div>
+    <ul class="search-results"></ul>
+    <ul id="toc" class="toc-list-h1">
+        <li>
+            <a href="#app-integration" class="toc-h1 toc-link" data-title="App integration">App
+                integration</a>
+            <ul class="toc-list-h2">
+                <li>
                     <a href="#launcher" class="toc-h2 toc-link" data-title="Launcher">Launcher</a>
-                  </li>
-                  <li>
+                </li>
+                <li>
                     <a href="#paymentgateway" class="toc-h2 toc-link" data-title="PaymentGateway">PaymentGateway</a>
-                  </li>
-                  <li>
-                    <a href="#printer-app" class="toc-h2 toc-link" data-title="Printer App">Printer App</a>
-                  </li>
-              </ul>
-          </li>
-          <li>
+                </li>
+                <li>
+                    <a href="#printer-app" class="toc-h2 toc-link" data-title="Printer App">Printer
+                        App</a>
+                </li>
+            </ul>
+        </li>
+        <li>
             <a href="#opit" class="toc-h1 toc-link" data-title="OPIT">OPIT</a>
-              <ul class="toc-list-h2">
-                  <li>
+            <ul class="toc-list-h2">
+                <li>
                     <a href="#introduction" class="toc-h2 toc-link" data-title="Introduction">Introduction</a>
-                  </li>
-                  <li>
+                </li>
+                <li>
                     <a href="#opit-setup" class="toc-h2 toc-link" data-title="Setup">Setup</a>
-                  </li>
-              </ul>
-          </li>
-          <li>
-            <a href="#ecr-integration" class="toc-h1 toc-link" data-title="ECR integration">ECR integration</a>
-              <ul class="toc-list-h2">
-                  <li>
-                    <a href="#app-setup" class="toc-h2 toc-link" data-title="App Setup">App Setup</a>
-                  </li>
-                  <li>
-                    <a href="#fiscal-commands" class="toc-h2 toc-link" data-title="Fiscal commands">Fiscal commands</a>
-                  </li>
-                  <li>
-                    <a href="#sending-a-card-payment" class="toc-h2 toc-link" data-title="Sending a card payment">Sending a card payment</a>
-                  </li>
-              </ul>
-          </li>
-      </ul>
-        <ul class="toc-footer">
-            <li><a href='https://github.com/slatedocs/slate'>Documentation Powered by Slate</a></li>
-        </ul>
-    </div>
-    <div class="page-wrapper">
-      <div class="dark-box"></div>
-      <div class="content">
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="#ecr-integration" class="toc-h1 toc-link" data-title="ECR integration">ECR
+                integration</a>
+            <ul class="toc-list-h2">
+                <li>
+                    <a href="#app-setup" class="toc-h2 toc-link" data-title="App Setup">App
+                        Setup</a>
+                </li>
+                <li>
+                    <a href="#fiscal-commands" class="toc-h2 toc-link" data-title="Fiscal commands">Fiscal
+                        commands</a>
+                </li>
+                <li>
+                    <a href="#sending-a-card-payment" class="toc-h2 toc-link"
+                       data-title="Sending a card payment">Sending a card payment</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <ul class="toc-footer">
+        <li><a href='https://github.com/slatedocs/slate'>Documentation Powered by Slate</a></li>
+    </ul>
+</div>
+<div class="page-wrapper">
+    <div class="dark-box"></div>
+    <div class="content">
         <h1 id='app-integration'>App integration</h1>
-<p>Here&#39;s everything you require for integrating with the OderoPOS Android system, enabling your application to seamlessly interact with our devices for card payments and printing via a set of clearly defined APIs. Our tools simplify the integration process, ensuring ease and speed while minimizing the need for future adjustments on your end. OderoPOS, integrated into the Android system, is continuously maintained and updated, forming our robust ecosystem.</p>
-<h2 id='launcher'>Launcher</h2>
-<p>In order to be recognized by Token Platform and be visible in the Launcher, please also add the following lines to <code>AndroidManifest.xml</code> file.</p>
+        <p>Here&#39;s everything you require for integrating with the OderoPOS Android system,
+            enabling your application to seamlessly interact with our devices for card payments and
+            printing via a set of clearly defined APIs. Our tools simplify the integration process,
+            ensuring ease and speed while minimizing the need for future adjustments on your end.
+            OderoPOS, integrated into the Android system, is continuously maintained and updated,
+            forming our robust ecosystem.</p>
+
+        <h2 id='launcher'>Launcher</h2>
+        <div class="content" data-include="launcher.html"></div>
+
+        <h2 id='paymentgateway'>PaymentGateway</h2>
+        <div class="content" data-include="pgw.html"></div>
+
+        <h2 id='printer-app'>Printer App</h2>
+        <div class="content" data-include="printer-app.html"></div>
+
+        <h1 id='opit'>OPIT</h1>
+        <div class="content" data-include="opit/short-description.html"></div>
+
+        <h2 id='introduction'>Introduction</h2>
+        <div class="content" data-include="opit/introduction.html"></div>
+
+        <h2 id='opit-setup'>Setup</h2>
+        <ol type="1">
+            <li>Download the latest OPIT Lan for Windows <a
+                    href="https://github.com/OderoPos/opit-lan-windows/releases">release</a> and
+                unzip the archive.
+            </li>
+            <li>Copy archive contents inside the sample project folder.</li>
+            <li>Open the sample app project solution with Microsoft Visual Studio (make sure C++
+                module is installed).
+            </li>
+            <li>In Microsoft Visual Studio go to Project -> Properties -> C/C++ -> Command Line ->
+                Additional Options -> add text: /std:c++latest
+                <p align="center"><img src="images/1-c57c7976-c57c7976.png" width=700></p>
+            </li>
+            <li>C/C++ -> General -> Additional Include Directories -> click on the dropdown -> Edit
+                ->
+                in the popup press the 3 dots (...) button from the right -> Choose headers folder
+                from the opit-desktop project -> Ok
+                <p align="center"><img src="images/2a-f3a7b050-f3a7b050.png" width=700></p>
+                <p align="center"><img src="images/2b-e4d83d86-e4d83d86.png" width=700></p>
+            </li>
+
+            <li>Linker -> Input -> Additional Dependencies -> click on the dropdown -> Edit -> add
+                text: OpitDesktop.lib -> Ok
+                <p align="center"><img src="images/3a-05caa5b3-05caa5b3.png" width=700></p>
+                <p align="center"><img src="images/3b-45cf7f51-45cf7f51.png" width=700></p>
+            </li>
+
+            <li>Linker -> General -> Additional Library Directories -> click on the dropdown -> Edit
+                ->
+                in the popup press the 3 dots (...) button from the right -> select the folder where
+                the OpitDesktop.lib file is located -> Ok
+                <p align="center"><img src="images/4a-d6d978e6-d6d978e6.png" width=700></p>
+                <p align="center"><img src="images/4b-5fcb9813-5fcb9813.png" width=700></p>
+            </li>
+
+            <li>That's it! The solution should now build.</li>
+        </ol>
+
+        <h1 id='ecr-integration'>ECR integration</h1>
+        <h2 id='app-setup'>App Setup</h2>
+        <div class="content" data-include="ecr/setup.html"></div>
+
+        <h2 id='fiscal-commands'>Fiscal commands</h2>
+        <div class="content" data-include="ecr/fiscal-commands.html"></div>
+
+        <h2 id='sending-a-card-payment'>Sending a card payment</h2>
+        <p>Please check out <a
+                href="https://developer.pos.odero.ro/#paymentgateway">PaymentGateway</a> docs</p>
 
-<blockquote>
-<p>AndroidManifest.xml</p>
-</blockquote>
-<div class="highlight"><pre class="highlight xml tab-xml"><code><span class="nt">&lt;application&gt;</span>
-    <span class="c">&lt;!-- Other fields --&gt;</span>
-    <span class="c">&lt;!-- App Name should be started with LYL, thus Launcher can differentiate sale apps --&gt;</span>
-    <span class="nt">&lt;meta-data</span> <span class="na">android:name=</span><span class="s">"app_name"</span> <span class="na">android:value=</span><span class="s">"LYL_APP_NAME"</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;meta-data</span> <span class="na">android:name=</span><span class="s">"app_model_type"</span> <span class="na">android:value=</span><span class="s">"400TR"</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;meta-data</span> <span class="na">android:name=</span><span class="s">"app_version"</span> <span class="na">android:value=</span><span class="s">"1"</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;meta-data</span> <span class="na">android:name=</span><span class="s">"sale_activity_name"</span> <span class="na">android:value=</span><span class="s">"&lt;internal_packages&gt;.&lt;activity_name&gt;"</span> <span class="nt">/&gt;</span>
-<span class="nt">&lt;/application&gt;</span>
-</code></pre></div>
-<p>Please ensure that <code>sale_activity_name</code> is the Activity that will be shown to the customers as the first screen.</p>
-<div class="highlight"><pre class="highlight xml tab-xml"><code><span class="nt">&lt;activity</span> <span class="na">android:name=</span><span class="s">".activity.MyActivity"</span>
-            <span class="na">android:exported=</span><span class="s">"true"</span><span class="nt">&gt;&lt;/activity&gt;</span>
-<span class="c">&lt;!-- Example Usage --&gt;</span>
-    <span class="nt">&lt;meta-data</span> <span class="na">android:name=</span><span class="s">"sale_activity_name"</span> <span class="na">android:value=</span><span class="s">".android.MyActivity"</span> <span class="nt">/&gt;</span>
-</code></pre></div><h2 id='paymentgateway'>PaymentGateway</h2>
-<p>Allows payment requests in a uniform way across all POS family.</p>
-
-<p>The API is agnostic of the underlying payment procedures, which may involve banking, card reading, etc.</p>
-
-<p>The PGW will take care of all the printing during a payment request. The caller does not need to handle it via the printer app.</p>
-
-<p><img src="images/317915137-64b691c7.png" alt="!\[alt text\](Architecture)" /></p>
-<h3 id='setup'>Setup</h3>
-<p>In order to access the PGW app, the following pgw-launcher and common library should be included in the app. To do this add the following maven url to <code>settings.gradle</code> under dependencyResolutionManagement/repositories:</p>
-
-<blockquote>
-<p>settings.gradle</p>
-</blockquote>
-<div class="highlight"><pre class="highlight gradle tab-gradle"><code><span class="n">maven</span> <span class="o">{</span>
-    <span class="n">url</span> <span class="s1">'https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/'</span>
-<span class="o">}</span>
-</code></pre></div>
-<p>And also in <code>app/build.gradle</code> the actual dependency should be added: <code>implementation &#39;Odero:pgw-launcher:1.0.13&#39;</code></p>
-
-<blockquote>
-<p>build.gradle</p>
-</blockquote>
-<div class="highlight"><pre class="highlight gradle tab-gradle"><code><span class="k">dependencies</span> <span class="o">{</span>
-    <span class="n">implementation</span> <span class="s1">'Odero:pgw-launcher:1.0.13'</span>
-<span class="o">}</span>
-</code></pre></div><h3 id='request-payment'>Request payment</h3>
-<p>The payment request is done via an ActivityResultLauncher contract.</p>
-
-<blockquote>
-<p>Obtaining the PGW contract</p>
-</blockquote>
-<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code><span class="kd">val</span> <span class="py">paymentResultContract</span> <span class="p">=</span> <span class="nc">PGWLauncher</span><span class="p">.</span><span class="nf">getPGWContract</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
-</code></pre></div>
-<blockquote>
-<p>Returns null if the PGW app is not installed on the device.</p>
-
-<p>Payment request</p>
-</blockquote>
-<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code><span class="k">import</span> <span class="nn">ro.odero.paymentgateway.common.data.CurrencyCode</span>
-<span class="k">import</span> <span class="nn">ro.odero.paymentgateway.common.data.PaymentOption</span>
-<span class="k">import</span> <span class="nn">ro.odero.paymentgateway.common.data.request.PaymentRequest</span>
-<span class="k">import</span> <span class="nn">ro.odero.paymentgateway.launcher.PGWLauncher</span>
-
-<span class="kd">val</span> <span class="py">pgwContract</span> <span class="p">=</span> <span class="nc">PGWLauncher</span><span class="p">.</span><span class="nf">getPGWContract</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
-
-<span class="k">if</span> <span class="p">(</span><span class="n">pgwContract</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
-
-<span class="p">}</span>
-
-<span class="kd">val</span> <span class="py">paymentLauncher</span> <span class="p">=</span> <span class="nf">registerForActivityResult</span><span class="p">(</span>
-    <span class="n">contract = pgwContract,</span>
-    <span class="n">onResult = { paymentResponse</span><span class="p">:</span> <span class="nc">PaymentResponse</span> <span class="p">-&gt;</span>
-    <span class="c1">//payment response</span>
-    <span class="p">}</span>
-<span class="p">)</span>
-
-<span class="n">paymentLauncher</span><span class="p">.</span><span class="nf">launch</span><span class="p">(</span><span class="nc">PaymentRequest</span><span class="p">(</span>
-                <span class="n">amount</span> <span class="p">=</span> <span class="mi">12345</span><span class="p">,</span>
-                <span class="n">paymentOptions</span> <span class="p">=</span> <span class="nf">listOf</span><span class="p">(</span><span class="nc">PaymentOption</span><span class="p">.</span><span class="nc">Card</span><span class="p">),</span>
-                <span class="n">currencyCode</span> <span class="p">=</span> <span class="nc">CurrencyCode</span><span class="p">.</span><span class="nc">RON</span>
-            <span class="p">)</span>
-    <span class="p">)</span>
-</code></pre></div>
-<p>According to the selected payment options <code>PGW</code> will handle the payment and printing. The amount will be internally translated as amount/100 to cover the currency decimal; in this case 12345 will internally converted to 123,45</p>
-<h3 id='handling-paymentresponse'>Handling PaymentResponse</h3>
-<p>Check the PaymentResponse based on the payment options sent.</p>
-
-<blockquote>
-<p>PaymentResponse handling</p>
-</blockquote>
-<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code><span class="n">paymentResponse</span> <span class="p">:</span> <span class="nc">PaymentResponse</span> <span class="p">-&gt;</span>
-
-<span class="k">if</span><span class="p">(</span><span class="n">paymentResponse</span> <span class="k">is</span> <span class="nc">CardPaymentResponse</span><span class="p">)</span><span class="o">..</span><span class="p">.</span>
-
-<span class="k">if</span><span class="p">(</span><span class="n">paymentResponse</span> <span class="k">is</span> <span class="nc">CashPaymentResponse</span><span class="p">)</span><span class="o">..</span><span class="p">.</span>
-
-</code></pre></div>
-<blockquote>
-<p>Types of PaymentResponse</p>
-</blockquote>
-<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code><span class="k">sealed</span> <span class="kd">class</span> <span class="nc">CardPaymentResponse</span> <span class="p">:</span> <span class="nc">PaymentResponse</span> <span class="p">{</span>
-
-    <span class="kd">data class</span> <span class="nc">Success</span><span class="p">(</span>
-        <span class="kd">val</span> <span class="py">receiptNumber</span><span class="p">:</span> <span class="nc">String</span><span class="p">,</span>
-        <span class="kd">val</span> <span class="py">bankActivityResultCode</span><span class="p">:</span> <span class="nc">Int</span><span class="p">,</span>
-        <span class="kd">val</span> <span class="py">bankStatus</span><span class="p">:</span> <span class="nc">Int</span><span class="p">,</span>
-        <span class="kd">val</span> <span class="py">customerSlip</span><span class="p">:</span> <span class="nc">String</span><span class="p">,</span>
-        <span class="kd">val</span> <span class="py">merchantSlip</span><span class="p">:</span> <span class="nc">String</span><span class="p">,</span>
-    <span class="p">)</span> <span class="p">:</span> <span class="nc">CardPaymentResponse</span><span class="p">()</span>
-
-    <span class="kd">data class</span> <span class="nc">Fail</span><span class="p">(</span>
-        <span class="kd">val</span> <span class="py">receiptNumber</span><span class="p">:</span> <span class="nc">String</span><span class="p">,</span>
-        <span class="kd">val</span> <span class="py">bankActivityResultCode</span><span class="p">:</span> <span class="nc">Int</span><span class="p">,</span>
-        <span class="kd">val</span> <span class="py">bankStatus</span><span class="p">:</span> <span class="nc">Int</span><span class="p">,</span>
-        <span class="kd">val</span> <span class="py">message</span><span class="p">:</span> <span class="nc">String</span><span class="p">,</span>
-    <span class="p">)</span> <span class="p">:</span> <span class="nc">CardPaymentResponse</span><span class="p">()</span>
-<span class="p">}</span>
-
-
-<span class="k">sealed</span> <span class="kd">class</span> <span class="nc">CashPaymentResponse</span> <span class="p">:</span> <span class="nc">PaymentResponse</span> <span class="p">{</span>
-
-    <span class="kd">data class</span> <span class="nc">Success</span><span class="p">(</span>
-        <span class="kd">val</span> <span class="py">receiptNumber</span><span class="p">:</span> <span class="nc">String</span><span class="p">,</span>
-    <span class="p">)</span> <span class="p">:</span> <span class="nc">CashPaymentResponse</span><span class="p">()</span>
-
-    <span class="kd">data class</span> <span class="nc">Fail</span><span class="p">(</span>
-        <span class="kd">val</span> <span class="py">receiptNumber</span><span class="p">:</span> <span class="nc">String</span><span class="p">,</span>
-        <span class="kd">val</span> <span class="py">message</span><span class="p">:</span> <span class="nc">String</span><span class="p">,</span>
-    <span class="p">)</span> <span class="p">:</span> <span class="nc">CashPaymentResponse</span><span class="p">()</span>
-<span class="p">}</span>
-</code></pre></div><h2 id='printer-app'>Printer App</h2>
-<p>Allows printing in a uniform way across all POS family.</p>
-
-<p>The API is agnostic of the underlying hardware but provides a set of well defined PrintCommands.</p>
-
-<p><img src="images/317947907-a4f4b285.png" alt="alt text" /></p>
-<h3 id='setup-2'>Setup</h3>
-<p>In order to access the Printer App, the following <code>printer-launcher</code> and <code>common</code> library should be included in the app. To do this add the following code into <code>settings.gradle</code> under dependencyResolutionManagement/repositories:</p>
-
-<blockquote>
-<p>settings.gradle</p>
-</blockquote>
-<div class="highlight"><pre class="highlight gradle tab-gradle"><code><span class="n">maven</span> <span class="o">{</span>
-    <span class="n">url</span> <span class="s1">'https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/'</span>
-<span class="o">}</span>
-</code></pre></div>
-<p>Add in <code>build.gradle</code> the lib dependencies: <code>implementation &#39;PrinterApp:printer-launcher:0.6.2&#39;</code>
- (the pgw-launcher should also add the common lib, if not please add the dependency <code>implementation &#39;Odero:printer-common:1.0.7&#39;</code>)</p>
-
-<blockquote>
-<p>build.gradle</p>
-</blockquote>
-<div class="highlight"><pre class="highlight gradle tab-gradle"><code><span class="k">dependencies</span><span class="o">{</span>
-    <span class="n">implementation</span> <span class="s1">'PrinterApp:printer-launcher:0.6.2'</span>
-    <span class="n">implementation</span> <span class="s1">'Odero:printer-common:1.0.7'</span>
-<span class="o">}</span>
-</code></pre></div><h3 id='printing'>Printing</h3>
-<p>There are two distinct flows that have to be implemented</p>
-
-<ul>
-<li>Checking if printer is ready to print
-
-<ul>
-<li>The check includes also if paper is present</li>
-</ul></li>
-</ul>
-
-<blockquote>
-<p>When printer is ready print the receipts</p>
-</blockquote>
-<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code><span class="kd">val</span> <span class="py">printerErrorCheck</span> <span class="p">=</span> <span class="nf">registerForActivityResul</span><span class="p">(</span>
-    <span class="nc">PrinterHealthResultContract</span><span class="p">()</span>
-    <span class="p">){ </span><span class="n">printerHealth</span><span class="p">:</span> <span class="nc">PrinterHealthResponse</span><span class="p">?</span> <span class="p">-&gt;</span>
-
-        <span class="k">if</span><span class="p">(</span><span class="n">printerHealth</span><span class="p">.</span><span class="n">hasErrors</span><span class="p">.</span><span class="nf">not</span><span class="p">()){</span>
-            <span class="nf">printReceipts</span><span class="p">()</span>
-        <span class="p">} </span><span class="k">else</span><span class="p"> {</span>
-            <span class="c1">//treat the error</span>
-        <span class="p">}</span>
-
-<span class="p">}</span>
-
-
-</code></pre></div>
-<ul>
-<li>Actual printing</li>
-</ul>
-
-<blockquote>
-<p>Actual printing contract that is used to start the PrinterApp</p>
-</blockquote>
-<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code><span class="kd">val</span> <span class="py">printerLauncher = PrinterLauncher.</span><span class="nf">registerForPrinterResult</span><span class="p">(</span>
-    <span class="n">onResult = </span><span class="p">{</span> <span class="n">printerResponse</span><span class="p">:</span> <span class="nc">PrinterResponse</span><span class="p">?</span> <span class="p">-&gt;</span>
-    <span class="c1">//treat printer response</span>
-    <span class="p">}</span>
-<span class="p">)</span>
-</code></pre></div>
-<blockquote>
-<p>Receipts example</p>
-</blockquote>
-<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code> <span class="kd">val</span> <span class="py">customerReceipt</span> <span class="p">=</span> <span class="nf">listOf</span><span class="p">(</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintSpace</span><span class="p">,</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintImage</span><span class="p">(</span><span class="n">image</span><span class="p">),</span> <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintSpace</span><span class="p">,</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintWithBold</span><span class="p">(</span><span class="k">true</span><span class="p">),</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintText</span><span class="p">(</span>
-            <span class="s">"Test SRL"</span><span class="p">,</span>
-            <span class="nc">TextAlignment</span><span class="p">.</span><span class="nc">Left</span><span class="p">,</span>
-        <span class="p">),</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintWithBold</span><span class="p">(</span><span class="k">false</span><span class="p">),</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintSpace</span><span class="p">,</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintText</span><span class="p">(</span>
-            <span class="s">"Data:10.03.2023"</span><span class="p">,</span>
-            <span class="nc">TextAlignment</span><span class="p">.</span><span class="nc">Left</span><span class="p">,</span>
-        <span class="p">),</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintText</span><span class="p">(</span>
-            <span class="s">"Ora:10:00"</span><span class="p">,</span>
-            <span class="nc">TextAlignment</span><span class="p">.</span><span class="nc">Right</span><span class="p">,</span>
-        <span class="p">),</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintText</span><span class="p">(</span>
-            <span class="s">"TID:0 MID:0"</span><span class="p">,</span>
-            <span class="nc">TextAlignment</span><span class="p">.</span><span class="nc">Left</span><span class="p">,</span>
-        <span class="p">),</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintSpace</span><span class="p">,</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintSpace</span><span class="p">,</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintText</span><span class="p">(</span>
-            <span class="s">"AID:00000"</span><span class="p">,</span>
-            <span class="nc">TextAlignment</span><span class="p">.</span><span class="nc">Right</span><span class="p">,</span>
-        <span class="p">),</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintText</span><span class="p">(</span>
-            <span class="s">"0000000000"</span><span class="p">,</span>
-            <span class="nc">TextAlignment</span><span class="p">.</span><span class="nc">Left</span><span class="p">,</span>
-        <span class="p">),</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintFontSize</span><span class="p">(</span><span class="nc">FontSize</span><span class="p">.</span><span class="nc">Small</span><span class="p">),</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintColumns</span><span class="p">(</span><span class="nf">arrayOf</span><span class="p">(</span><span class="s">"BATCH:000001"</span><span class="p">,</span> <span class="s">"BON:000001"</span><span class="p">)),</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintColumns</span><span class="p">(</span><span class="nf">arrayOf</span><span class="p">(</span><span class="s">"RRN:00123456789"</span><span class="p">,</span> <span class="s">"RC: 00"</span><span class="p">)),</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintColumns</span><span class="p">(</span><span class="nf">arrayOf</span><span class="p">(</span><span class="s">"AUTH:775040"</span><span class="p">,</span> <span class="s">"STAN:012345"</span><span class="p">)),</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintLine</span><span class="p">,</span> <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintWithBold</span><span class="p">(</span><span class="k">true</span><span class="p">),</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintFontSize</span><span class="p">(</span><span class="nc">FontSize</span><span class="p">.</span><span class="nc">Large</span><span class="p">),</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintColumns</span><span class="p">(</span><span class="nf">arrayOf</span><span class="p">(</span><span class="s">"SUMA:"</span><span class="p">,</span> <span class="s">"50"</span><span class="p">)),</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintWithBold</span><span class="p">(</span><span class="k">false</span><span class="p">),</span> <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintSpace</span><span class="p">,</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintText</span><span class="p">(</span><span class="s">"APPROVED"</span><span class="p">,</span> <span class="nc">TextAlignment</span><span class="p">.</span><span class="nc">Left</span><span class="p">),</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintFontSize</span><span class="p">(</span><span class="nc">FontSize</span><span class="p">.</span><span class="nc">Medium</span><span class="p">),</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintText</span><span class="p">(</span><span class="s">"EXEMPLAR CLIENT"</span><span class="p">,</span> <span class="nc">TextAlignment</span><span class="p">.</span><span class="nc">Left</span><span class="p">),</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintLine</span><span class="p">,</span> <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintSpace</span><span class="p">,</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintSpace</span><span class="p">,</span>
-    <span class="p">)</span>
-
-    <span class="kd">val</span> <span class="py">merchantReceipt</span> <span class="p">=</span> <span class="nf">listOf</span><span class="p">(</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintSpace</span><span class="p">,</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintImage</span><span class="p">(</span><span class="n">image</span><span class="p">),</span> <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintSpace</span><span class="p">,</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintWithBold</span><span class="p">(</span><span class="k">true</span><span class="p">),</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintText</span><span class="p">(</span>
-            <span class="s">"Test SRL"</span><span class="p">,</span>
-            <span class="nc">TextAlignment</span><span class="p">.</span><span class="nc">Left</span><span class="p">,</span>
-        <span class="p">),</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintWithBold</span><span class="p">(</span><span class="k">false</span><span class="p">),</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintSpace</span><span class="p">,</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintText</span><span class="p">(</span>
-            <span class="s">"Data:10.03.2023"</span><span class="p">,</span>
-            <span class="nc">TextAlignment</span><span class="p">.</span><span class="nc">Left</span><span class="p">,</span>
-        <span class="p">),</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintText</span><span class="p">(</span>
-            <span class="s">"Ora:10:00"</span><span class="p">,</span>
-            <span class="nc">TextAlignment</span><span class="p">.</span><span class="nc">Right</span><span class="p">,</span>
-        <span class="p">),</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintText</span><span class="p">(</span>
-            <span class="s">"TID:0 MID:0"</span><span class="p">,</span>
-            <span class="nc">TextAlignment</span><span class="p">.</span><span class="nc">Center</span><span class="p">,</span>
-        <span class="p">),</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintSpace</span><span class="p">,</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintSpace</span><span class="p">,</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintText</span><span class="p">(</span>
-            <span class="s">"AID:00000"</span><span class="p">,</span>
-            <span class="nc">TextAlignment</span><span class="p">.</span><span class="nc">Right</span><span class="p">,</span>
-        <span class="p">),</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintText</span><span class="p">(</span>
-            <span class="s">"0000000000"</span><span class="p">,</span> <span class="c1">// cardno</span>
-            <span class="nc">TextAlignment</span><span class="p">.</span><span class="nc">Left</span><span class="p">,</span>
-        <span class="p">),</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintFontSize</span><span class="p">(</span><span class="nc">FontSize</span><span class="p">.</span><span class="nc">Small</span><span class="p">),</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintColumns</span><span class="p">(</span><span class="nf">arrayOf</span><span class="p">(</span><span class="s">"BATCH:000001"</span><span class="p">,</span> <span class="s">"BON:000001"</span><span class="p">)),</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintColumns</span><span class="p">(</span><span class="nf">arrayOf</span><span class="p">(</span><span class="s">"RRN:00123456789"</span><span class="p">,</span> <span class="s">"RC: 00"</span><span class="p">)),</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintColumns</span><span class="p">(</span><span class="nf">arrayOf</span><span class="p">(</span><span class="s">"AUTH:775040"</span><span class="p">,</span> <span class="s">"STAN:012345"</span><span class="p">)),</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintLine</span><span class="p">,</span> <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintWithBold</span><span class="p">(</span><span class="k">true</span><span class="p">),</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintFontSize</span><span class="p">(</span><span class="nc">FontSize</span><span class="p">.</span><span class="nc">Large</span><span class="p">),</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintColumns</span><span class="p">(</span><span class="nf">arrayOf</span><span class="p">(</span><span class="s">"SUMA:"</span><span class="p">,</span> <span class="s">"50"</span><span class="p">)),</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintWithBold</span><span class="p">(</span><span class="k">false</span><span class="p">),</span> <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintSpace</span><span class="p">,</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintText</span><span class="p">(</span><span class="s">"APPROVED"</span><span class="p">,</span> <span class="nc">TextAlignment</span><span class="p">.</span><span class="nc">Left</span><span class="p">),</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintFontSize</span><span class="p">(</span><span class="nc">FontSize</span><span class="p">.</span><span class="nc">Medium</span><span class="p">),</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintText</span><span class="p">(</span><span class="s">"EXEMPLAR VANZATOR"</span><span class="p">,</span> <span class="nc">TextAlignment</span><span class="p">.</span><span class="nc">Center</span><span class="p">),</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintLine</span><span class="p">,</span> <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintSpace</span><span class="p">,</span>
-        <span class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintSpace</span><span class="p">,</span>
-    <span class="p">)</span>
-</code></pre></div>
-<blockquote>
-<p>Printing</p>
-</blockquote>
-<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code><span class="k">fun</span> <span class="nf">printReceipts</span><span class="p">(){</span>
-
-<span class="n">printerLauncher</span><span class="p">.</span><span class="nf">launch</span><span class="p">(</span>
-            <span class="nc">PrinterRequest</span><span class="p">(</span>
-                <span class="nf">listOf</span><span class="p">(</span>
-                    <span class="nc">PrintDocument</span><span class="p">(</span>
-                        <span class="n">clientReceipt</span><span class="p">,</span>
-                        <span class="s">"Chitanta client"</span><span class="p">,</span>
-                    <span class="p">),</span>
-                    <span class="nc">PrintDocument</span><span class="p">(</span><span class="n">merchantReceipt</span><span class="p">,</span> <span class="s">"Chitanta vanzator"</span><span class="p">),</span>
-                <span class="p">),</span>
-                <span class="nc">PrintRequestType</span><span class="p">.</span><span class="nc">PrintWithDialog</span><span class="p">,</span> <span class="c1">// will show a dialog between each print</span>
-                <span class="c1">// document</span>
-                <span class="c1">// PrintRequestType.SimplePrint //will print each document back-to-back - useful</span>
-                <span class="c1">// for setlements, reports, etc</span>
-            <span class="p">)),</span>
-<span class="p">}</span>
-
-</code></pre></div>
-<blockquote>
-<p>PrinterResponse structure</p>
-</blockquote>
-<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code><span class="kd">data class</span> <span class="nc">PrinterResponse</span><span class="p">(</span>
-    <span class="kd">val</span> <span class="py">status</span><span class="p">:</span> <span class="nc">Status</span><span class="p">,</span>
-    <span class="kd">val</span> <span class="py">message</span><span class="p">:</span> <span class="nc">String</span><span class="p">,</span>
-    <span class="kd">val</span> <span class="py">data</span><span class="p">:</span> <span class="nc">List</span><span class="p">&lt;</span><span class="nc">DocumentData</span><span class="p">&gt;,</span>
-<span class="p">)</span> <span class="p">{</span>
-
-    <span class="k">enum</span> <span class="kd">class</span> <span class="nc">Status</span> <span class="p">{</span>
-        <span class="nc">SUCCESS</span><span class="p">,</span>
-        <span class="nc">ERROR</span><span class="p">,</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div><h1 id='opit'>OPIT</h1>
-
-<p>Odero POS Integration Toolkit for Developers<br/></p>
-
-<p>Welcome to OPit, the Odero POS Integration Toolkit designed to streamline and enhance the communication between a Windows device (PC, laptop) and an Odero POS terminal. OPit enables developers to send commands such as Payment Requests, Settlements, Reports, and more, directly to the Odero POS terminal over a TCP/IP socket connection. By leveraging this powerful toolkit, developers can seamlessly integrate their Windows applications with Odero POS, unlocking new possibilities for efficient and secure payment processing.<br/></p>
-
-<p>At its core, OPit provides a reliable and secure channel for data exchange between the Windows device and the Odero POS terminal. This communication is facilitated through TCP/IP sockets, allowing for real-time, bidirectional communication over a local network. To ensure a seamless connection, both the Windows device and the Odero POS terminal must be connected to the same router or Wi-Fi network.<br/></p>
-
-<p>With OPit, developers gain full control over the payment flow, enabling them to initiate payment requests from their Windows applications and receive responses from the Odero POS terminal. This integration empowers developers to create custom workflows, tailor the user experience, and incorporate Odero POS functionality seamlessly into their existing applications. Whether you&#39;re building a point-of-sale system, a payment gateway, or any other payment-related application, OPit provides the tools you need to connect and communicate effortlessly with Odero POS.<br/></p>
-
-<p>By leveraging the power of OPit, developers can harness the extensive capabilities of Odero POS, such as processing transactions, generating reports, performing settlements, and more, directly from their Windows applications. This seamless integration ensures a cohesive experience for users and eliminates the need for manual data entry or redundant workflows. With OPit, you can empower your users with a unified and efficient payment processing solution, offering a streamlined experience that enhances productivity and accuracy.<br/></p>
-
-<p>In this developer documentation, we will provide you with comprehensive guidance on utilizing OPit to integrate your Windows applications with Odero POS. You&#39;ll find detailed instructions, sample code snippets, and best practices to help you make the most of this powerful toolkit. Whether you&#39;re a seasoned developer or just getting started, this documentation will serve as your roadmap to successfully integrating OPit and unlocking the full potential of Odero POS in your applications.<br/></p>
-
-<p>We&#39;re excited to have you embark on this journey with OPit, and we look forward to witnessing the innovative solutions you&#39;ll build with the power of seamless communication between Windows devices and Odero POS terminals. Let&#39;s dive in and get started!<br/></p>
-
-<h2 id='introduction'>Introduction</h2>
-
-<p>OPit Lan for Windows is a C++ library which allows for a Windows device (PC, laptop) to send commands (Payment Request, Settlement, Reports etc) to an Odero Pos terminal.<br/>
-The communication between the two devices is performed through TCP/IP sockets.<br/>
-Both devices have to be connected to the same router / wifi network.</p>
-
-<p>Please follow the below instructions for setup:<br/>
-<ol type="1">
-  <li>To use OPIT Lan you will need to use static ips for both devices, on the client tablet and the Odero POS terminal, and to have a dedicated router with - potentially - DHCP off (depends on the router)<br/>
-Tutorial on how to set up static ip on Windows can be found <a href="https://pureinfotech.com/set-static-ip-address-windows-10">here</a>
-</li>
-  <li>Connect to wifi on the dedicated router on both devices.</li>
-  <li>The Odero POS terminal must have the ip 192.168.1.1 this is the ip where the client device expects to find the host.</li>
-  <li>Install app-lan-host-release.apk on the Odero POS terminal and OpitDesktopSampleApp on the Windows device.</li>
-  <li>Start the OPIT Lan app on the Odero POS terminal.</li>
-  <li>Start Sample app on windows.</li>
-  <li>Send payment request.</li>
-</ol></p>
-
-<p><br/>
-Below you can find the OPit Lan for Windows diagram.
-<p align="center">
-<img src="images/opit_lan_windows_diagram-08dd9580-08dd9580.jpeg" width=700></p></p>
-
-<ol type="1">
-  <li>OPit lan host on Odero POS terminal is started and the socket server is booted up.</li>
-  <li>Client app (that implement OPit library) starts on windows device and connects to the socket server from the Odero POS terminal.</li>
-  <li>Client app receives onConnected callback.</li>
-  <li>Client app sends payment request via opened tcp/ip socket and is received on the Odero POS terminal.</li>
-  <li>Client app terminates the socket connection.</li>
-  <li>Client app receives onDisconnected callback.</li>
-  <li>Odero POS terminal switchs from wifi to gsm data as required by the bank app in order to perform the transaction on secure connection. Also the host socket server is shut down.</li>
-  <li>Odero POS terminal host awaits for response from the bank app.</li>
-  <li>Client app sends connnection ping requests attempting to connect to the socket server on the host device. These attempts fail at this point because the socket server is shut down as described in previous step.</li>
-  <li>Host app receives response from the bank app, network switch from gsm to wifi occurs and the socket server is started.</li>
-  <li>Client app connection request is successful.</li>
-  <li>Host app on Odero POS terminal sends the response from the bank app and is received on the client app (windows)</li>
-</ol>
-
-<p>The client app side implementation is rather simple, only step 4 is required to be perfomed, all other steps on the client side are performed under the hood inside the library.</p>
-
-<h2 id='opit-setup'>Setup</h2>
-
-<ol type="1">
-  <li>Download the latest OPIT Lan for Windows <a href="https://github.com/OderoPos/opit-lan-windows/releases">release</a> and unzip the archive.</li>
-  <li>Copy archive contents inside the sample project folder.</li>
-  <li>Open the sample app project solution with Microsoft Visual Studio (make sure C++ module is installed).</li>
-  <li>In Microsoft Visual Studio go to Project -> Properties -> C/C++ -> Command Line -> Additional Options -> add text: /std:c++latest
-<p align="center"><img src="images/1-c57c7976-c57c7976.png" width=700></p>
-  </li>
-  <li>C/C++ -> General -> Additional Include Directories -> click on the dropdown -> Edit -> 
-in the popup press the 3 dots (...) button from the right -> Choose headers folder from the opit-desktop project -> Ok
-<p align="center"><img src="images/2a-f3a7b050-f3a7b050.png" width=700></p>
-<p align="center"><img src="images/2b-e4d83d86-e4d83d86.png" width=700></p>
-  </li>
-
-  <li>Linker -> Input -> Additional Dependencies -> click on the dropdown -> Edit -> add text: OpitDesktop.lib -> Ok
-<p align="center"><img src="images/3a-05caa5b3-05caa5b3.png" width=700></p>
-<p align="center"><img src="images/3b-45cf7f51-45cf7f51.png" width=700></p>
-</li>
-
-  <li>Linker -> General -> Additional Library Directories -> click on the dropdown -> Edit -> 
-in the popup press the 3 dots (...) button from the right -> select the folder where the OpitDesktop.lib file is located -> Ok
-<p align="center"><img src="images/4a-d6d978e6-d6d978e6.png" width=700></p>
-<p align="center"><img src="images/4b-5fcb9813-5fcb9813.png" width=700></p>
-</li>
-
-  <li>That's it! The solution should now build.</li>
-</ol>
-<h1 id='ecr-integration'>ECR integration</h1><h2 id='app-setup'>App Setup</h2>
-<p>Login in ECR app with <code>integrator</code> user type.
-A list with all the integrated apps on the ECR330 will be displayed.</p>
-
-<p>If we want to mark an app as integrated with the ECR330 app we need to define in the manifest file of the target app the following metadata.</p>
-
-<blockquote>
-<p>AndroidManifest.xml</p>
-</blockquote>
-<div class="highlight"><pre class="highlight xml tab-xml"><code><span class="nt">&lt;meta-data</span>
-    <span class="na">android:name=</span><span class="s">"app_name"</span>
-    <span class="na">android:value=</span><span class="s">"ECR_[app name]"</span> <span class="nt">/&gt;</span>
-</code></pre></div>
-<p>After that, the app will be displayed on the main screen of the ECR330 app.</p>
-<h2 id='fiscal-commands'>Fiscal commands</h2>
-<p>libVersion = Check latest version <a href="https://ro-artifactory.devtokeninc.com/ui/native/PublicLibraries/X330/integrationLibs/fiscal">here</a></p>
-
-<p><strong><em>NOTE:</em></strong>  For best compatibility <code>libVersion</code> should match ECR version installed</p>
-
-<blockquote>
-<p>Dependencies</p>
-</blockquote>
-<div class="highlight"><pre class="highlight groovy tab-groovy"><code><span class="c1">//in settings.gradle</span>
-<span class="n">maven</span> <span class="o">{</span>
-    <span class="n">url</span> <span class="s1">'https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/'</span>
-<span class="o">}</span>
-
-<span class="c1">//in app.gradle</span>
-<span class="n">implementation</span> <span class="err">'</span><span class="n">X330</span><span class="o">.</span><span class="na">integrationLibs</span><span class="o">:</span><span class="nl">fiscal:</span><span class="n">$libVersion</span>
-</code></pre></div>
-<p>Use <code>EcrCommandExecutor</code> object for sending commands to the ECR and receiving the result.</p>
-
-<p>The fiscal commands are sent to the ECR using the <code>executeFiscalCommand</code> method. The result can be received
-as a <code>Flow</code> or if you want to receive as a <code>EcrCommandResultListener</code>.</p>
-
-<p>The user screen commands follow the same <code>flow</code>, <code>listener</code> pattern.</p>
-
-<p>Type of fiscal commands</p>
-
-<p><code>SetDateTime</code><br>
-<code>SetCompanyData</code><br>
-<code>GetCompanyData</code><br>
-<code>SetVATRates</code><br>
-<code>GetVATRates</code><br>
-<code>Fiscalise</code><br>
-<code>InitElectronicJournal</code><br>
-<code>TechnicalReport</code><br>
-<code>ZReport</code><br>
-<code>XReport</code><br>
-<code>InitJournal</code><br>
-<code>Journal</code><br>
-<code>JournalExport</code><br>
-<code>XJournal</code><br>
-<code>CustomerData</code><br>
-<code>PeriodicReport</code><br>
-    - <code>ByDate</code><br>
-    - <code>ByZ</code><br>
-<code>XMLReport</code><br>
-<code>GetDailyTotals</code><br>
-<code>GetStatus</code><br>
-<code>GetSoftwareVersion</code><br>
-<code>LoadProfile</code><br>
-<code>ResetFiscalMemory</code><br>
-<code>Sale</code><br>
-<code>CashOperation</code>  </p>
-
-<blockquote>
-<p>Fiscal commands</p>
-</blockquote>
-<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code><span class="c1">//Example of usage for sending a fiscal command and receiving the result as a [Flow]:</span>
-<span class="nc">EcrCommandExecutor</span><span class="p">.</span><span class="nf">executeFiscalCommand</span><span class="p">(</span>
-   <span class="n">context</span> <span class="p">=</span> <span class="n">context</span><span class="p">,</span>
-   <span class="n">command</span> <span class="p">=</span> <span class="nc">FiscalCommand</span><span class="p">.</span><span class="nc">SetDateTime</span><span class="p">(</span><span class="nc">Calendar</span><span class="p">.</span><span class="nf">getInstance</span><span class="p">().</span><span class="n">time</span><span class="p">),</span>
-<span class="p">).</span><span class="nf">collect</span> <span class="p">{</span> <span class="n">result</span> <span class="p">-&gt;</span>
-    <span class="n">result</span><span class="p">.</span><span class="nf">runCatching</span> <span class="p">{</span>
-        <span class="nc">Log</span><span class="p">.</span><span class="nf">d</span><span class="p">(</span><span class="s">"MainActivity"</span><span class="p">,</span> <span class="s">"Result.Success: $result"</span><span class="p">)</span>
-        <span class="nc">Toast</span><span class="p">.</span><span class="nf">makeText</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">result</span><span class="p">.</span><span class="nf">toString</span><span class="p">(),</span> <span class="nc">Toast</span><span class="p">.</span><span class="nc">LENGTH_SHORT</span><span class="p">)</span>
-            <span class="p">.</span><span class="nf">show</span><span class="p">()</span>
-    <span class="p">}.</span><span class="nf">onFailure</span> <span class="p">{</span>
-        <span class="nc">Log</span><span class="p">.</span><span class="nf">e</span><span class="p">(</span><span class="s">"MainActivity"</span><span class="p">,</span> <span class="s">"Result.Failure: $result"</span><span class="p">)</span>
-        <span class="nc">Toast</span><span class="p">.</span><span class="nf">makeText</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">result</span><span class="p">.</span><span class="nf">toString</span><span class="p">(),</span> <span class="nc">Toast</span><span class="p">.</span><span class="nc">LENGTH_SHORT</span><span class="p">)</span>
-            <span class="p">.</span><span class="nf">show</span><span class="p">()</span>
-     <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="c1">//Example of usage for sending a fiscal command and receiving the result as a [EcrCommandResultListener]:</span>
-<span class="nc">EcrCommandExecutor</span><span class="p">.</span><span class="nf">executeFiscalCommand</span><span class="p">(</span>
-   <span class="n">context</span> <span class="p">=</span> <span class="n">context</span><span class="p">,</span>
-   <span class="n">command</span> <span class="p">=</span> <span class="nc">FiscalCommand</span><span class="p">.</span><span class="nc">SetDateTime</span><span class="p">(</span><span class="nc">Calendar</span><span class="p">.</span><span class="nf">getInstance</span><span class="p">().</span><span class="n">time</span><span class="p">),</span>
-   <span class="n">listener</span> <span class="p">=</span> <span class="kd">object</span> <span class="err">: </span><span class="nc">EcrCommandResultListener</span> <span class="p">{</span>
-         <span class="k">override</span> <span class="k">fun</span> <span class="nf">onEcrCommandResult</span><span class="p">(</span><span class="n">result</span><span class="p">:</span> <span class="nc">String</span><span class="p">)</span> <span class="p">{</span>
-             <span class="c1">// Handle the successful result</span>
-         <span class="p">}</span>
-         <span class="k">override</span> <span class="k">fun</span> <span class="nf">onEcrCommandError</span><span class="p">(</span><span class="n">error</span><span class="p">:</span> <span class="nc">String</span><span class="p">)</span> <span class="p">{</span>
-             <span class="c1">// Handle the error result</span>
-         <span class="p">}</span>
-   <span class="p">},</span>
-<span class="p">)</span>
-
-<span class="c1">//Example of usage for sending a user screen command and receiving the result as a [Flow]:</span>
-<span class="nc">EcrCommandExecutor</span><span class="p">.</span><span class="nf">executeUserScreenCommand</span><span class="p">(</span>
-   <span class="n">context</span> <span class="p">=</span> <span class="n">context</span><span class="p">,</span>
-   <span class="n">newText</span> <span class="p">=</span> <span class="nc">SecureRandom</span><span class="p">().</span><span class="nf">nextInt</span><span class="p">(</span><span class="mi">100</span><span class="p">).</span><span class="nf">toString</span><span class="p">(),</span>
-<span class="p">).</span><span class="nf">collect</span> <span class="p">{</span> <span class="n">result</span> <span class="p">-&gt;</span>
-    <span class="n">result</span><span class="p">.</span><span class="nf">runCatching</span> <span class="p">{</span>
-        <span class="nc">Log</span><span class="p">.</span><span class="nf">d</span><span class="p">(</span><span class="s">"MainActivity"</span><span class="p">,</span> <span class="s">"Result.Success: $result"</span><span class="p">)</span>
-        <span class="nc">Toast</span><span class="p">.</span><span class="nf">makeText</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">result</span><span class="p">.</span><span class="nf">toString</span><span class="p">(),</span> <span class="nc">Toast</span><span class="p">.</span><span class="nc">LENGTH_SHORT</span><span class="p">)</span>
-            <span class="p">.</span><span class="nf">show</span><span class="p">()</span>
-    <span class="p">}.</span><span class="nf">onFailure</span> <span class="p">{</span>
-        <span class="nc">Log</span><span class="p">.</span><span class="nf">e</span><span class="p">(</span><span class="s">"MainActivity"</span><span class="p">,</span> <span class="s">"Result.Failure: $result"</span><span class="p">)</span>
-        <span class="nc">Toast</span><span class="p">.</span><span class="nf">makeText</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">result</span><span class="p">.</span><span class="nf">toString</span><span class="p">(),</span> <span class="nc">Toast</span><span class="p">.</span><span class="nc">LENGTH_SHORT</span><span class="p">)</span>
-            <span class="p">.</span><span class="nf">show</span><span class="p">()</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="c1">//Example of usage for sending a user screen command and receiving the result as a [EcrCommandResultListener]:</span>
-<span class="nc">EcrCommandExecutor</span><span class="p">.</span><span class="nf">executeUserScreenCommand</span><span class="p">(</span>
-   <span class="n">context</span> <span class="p">=</span> <span class="n">context</span><span class="p">,</span>
-   <span class="n">newText</span> <span class="p">=</span> <span class="nc">SecureRandom</span><span class="p">().</span><span class="nf">nextInt</span><span class="p">(</span><span class="mi">100</span><span class="p">).</span><span class="nf">toString</span><span class="p">(),</span>
-   <span class="n">listener</span> <span class="p">=</span> <span class="kd">object</span> <span class="err">: </span><span class="nc">EcrCommandResultListener</span> <span class="p">{</span>
-       <span class="k">override</span> <span class="k">fun</span> <span class="nf">onEcrCommandResult</span><span class="p">(</span><span class="n">result</span><span class="p">:</span> <span class="nc">String</span><span class="p">)</span> <span class="p">{</span>
-           <span class="c1">// Handle the successful result</span>
-       <span class="p">}</span>
-       <span class="k">override</span> <span class="k">fun</span> <span class="nf">onEcrCommandError</span><span class="p">(</span><span class="n">error</span><span class="p">:</span> <span class="nc">String</span><span class="p">)</span> <span class="p">{</span>
-           <span class="c1">// Handle the error result</span>
-       <span class="p">}</span>
-   <span class="p">},</span>
-<span class="p">)</span>
-
-<span class="c1">//Example of a sale fiscal command</span>
-<span class="nc">FiscalCommand</span><span class="p">.</span><span class="nc">Sale</span><span class="p">(</span>
-    <span class="n">sellerInfo</span> <span class="p">=</span> <span class="nc">SellerInfo</span><span class="p">(</span>
-        <span class="n">cashierName</span> <span class="p">=</span> <span class="s">"John Doe"</span><span class="p">,</span>
-        <span class="n">posNumber</span> <span class="p">=</span> <span class="s">"123413"</span><span class="p">,</span>
-    <span class="p">),</span>
-    <span class="n">products</span> <span class="p">=</span> <span class="nf">listOf</span><span class="p">(</span>
-        <span class="nc">FiscalProduct</span><span class="p">(</span>
-            <span class="n">productName</span> <span class="p">=</span> <span class="s">"Product 1"</span><span class="p">,</span>
-            <span class="n">unit</span> <span class="p">=</span> <span class="s">"kg"</span><span class="p">,</span>
-            <span class="n">quantity</span> <span class="p">=</span> <span class="s">"1"</span><span class="p">,</span>
-            <span class="n">pricePerUnit</span> <span class="p">=</span> <span class="s">"10,5"</span><span class="p">,</span>
-            <span class="n">vatId</span> <span class="p">=</span> <span class="s">"B"</span><span class="p">,</span>
-        <span class="p">),</span>
-        <span class="nc">FiscalProduct</span><span class="p">(</span>
-            <span class="n">productName</span> <span class="p">=</span> <span class="s">"Product 2"</span><span class="p">,</span>
-            <span class="n">unit</span> <span class="p">=</span> <span class="s">"kg"</span><span class="p">,</span>
-            <span class="n">quantity</span> <span class="p">=</span> <span class="s">"1"</span><span class="p">,</span>
-            <span class="n">pricePerUnit</span> <span class="p">=</span> <span class="s">"15,5"</span><span class="p">,</span>
-            <span class="n">vatId</span> <span class="p">=</span> <span class="s">"B"</span><span class="p">,</span>
-        <span class="p">),</span>
-    <span class="p">),</span>
-    <span class="n">payments</span> <span class="p">=</span> <span class="nf">listOf</span><span class="p">(</span>
-        <span class="nc">FiscalPayment</span><span class="p">(</span>
-            <span class="n">paymentMethod</span> <span class="p">=</span> <span class="nc">FiscalPayment</span><span class="p">.</span><span class="nc">PaymentMethod</span><span class="p">.</span><span class="nc">Card</span><span class="p">,</span>
-            <span class="n">amount</span> <span class="p">=</span> <span class="s">"26"</span><span class="p">,</span>
-        <span class="p">),</span>
-    <span class="p">),</span>
-    <span class="n">cifNumber</span> <span class="p">=</span> <span class="s">"43511483"</span><span class="p">,</span>
-<span class="p">)</span>
-</code></pre></div><h2 id='sending-a-card-payment'>Sending a card payment</h2>
-<p>Please check out <a href="https://developer.pos.odero.ro/#paymentgateway">PaymentGateway</a> docs</p>
-
-      </div>
-      <div class="dark-box">
-      </div>
     </div>
-  </body>
+    <div class="dark-box"></div>
+</div>
+<script src="import_html.js"></script>
+</body>
 </html>

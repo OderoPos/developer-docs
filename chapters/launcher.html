@@ -1,0 +1,46 @@
+<blockquote>
+  <p>AndroidManifest.xml</p>
+</blockquote>
+<div class="highlight">
+    <pre class="highlight xml tab-xml">
+        <code>
+        <span class="nt">&lt;application&gt;</span>
+            <span class="c">&lt;!-- Other fields --&gt;</span>
+            <span class="c">&lt;!-- App Name should be started with LYL, thus Launcher can differentiate sale apps --&gt;</span>
+            <span class="nt">&lt;meta-data</span>
+                <span class="na">android:name=</span><span class="s">"app_name"</span>
+                <span class="na">android:value=</span><span class="s">"LYL_APP_NAME"</span> <span class="nt">/&gt;</span>
+
+            <span class="nt">&lt;meta-data</span>
+                <span class="na">android:name=</span><span class="s">"app_model_type"</span>
+                <span class="na">android:value=</span><span class="s">"400TR"</span> <span class="nt">/&gt;</span>
+
+            <span class="nt">&lt;meta-data</span>
+                <span class="na">android:name=</span><span class="s">"app_version"</span>
+                <span class="na">android:value=</span><span class="s">"1"</span> <span class="nt">/&gt;</span>
+
+            <span class="nt">&lt;meta-data</span>
+                <span class="na">android:name=</span><span class="s">"sale_activity_name"</span>
+                <span class="na">android:value=</span><span class="s">"&lt;internal_packages&gt;.&lt;activity_name&gt;"</span> <span class="nt">/&gt;</span>
+
+        <span class="nt">&lt;/application&gt;</span>
+        </code>
+    </pre>
+</div>
+<p>In order to be recognized by Token Platform and be visible in the Launcher, please also add the following lines to <code>AndroidManifest.xml</code> file.</p>
+
+<div class="highlight">
+    <pre class="highlight xml tab-xml">
+        <code>
+        <span class="nt">&lt;activity</span>
+            <span class="na">android:name=</span><span class="s">".activity.MyActivity"</span>
+            <span class="na">android:exported=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+
+            <span class="c">&lt;!-- Example Usage --&gt;</span>
+        <span class="nt">&lt;meta-data</span>
+            <span class="na">android:name=</span><span class="s">"sale_activity_name"</span>
+            <span class="na">android:value=</span><span class="s">".android.MyActivity"</span> <span class="nt">/&gt;</span>
+        </code>
+    </pre>
+</div>
+<p>Please ensure that <code>sale_activity_name</code> is the Activity that will be shown to the customers as the first screen.</p>
