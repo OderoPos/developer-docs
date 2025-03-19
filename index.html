@@ -1,6 +1,8 @@
 <!doctype html>
 <html lang="en">
 <head>
+    <link rel="icon" href="images/ic_launcher.png">
+
     <meta charset="utf-8">
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -325,10 +327,18 @@
             <a href="#opit" class="toc-h1 toc-link" data-title="OPIT">OPIT</a>
             <ul class="toc-list-h2">
                 <li>
-                    <a href="#introduction" class="toc-h2 toc-link" data-title="Introduction">Introduction</a>
+                    <a href="#introduction" class="toc-h2 toc-link"
+                       data-title="Opit - Introduction">Introduction</a>
                 </li>
                 <li>
-                    <a href="#opit-setup" class="toc-h2 toc-link" data-title="Setup">Setup</a>
+                    <a href="#opit-setup" class="toc-h2 toc-link" data-title="Opit - Build project">Build
+                        project</a>
+                </li>
+                <li>
+                    <a href="#opit-windows" class="toc-h2 toc-link" data-title="Opit - Windows">Windows</a>
+                </li>
+                <li>
+                    <a href="#opit-android" class="toc-h2 toc-link" data-title="Opit - Android">Android</a>
                 </li>
             </ul>
         </li>
@@ -376,12 +386,10 @@
         <div class="content" data-include="printer-app.html"></div>
 
         <h1 id='opit'>OPIT</h1>
-        <div class="content" data-include="opit/short-description.html"></div>
-
         <h2 id='introduction'>Introduction</h2>
         <div class="content" data-include="opit/introduction.html"></div>
 
-        <h2 id='opit-setup'>Setup</h2>
+        <h2 id='opit-setup'>Setup to build the OPIT project</h2>
         <ol type="1">
             <li>Download the latest OPIT Lan for Windows <a
                     href="https://github.com/OderoPos/opit-lan-windows/releases">release</a> and
@@ -391,34 +399,45 @@
             <li>Open the sample app project solution with Microsoft Visual Studio (make sure C++
                 module is installed).
             </li>
-            <li>In Microsoft Visual Studio go to Project -> Properties -> C/C++ -> Command Line ->
+            <li>
+                In Microsoft Visual Studio go to Project -> Properties -> C/C++ -> Command Line ->
                 Additional Options -> add text: /std:c++latest
                 <p align="center"><img src="images/1-c57c7976-c57c7976.png" width=700></p>
             </li>
-            <li>C/C++ -> General -> Additional Include Directories -> click on the dropdown -> Edit
+            <li>
+                C/C++ -> General -> Additional Include Directories -> click on the dropdown -> Edit
                 ->
                 in the popup press the 3 dots (...) button from the right -> Choose headers folder
                 from the opit-desktop project -> Ok
                 <p align="center"><img src="images/2a-f3a7b050-f3a7b050.png" width=700></p>
                 <p align="center"><img src="images/2b-e4d83d86-e4d83d86.png" width=700></p>
             </li>
-
-            <li>Linker -> Input -> Additional Dependencies -> click on the dropdown -> Edit -> add
+            <li>
+                Linker -> Input -> Additional Dependencies -> click on the dropdown -> Edit -> add
                 text: OpitDesktop.lib -> Ok
                 <p align="center"><img src="images/3a-05caa5b3-05caa5b3.png" width=700></p>
                 <p align="center"><img src="images/3b-45cf7f51-45cf7f51.png" width=700></p>
             </li>
-
-            <li>Linker -> General -> Additional Library Directories -> click on the dropdown -> Edit
+            <li>
+                Linker -> General -> Additional Library Directories -> click on the dropdown -> Edit
                 ->
                 in the popup press the 3 dots (...) button from the right -> select the folder where
                 the OpitDesktop.lib file is located -> Ok
                 <p align="center"><img src="images/4a-d6d978e6-d6d978e6.png" width=700></p>
                 <p align="center"><img src="images/4b-5fcb9813-5fcb9813.png" width=700></p>
             </li>
-
             <li>That's it! The solution should now build.</li>
         </ol>
+
+        <h2 id='opit-windows'>OPit Lan for Windows</h2>
+        <div class="content" data-include="opit/windows.html"></div>
+
+        <h2 id='opit-android'>OPit Android</h2>
+        <div class="content" data-include="opit/android-bl.html"></div>
+        <div class="content" data-include="opit/android-lan.html"></div>
+        <div class="content" data-include="opit/android-usb.html"></div>
+        <div class="content" data-include="opit/android-sample.html"></div>
+
 
         <h1 id='ecr-integration'>ECR integration</h1>
         <h2 id='app-setup'>App Setup</h2>

@@ -1,0 +1,65 @@
+<p>OPit Lan for Windows is a C++ library which allows for a Windows device (PC, laptop) to
+    send commands (Payment Request, Settlement, Reports etc) to an Odero Pos terminal.<br/>
+    The communication between the two devices is performed through TCP/IP sockets.<br/>
+    Both devices have to be connected to the same router / wifi network.
+</p>
+<p>Please follow the below instructions for setup:<br/>
+<ol type="1">
+    <li>To use OPIT Lan you will need to use static ips for both devices, on the client
+        tablet and the Odero POS terminal, and to have a dedicated router with - potentially
+        - DHCP off (depends on the router)<br/>
+        Tutorial on how to set up static ip on Windows can be found <a
+                href="https://pureinfotech.com/set-static-ip-address-windows-10">here</a>
+    </li>
+    <li>Connect to wifi on the dedicated router on both devices.</li>
+    <li>The Odero POS terminal must have the ip 192.168.1.1 this is the ip where the client
+        device expects to find the host.
+    </li>
+    <li>Install app-lan-host-release.apk on the Odero POS terminal and OpitDesktopSampleApp
+        on the Windows device.
+    </li>
+    <li>Start the OPIT Lan app on the Odero POS terminal.</li>
+    <li>Start Sample app on windows.</li>
+    <li>Send payment request.</li>
+</ol>
+</p>
+<p>
+    <br/>
+    Below you can find the OPit Lan for Windows diagram.
+<p align="center">
+    <img src="images/opit_lan_windows_diagram-08dd9580-08dd9580.jpeg" width=700>
+</p>
+</p>
+<ol type="1">
+    <li>OPit lan host on Odero POS terminal is started and the socket server is booted up.
+    </li>
+    <li>Client app (that implement OPit library) starts on windows device and connects to
+        the socket server from the Odero POS terminal.
+    </li>
+    <li>Client app receives onConnected callback.</li>
+    <li>Client app sends payment request via opened tcp/ip socket and is received on the
+        Odero POS terminal.
+    </li>
+    <li>Client app terminates the socket connection.</li>
+    <li>Client app receives onDisconnected callback.</li>
+    <li>Odero POS terminal switches from wifi to gsm data as required by the bank app in
+        order to perform the transaction on secure connection. Also the host socket server
+        is shut down.
+    </li>
+    <li>Odero POS terminal host awaits for response from the bank app.</li>
+    <li>Client app sends connection ping requests attempting to connect to the socket
+        server on the host device. These attempts fail at this point because the socket
+        server is shut down as described in previous step.
+    </li>
+    <li>Host app receives response from the bank app, network switch from gsm to wifi occurs
+        and the socket server is started.
+    </li>
+    <li>Client app connection request is successful.</li>
+    <li>Host app on Odero POS terminal sends the response from the bank app and is received
+        on the client app (windows)
+    </li>
+</ol>
+<p>The client app side implementation is rather simple, only step 4 is required to be
+    performed, all other steps on the client side are performed under the hood inside the
+    library.
+</p>
