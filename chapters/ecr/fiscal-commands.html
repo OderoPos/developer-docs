@@ -1,3 +1,23 @@
+<blockquote>
+    <p>Dependencies</p>
+</blockquote>
+<div class="highlight">
+   <pre class="highlight groovy tab-groovy"><code><span class="c1">//in settings.gradle</span>
+<span class="n">maven</span> <span class="o">{</span>
+    <span class="n">url</span> <span class="s1">'https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/'</span>
+<span class="o">}</span>
+
+<span class="c1">//in app.gradle</span>
+<span class="k">dependencies</span> <span
+               class="o">{</span>
+    <span class="n">implementation</span> <span class="err">'</span><span class="n">X330</span><span
+               class="o">.</span><span class="na">integrationLibs</span><span
+               class="o">:</span><span class="nl">fiscal:</span><span
+               class="n">$libVersion</span>
+<span class="o">}</span>
+  </code></pre>
+</div>
+
 <p>libVersion = Check latest version <a
         href="https://ro-artifactory.devtokeninc.com/ui/native/PublicLibraries/X330/integrationLibs/fiscal">here</a>
 </p>
@@ -5,21 +25,6 @@
 <p><strong><em>NOTE:</em></strong> For best compatibility <code>libVersion</code> should
     match ECR version installed</p>
 
-<blockquote>
-    <p>Dependencies</p>
-</blockquote>
-<div class="highlight"><pre class="highlight groovy tab-groovy"><code><span class="c1">//in settings.gradle</span>
-<span class="n">maven</span> <span class="o">{</span>
-    <span class="n">url</span> <span class="s1">'https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/'</span>
-<span class="o">}</span>
-
-<span class="c1">//in app.gradle</span>
-<span class="n">implementation</span> <span class="err">'</span><span class="n">X330</span><span
-            class="o">.</span><span class="na">integrationLibs</span><span
-            class="o">:</span><span class="nl">fiscal:</span><span
-            class="n">$libVersion</span>
-</code></pre>
-</div>
 <p>Use <code>EcrCommandExecutor</code> object for sending commands to the ECR and receiving
     the result.</p>
 
