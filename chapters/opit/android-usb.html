@@ -1,1 +1,113 @@
 <h3>Opit USB</h3>
+
+<h3> Pos is Host</h3>
+
+<blockquote>
+    <p>Dependencies</p>
+</blockquote>
+<div class="highlight">
+   <pre class="highlight groovy tab-groovy"><code><span class="c1">//in settings.gradle</span>
+<span class="n">maven</span> <span class="o">{</span>
+    <span class="n">url</span> <span class="s1">'https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/'</span>
+<span class="o">}</span>
+
+<span class="c1">//in app.gradle</span>
+<span class="k">dependencies</span> <span class="o">{</span>
+   <span class="n">implementation</span> <span class="err">'</span><span
+               class="n">OPIT</span><span
+               class="o">.</span><span class="na">pos-is-host</span><span
+               class="o">:</span><span class="na">common:</span><span
+               class="n">$commonLibVersion</span><span class="na">@aar</span><span
+               class="err">'</span>
+   <span class="n">implementation</span> <span class="err">'</span><span
+               class="n">OPIT</span><span
+               class="o">.</span><span class="na">pos-is-host</span><span
+               class="o">:</span><span class="na">clientlib:</span><span
+               class="n">$clientLibVersion</span><span class="na">@aar</span><span
+               class="err">'</span>
+   <span class="n">implementation</span> <span class="err">'</span><span
+               class="n">OPIT</span><span
+               class="o">.</span><span class="na">pos-is-host</span><span
+               class="o">:</span><span class="na">clientusb:</span><span
+               class="n">$clientUsbVersion</span><span class="na">@aar</span><span
+               class="err">'</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>
+    <br> You need to add the following dependencies to your build.gradle files (check the
+    right side)
+</p>
+<p>
+    $commonLibVersion = Check latest version <a
+        href="https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/OPIT/pos-is-host/common">here</a><br>
+    $clientLibVersion = Check latest version <a
+        href="https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/OPIT/pos-is-host/clientlib">here</a><br>
+    $clientUsbVersion = Check latest version <a
+        href="https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/OPIT/pos-is-host/clientusb">here</a><br>
+</p>
+
+<h3> Tablet is Host</h3>
+
+<blockquote>
+    <p>Dependencies</p>
+</blockquote>
+<div class="highlight">
+   <pre class="highlight groovy tab-groovy"><code><span class="c1">//in settings.gradle</span>
+<span class="n">maven</span> <span class="o">{</span>
+    <span class="n">url</span> <span class="s1">'https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/'</span>
+<span class="o">}</span>
+
+<span class="c1">//in app.gradle</span>
+<span class="k">dependencies</span> <span class="o">{</span>
+   <span class="n">implementation</span> <span class="err">'</span><span
+               class="n">OPIT</span><span
+               class="o">.</span><span class="na">tablet-is-host</span><span
+               class="o">:</span><span class="na">common:</span><span
+               class="n">$commonLibVersion</span><span class="na">@aar</span><span
+               class="err">'</span>
+   <span class="n">implementation</span> <span class="err">'</span><span
+               class="n">OPIT</span><span
+               class="o">.</span><span class="na">tablet-is-host</span><span
+               class="o">:</span><span class="na">masterusb:</span><span
+               class="n">$masterUsbVersion</span><span class="na">@aar</span><span
+               class="err">'</span>
+   <span class="n">implementation</span> <span class="err">'</span><span
+               class="n">OPIT</span><span
+               class="o">.</span><span class="na">tablet-is-host</span><span
+               class="o">:</span><span class="na">masterlib:</span><span
+               class="n">$masterLibVersion</span><span class="na">@aar</span><span
+               class="err">'</span>
+
+
+
+
+   <span class="n">implementation</span> <span class="err">'</span><span
+               class="n">OPIT</span><span
+               class="o">.</span><span class="na">tablet-is-host</span><span
+               class="o">:</span><span class="na">poslib:</span><span
+               class="n">$posLibVersion</span><span class="na">@aar</span><span
+               class="err">'</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>
+    <br> You need to add the following dependencies to your build.gradle files (check the
+    right side)
+</p>
+<p>
+    $commonLibVersion = Check latest version <a
+        href="https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/OPIT/tablet-is-host/common">here</a><br>
+    $masterUsbVersion = Check latest version <a
+        href="https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/OPIT/tablet-is-host/masterusb">here</a><br>
+    $masterLibVersion = Check latest version <a
+        href="https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/OPIT/tablet-is-host/masterlib">here</a><br>
+</p>
+
+<p>
+    <br><br><br>
+    $posLibVersion = Check latest version <a
+        href="https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/OPIT/tablet-is-host/poslib">here</a><br>
+</p>

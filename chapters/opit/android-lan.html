@@ -1,1 +1,55 @@
 <h3>Opit Lan</h3>
+
+<blockquote>
+    <p>Dependencies</p>
+</blockquote>
+<div class="highlight">
+   <pre class="highlight groovy tab-groovy"><code><span class="c1">//in settings.gradle</span>
+<span class="n">maven</span> <span class="o">{</span>
+    <span class="n">url</span> <span class="s1">'https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/'</span>
+<span class="o">}</span>
+
+<span class="c1">//in app.gradle</span>
+<span class="k">dependencies</span> <span class="o">{</span>
+   <span class="n">implementation</span> <span class="err">'</span><span
+               class="n">OPIT</span><span
+               class="o">.</span><span class="na">pos-is-host</span><span
+               class="o">:</span><span class="na">common:</span><span
+               class="n">$commonLibVersion</span><span class="na">@aar</span><span
+               class="err">'</span>
+   <span class="n">implementation</span> <span class="err">'</span><span
+               class="n">OPIT</span><span
+               class="o">.</span><span class="na">pos-is-host</span><span
+               class="o">:</span><span class="na">clientlib:</span><span
+               class="n">$clientLibVersion</span><span class="na">@aar</span><span
+               class="err">'</span>
+   <span class="n">implementation</span> <span class="err">'</span><span
+               class="n">OPIT</span><span
+               class="o">.</span><span class="na">pos-is-host</span><span
+               class="o">:</span><span class="na">common_lan:</span><span
+               class="n">$commonLibLanVersion</span><span class="na">@aar</span><span
+               class="err">'</span>
+   <span class="n">implementation</span> <span class="err">'</span><span
+               class="n">OPIT</span><span
+               class="o">.</span><span class="na">pos-is-host</span><span
+               class="o">:</span><span class="na">clientlib_lan:</span><span
+               class="n">$clientLibLanVersion</span><span class="na">@aar</span><span
+               class="err">'</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>
+    <br> You need to add the following dependencies to your build.gradle files (check the
+    right side)
+</p>
+<p>
+    $commonLibVersion = Check latest version <a
+        href="https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/OPIT/pos-is-host/common">here</a><br>
+    $clientLibVersion = Check latest version <a
+        href="https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/OPIT/pos-is-host/clientlib">here</a><br>
+    $commonLibLanVersion = Check latest version <a
+        href="https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/OPIT/pos-is-host/common_bluetooth">here</a><br>
+    $clientLibLanVersion = Check latest version <a
+        href="https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/OPIT/pos-is-host/clientlib_bluetooth">here</a><br>
+</p>
