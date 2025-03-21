@@ -1,1 +1,399 @@
 <h3 id='opit-android-sample'>Sample Implementation</h3>
+
+<blockquote><p>SampleActivity</p></blockquote>
+<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code>
+<span class="kd">class</span> <span class="nc">SampleActivity</span> <span class="o">:</span> <span
+        class="nc">AppCompatActivity</span><span class="o">()</span> <span class="o">{</span>
+
+    <span class="k">private</span> <span class="k">val</span> <span class="na">opit</span><span
+        class="o">:</span> <span class="kt">Opit</span> <span class="k">by</span> <span class="nl">lazy</span> <span
+        class="o">{</span>
+        <span class="na">Opit</span><span class="o">(</span><span class="k">this</span><span
+        class="o">,</span> <span class="na">lifecycleScope</span><span class="o">,</span> <span
+        class="na">opitResultListener</span><span class="o">)</span>
+    <span class="o">}</span>
+
+    <span class="c1">//in this callback/listener you will get the result/response of the operation, from TR400</span>
+    <span class="k">private</span> <span class="k">val</span> <span
+        class="na">opitResultListener</span> <span class="o">=</span> <span class="k">object</span> <span
+        class="o">:</span> <span class="kt">OpitResultListener</span><span class="o">()</span> <span
+        class="o">{</span>
+        <span class="k">override</span> <span class="k">fun</span> <span
+        class="na">onPaymentResult</span><span class="o">(</span><span class="na">result</span><span
+        class="o">:</span> <span class="kt">PaymentResult</span><span class="o">)</span> <span
+        class="o">{</span>
+            <span class="na">Debug</span><span class="o">.</span><span class="na">print</span><span
+        class="o">(</span><span class="s">&quot;result: &quot;</span> <span class="o">+</span> <span
+        class="na">result</span><span class="o">)</span>
+        <span class="o">}</span>
+
+        <span class="k">override</span> <span class="k">fun</span> <span
+        class="na">onVoidResult</span><span class="o">(</span><span class="na">result</span><span
+        class="o">:</span> <span class="kt">VoidResult</span><span class="o">)</span> <span
+        class="o">{</span>
+            <span class="na">Debug</span><span class="o">.</span><span class="na">print</span><span
+        class="o">(</span><span class="s">&quot;result: &quot;</span> <span class="o">+</span> <span
+        class="na">result</span><span class="o">)</span>
+        <span class="o">}</span>
+
+        <span class="k">override</span> <span class="k">fun</span> <span class="na">onReprintLastResult</span><span
+        class="o">(</span><span class="na">result</span><span class="o">:</span> <span class="kt">ReprintReceiptLastResult</span><span
+        class="o">)</span> <span class="o">{</span>
+            <span class="na">Debug</span><span class="o">.</span><span class="na">print</span><span
+        class="o">(</span><span class="s">&quot;result: &quot;</span> <span class="o">+</span> <span
+        class="na">result</span><span class="o">)</span>
+        <span class="o">}</span>
+
+        <span class="k">override</span> <span class="k">fun</span> <span class="na">onReprintReceiptNoResult</span><span
+        class="o">(</span><span class="na">result</span><span class="o">:</span> <span class="kt">ReprintReceiptNumberResult</span><span
+        class="o">)</span> <span class="o">{</span>
+            <span class="na">Debug</span><span class="o">.</span><span class="na">print</span><span
+        class="o">(</span><span class="s">&quot;result: &quot;</span> <span class="o">+</span> <span
+        class="na">result</span><span class="o">)</span>
+        <span class="o">}</span>
+
+        <span class="k">override</span> <span class="k">fun</span> <span class="na">onDetailedXReportResult</span><span
+        class="o">(</span><span class="na">result</span><span class="o">:</span> <span class="kt">DetailedXResult</span><span
+        class="o">)</span> <span class="o">{</span>
+            <span class="na">Debug</span><span class="o">.</span><span class="na">print</span><span
+        class="o">(</span><span class="s">&quot;result: &quot;</span> <span class="o">+</span> <span
+        class="na">result</span><span class="o">)</span>
+        <span class="o">}</span>
+
+        <span class="k">override</span> <span class="k">fun</span> <span class="na">onSimpleXReportResult</span><span
+        class="o">(</span><span class="na">result</span><span class="o">:</span> <span class="kt">SimpleXResult</span><span
+        class="o">)</span> <span class="o">{</span>
+            <span class="na">Debug</span><span class="o">.</span><span class="na">print</span><span
+        class="o">(</span><span class="s">&quot;result: &quot;</span> <span class="o">+</span> <span
+        class="na">result</span><span class="o">)</span>
+        <span class="o">}</span>
+
+        <span class="k">override</span> <span class="k">fun</span> <span class="na">onLastSettlementResult</span><span
+        class="o">(</span><span class="na">result</span><span class="o">:</span> <span class="kt">LastSettlementResult</span><span
+        class="o">)</span> <span class="o">{</span>
+            <span class="na">Debug</span><span class="o">.</span><span class="na">print</span><span
+        class="o">(</span><span class="s">&quot;result: &quot;</span> <span class="o">+</span> <span
+        class="na">result</span><span class="o">)</span>
+        <span class="o">}</span>
+
+        <span class="k">override</span> <span class="k">fun</span> <span class="na">onSettlementResult</span><span
+        class="o">(</span><span class="na">result</span><span class="o">:</span> <span class="kt">SettlementResult</span><span
+        class="o">)</span> <span class="o">{</span>
+            <span class="na">Debug</span><span class="o">.</span><span class="na">print</span><span
+        class="o">(</span><span class="s">&quot;result: &quot;</span> <span class="o">+</span> <span
+        class="na">result</span><span class="o">)</span>
+        <span class="o">}</span>
+
+        <span class="k">override</span> <span class="k">fun</span> <span
+        class="na">onConnected</span><span class="o">()</span> <span class="o">{</span>
+        <span class="o">}</span>
+
+        <span class="k">override</span> <span class="k">fun</span> <span
+        class="na">onDisconnected</span><span class="o">()</span> <span class="o">{</span>
+        <span class="o">}</span>
+
+        <span class="k">override</span> <span class="k">fun</span> <span
+        class="na">onError</span><span class="o">(</span><span class="na">msg</span><span class="o">:</span> <span
+        class="kt">String</span><span class="o">)</span> <span class="o">{</span>
+            <span class="na">Debug</span><span class="o">.</span><span class="na">print</span><span
+        class="o">(</span><span class="s">&quot;errorMessage: &quot;</span> <span class="o">+</span> <span
+        class="na">msg</span><span class="o">)</span>
+        <span class="o">}</span>
+
+        <span class="k">override</span> <span class="k">fun</span> <span class="na">onFiscalCommandResult</span><span
+        class="o">(</span><span class="na">success</span><span class="o">:</span> <span class="kt">Boolean</span><span
+        class="o">,</span> <span class="na">result</span><span class="o">:</span> <span class="kt">EcrResult</span><span
+        class="o">.</span><span class="kt">FiscalResult</span><span class="o">)</span> <span
+        class="o">{</span>
+            <span class="na">Debug</span><span class="o">.</span><span class="na">print</span><span
+        class="o">(</span><span class="s">&quot;result: &quot;</span> <span class="o">+</span> <span
+        class="na">result</span><span class="o">)</span>
+        <span class="o">}</span>
+
+        <span class="k">override</span> <span class="k">fun</span> <span class="na">onScreenCommandResult</span><span
+        class="o">(</span><span class="na">success</span><span class="o">:</span> <span class="kt">Boolean</span><span
+        class="o">,</span> <span class="na">result</span><span class="o">:</span> <span class="kt">EcrResult</span><span
+        class="o">.</span><span class="kt">ScreenResult</span><span class="o">)</span> <span
+        class="o">{</span>
+            <span class="na">Debug</span><span class="o">.</span><span class="na">print</span><span
+        class="o">(</span><span class="s">&quot;result: &quot;</span> <span class="o">+</span> <span
+        class="na">result</span><span class="o">)</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="nd">@SuppressLint</span><span class="o">(</span><span class="s">&quot;SetTextI18n&quot;</span><span
+        class="o">)</span>
+    <span class="k">override</span> <span class="k">fun</span> <span class="na">onCreate</span><span
+        class="o">(</span><span class="na">savedInstanceState</span><span class="o">:</span> <span
+        class="kt">Bundle</span><span class="o">?)</span> <span class="o">{</span>
+        <span class="k">super</span><span class="o">.</span><span class="na">onCreate</span><span
+        class="o">(</span><span class="na">savedInstanceState</span><span class="o">)</span>
+
+        <span class="c1">//... other code</span>
+
+        <span class="na">opit</span><span class="o">.</span><span class="na">init</span><span
+        class="o">()</span>
+    <span class="o">}</span>
+
+    <span class="k">private</span> <span class="k">fun</span> <span
+        class="na">setControls</span><span class="o">(){</span>
+        <span class="na">buttonSetTime</span><span class="o">.</span><span class="na">setOnClickListener</span> <span
+        class="o">{</span> <span class="na">sendSetTimeRequest</span><span class="o">()</span> <span
+        class="o">}</span>
+        <span class="na">buttonUpdateUserScreen</span><span class="o">.</span><span class="na">setOnClickListener</span> <span
+        class="o">{</span> <span class="na">sendUpdateUserScreenRequest</span><span
+        class="o">()</span> <span class="o">}</span>
+        <span class="na">buttonSale</span><span class="o">.</span><span class="na">setOnClickListener</span> <span
+        class="o">{</span> <span class="na">sendPaymentRequest</span><span class="o">()</span> <span
+        class="o">}</span>
+        <span class="na">buttonVoid</span><span class="o">.</span><span class="na">setOnClickListener</span> <span
+        class="o">{</span> <span class="na">sendVoidRequest</span><span class="o">()</span> <span
+        class="o">}</span>
+        <span class="na">buttonReprintLast</span><span class="o">.</span><span class="na">setOnClickListener</span> <span
+        class="o">{</span> <span class="na">reprintLastReceipt</span><span class="o">()</span> <span
+        class="o">}</span>
+        <span class="na">buttonReprintReceipt</span><span class="o">.</span><span class="na">setOnClickListener</span> <span
+        class="o">{</span> <span class="na">sendReprintReceiptByNumber</span><span
+        class="o">()</span> <span class="o">}</span>
+        <span class="na">buttonDetailedX</span><span class="o">.</span><span class="na">setOnClickListener</span> <span
+        class="o">{</span> <span class="na">getDetailedReport</span><span class="o">()</span> <span
+        class="o">}</span>
+        <span class="na">buttonSimpleX</span><span class="o">.</span><span class="na">setOnClickListener</span> <span
+        class="o">{</span> <span class="na">getSimpleReport</span><span class="o">()</span> <span
+        class="o">}</span>
+        <span class="na">buttonLastSettlementCopy</span><span class="o">.</span><span class="na">setOnClickListener</span> <span
+        class="o">{</span> <span class="na">getLastSettlementCopy</span><span
+        class="o">()</span> <span class="o">}</span>
+        <span class="na">buttonStartSettlement</span><span class="o">.</span><span class="na">setOnClickListener</span> <span
+        class="o">{</span> <span class="na">printSettlement</span><span class="o">()</span> <span
+        class="o">}</span>
+        <span class="na">buttonTestAccessory</span><span class="o">.</span><span class="na">setOnClickListener</span> <span
+        class="o">{</span> <span class="na">testAccessory</span><span class="o">()</span> <span
+        class="o">}</span>
+        <span class="na">buttonRestartConnection</span><span class="o">.</span><span class="na">setOnClickListener</span> <span
+        class="o">{</span> <span class="na">restartConnection</span><span class="o">()</span> <span
+        class="o">}</span>
+        <span class="na">buttonIsPosConnected</span><span class="o">.</span><span class="na">setOnClickListener</span> <span
+        class="o">{</span> <span class="na">isPosConnected</span><span class="o">()</span> <span
+        class="o">}</span>
+    <span class="o">}</span>
+
+
+    <span class="k">private</span> <span class="k">fun</span> <span
+        class="na">sendSetTimeRequest</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">val</span> <span class="na">currentTime</span> <span
+        class="o">=</span> <span class="kt">Date</span><span class="o">()</span>
+        <span class="k">val</span> <span class="na">uniqueId</span> <span class="o">=</span> <span
+        class="kt">UUID</span><span class="o">.</span><span class="na">randomUUID</span><span
+        class="o">().</span><span class="na">toString</span><span class="o">()</span>
+        <span class="na">CoroutineScope</span><span class="o">(</span><span
+        class="na">Dispatchers</span><span class="o">.</span><span class="na">IO</span><span
+        class="o">).</span><span class="na">launch</span> <span class="o">{</span>
+            <span class="k">val</span> <span class="na">wasSent</span> <span
+        class="o">=</span> <span class="na">opit</span><span class="o">.</span><span class="na">sendFiscalCommand</span><span
+        class="o">(</span>
+                <span class="na">command</span> <span class="o">=</span> <span class="kt">FiscalCommand</span><span
+        class="o">.</span><span class="kt">SetDateTime</span><span class="o">(</span><span
+        class="na">currentTime</span><span class="o">),</span>
+                <span class="na">uniqueId</span> <span class="o">=</span> <span
+        class="na">uniqueId</span>
+            <span class="o">)</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="k">private</span> <span class="k">fun</span> <span class="na">sendUpdateUserScreenRequest</span><span
+        class="o">()</span> <span class="o">{</span>
+        <span class="k">val</span> <span class="na">text</span> <span class="o">=</span> <span
+        class="s">&quot;you have to send just numbers&quot;</span>
+
+        <span class="k">val</span> <span class="na">uniqueId</span> <span class="o">=</span> <span
+        class="kt">UUID</span><span class="o">.</span><span class="na">randomUUID</span><span
+        class="o">().</span><span class="na">toString</span><span class="o">()</span>
+        <span class="na">CoroutineScope</span><span class="o">(</span><span
+        class="na">Dispatchers</span><span class="o">.</span><span class="na">IO</span><span
+        class="o">).</span><span class="na">launch</span> <span class="o">{</span>
+            <span class="k">val</span> <span class="na">wasSent</span> <span
+        class="o">=</span> <span class="na">opit</span><span class="o">.</span><span class="na">sendScreenCommand</span><span
+        class="o">(</span><span class="na">text</span><span class="o">,</span> <span class="na">uniqueId</span><span
+        class="o">)</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="k">private</span> <span class="k">fun</span> <span
+        class="na">sendPaymentRequest</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">val</span> <span class="na">amount</span> <span class="o">=</span> <span
+        class="mf">100.0</span>
+        <span class="k">val</span> <span class="na">currency</span> <span class="o">=</span> <span
+        class="s">&quot;RON&quot;</span>
+
+        <span class="k">val</span> <span class="na">uniqueId</span> <span class="o">=</span> <span
+        class="kt">UUID</span><span class="o">.</span><span class="na">randomUUID</span><span
+        class="o">().</span><span class="na">toString</span><span class="o">()</span>
+        <span class="na">CoroutineScope</span><span class="o">(</span><span
+        class="na">Dispatchers</span><span class="o">.</span><span class="na">IO</span><span
+        class="o">).</span><span class="na">launch</span> <span class="o">{</span>
+            <span class="k">val</span> <span class="na">wasSent</span> <span
+        class="o">=</span> <span class="na">opit</span><span class="o">.</span><span class="na">sendPaymentRequest</span><span
+        class="o">(</span><span class="na">amount</span><span class="o">,</span> <span class="na">currency</span><span
+        class="o">,</span> <span class="na">uniqueId</span><span class="o">)</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="k">private</span> <span class="k">fun</span> <span
+        class="na">sendVoidRequest</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">val</span> <span class="na">receiptNo</span> <span class="o">=</span> <span
+        class="s">&quot;1234&quot;</span>
+
+        <span class="k">val</span> <span class="na">uniqueId</span> <span class="o">=</span> <span
+        class="kt">UUID</span><span class="o">.</span><span class="na">randomUUID</span><span
+        class="o">().</span><span class="na">toString</span><span class="o">()</span>
+        <span class="na">CoroutineScope</span><span class="o">(</span><span
+        class="na">Dispatchers</span><span class="o">.</span><span class="na">IO</span><span
+        class="o">).</span><span class="na">launch</span> <span class="o">{</span>
+        <span class="k">val</span> <span class="na">wasSent</span> <span class="o">=</span> <span
+        class="na">opit</span><span class="o">.</span><span class="na">voidReceipt</span><span
+        class="o">(</span><span class="na">receiptNo</span><span class="o">,</span> <span
+        class="na">uniqueId</span><span class="o">)</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="k">private</span> <span class="k">fun</span> <span
+        class="na">reprintLastReceipt</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">val</span> <span class="na">uniqueId</span> <span class="o">=</span> <span
+        class="kt">UUID</span><span class="o">.</span><span class="na">randomUUID</span><span
+        class="o">().</span><span class="na">toString</span><span class="o">()</span>
+        <span class="na">appendToUI</span><span class="o">(</span><span class="s">&quot;client&gt; ReprintLastReceipt, uniqueId: $uniqueId&quot;</span><span
+        class="o">)</span>
+
+        <span class="na">CoroutineScope</span><span class="o">(</span><span
+        class="na">Dispatchers</span><span class="o">.</span><span class="na">IO</span><span
+        class="o">).</span><span class="na">launch</span> <span class="o">{</span>
+            <span class="k">val</span> <span class="na">wasSent</span> <span
+        class="o">=</span> <span class="na">opit</span><span class="o">.</span><span class="na">reprintLastReceipt</span><span
+        class="o">(</span><span class="na">uniqueId</span><span class="o">)</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="k">private</span> <span class="k">fun</span> <span class="na">sendReprintReceiptByNumber</span><span
+        class="o">()</span> <span class="o">{</span>
+        <span class="k">val</span> <span class="na">receiptNo</span> <span class="o">=</span> <span
+        class="s">&quot;1234&quot;</span>
+
+        <span class="k">val</span> <span class="na">uniqueId</span> <span class="o">=</span> <span
+        class="kt">UUID</span><span class="o">.</span><span class="na">randomUUID</span><span
+        class="o">().</span><span class="na">toString</span><span class="o">()</span>
+        <span class="na">CoroutineScope</span><span class="o">(</span><span
+        class="na">Dispatchers</span><span class="o">.</span><span class="na">IO</span><span
+        class="o">).</span><span class="na">launch</span> <span class="o">{</span>
+            <span class="k">val</span> <span class="na">wasSent</span> <span
+        class="o">=</span> <span class="na">opit</span><span class="o">.</span><span class="na">reprintReceiptNo</span><span
+        class="o">(</span><span class="na">receiptNo</span><span class="o">,</span> <span
+        class="na">uniqueId</span><span class="o">)</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="k">private</span> <span class="k">fun</span> <span
+        class="na">getDetailedReport</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">val</span> <span class="na">currency</span> <span class="o">=</span> <span
+        class="s">&quot;RON&quot;</span>
+
+        <span class="k">val</span> <span class="na">uniqueId</span> <span class="o">=</span> <span
+        class="kt">UUID</span><span class="o">.</span><span class="na">randomUUID</span><span
+        class="o">().</span><span class="na">toString</span><span class="o">()</span>
+        <span class="na">CoroutineScope</span><span class="o">(</span><span
+        class="na">Dispatchers</span><span class="o">.</span><span class="na">IO</span><span
+        class="o">).</span><span class="na">launch</span> <span class="o">{</span>
+            <span class="k">val</span> <span class="na">wasSent</span> <span
+        class="o">=</span> <span class="na">opit</span><span class="o">.</span><span class="na">getDetailedXReport</span><span
+        class="o">(</span><span class="na">currency</span><span class="o">,</span> <span class="na">uniqueId</span><span
+        class="o">)</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="k">private</span> <span class="k">fun</span> <span
+        class="na">getSimpleReport</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">val</span> <span class="na">currency</span> <span class="o">=</span> <span
+        class="s">&quot;RON&quot;</span>
+
+        <span class="k">val</span> <span class="na">uniqueId</span> <span class="o">=</span> <span
+        class="kt">UUID</span><span class="o">.</span><span class="na">randomUUID</span><span
+        class="o">().</span><span class="na">toString</span><span class="o">()</span>
+        <span class="na">CoroutineScope</span><span class="o">(</span><span
+        class="na">Dispatchers</span><span class="o">.</span><span class="na">IO</span><span
+        class="o">).</span><span class="na">launch</span> <span class="o">{</span>
+            <span class="k">val</span> <span class="na">wasSent</span> <span
+        class="o">=</span> <span class="na">opit</span><span class="o">.</span><span class="na">getSimpleXReport</span><span
+        class="o">(</span><span class="na">currency</span><span class="o">,</span> <span class="na">uniqueId</span><span
+        class="o">)</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="k">private</span> <span class="k">fun</span> <span
+        class="na">getLastSettlementCopy</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">val</span> <span class="na">currency</span> <span class="o">=</span> <span
+        class="s">&quot;RON&quot;</span>
+
+        <span class="k">val</span> <span class="na">uniqueId</span> <span class="o">=</span> <span
+        class="kt">UUID</span><span class="o">.</span><span class="na">randomUUID</span><span
+        class="o">().</span><span class="na">toString</span><span class="o">()</span>
+        <span class="na">CoroutineScope</span><span class="o">(</span><span
+        class="na">Dispatchers</span><span class="o">.</span><span class="na">IO</span><span
+        class="o">).</span><span class="na">launch</span> <span class="o">{</span>
+            <span class="k">val</span> <span class="na">wasSent</span> <span
+        class="o">=</span> <span class="na">opit</span><span class="o">.</span><span class="na">printLastSettlement</span><span
+        class="o">(</span><span class="na">currency</span><span class="o">,</span> <span class="na">uniqueId</span><span
+        class="o">)</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="k">private</span> <span class="k">fun</span> <span
+        class="na">printSettlement</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">val</span> <span class="na">uniqueId</span> <span class="o">=</span> <span
+        class="kt">UUID</span><span class="o">.</span><span class="na">randomUUID</span><span
+        class="o">().</span><span class="na">toString</span><span class="o">()</span>
+        <span class="na">CoroutineScope</span><span class="o">(</span><span
+        class="na">Dispatchers</span><span class="o">.</span><span class="na">IO</span><span
+        class="o">).</span><span class="na">launch</span> <span class="o">{</span>
+            <span class="k">val</span> <span class="na">wasSent</span> <span
+        class="o">=</span> <span class="na">opit</span><span class="o">.</span><span class="na">printSettlement</span><span
+        class="o">(</span><span class="na">uniqueId</span><span class="o">)</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="k">private</span> <span class="k">fun</span> <span
+        class="na">testAccessory</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">val</span> <span class="na">hasUsbAccessory</span> <span class="o">=</span> <span
+        class="na">packageManager</span><span class="o">.</span><span
+        class="na">hasSystemFeature</span><span class="o">(</span><span
+        class="na">PackageManager</span><span class="o">.</span><span class="na">FEATURE_USB_ACCESSORY</span><span
+        class="o">)</span>
+        <span class="k">val</span> <span class="na">hasUsbHost</span> <span class="o">=</span> <span
+        class="na">packageManager</span><span class="o">.</span><span
+        class="na">hasSystemFeature</span><span class="o">(</span><span
+        class="na">PackageManager</span><span class="o">.</span><span
+        class="na">FEATURE_USB_HOST</span><span class="o">)</span>
+        <span class="k">val</span> <span class="na">text</span> <span class="o">=</span> <span
+        class="s">&quot;Has Usb Accessory: $hasUsbAccessory\nHas Usb Host: $hasUsbHost&quot;</span>
+        <span class="na">Toast</span><span class="o">.</span><span class="na">makeText</span><span
+        class="o">(</span><span class="k">this</span><span class="o">,</span> <span
+        class="na">text</span><span class="o">,</span> <span class="na">Toast</span><span class="o">.</span><span
+        class="na">LENGTH_LONG</span><span class="o">).</span><span class="na">show</span><span
+        class="o">()</span>
+    <span class="o">}</span>
+
+    <span class="k">private</span> <span class="k">fun</span> <span
+        class="na">restartConnection</span><span class="o">()</span> <span class="o">{</span>
+        <span class="na">opit</span><span class="o">.</span><span class="na">restart</span><span
+        class="o">()</span>
+    <span class="o">}</span>
+
+    <span class="k">private</span> <span class="k">fun</span> <span class="na">isPosConnected</span><span
+        class="o">()</span> <span class="o">{</span>
+        <span class="na">Debug</span><span class="o">.</span><span class="na">print</span><span
+        class="o">(</span><span class="s">&quot;isPosConnected: &quot;</span> <span
+        class="o">+</span> <span class="na">opit</span><span class="o">.</span><span class="na">isPosConnected</span><span
+        class="o">())</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+    </code></pre>
+</div>
