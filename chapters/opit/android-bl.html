@@ -1,0 +1,102 @@
+<h3>Opit Bluetooth</h3>
+
+<p>
+    This version of OPIT project is designed to work with Odero POS terminals that have
+    Bluetooth connectivity. The communication between the Android device and the Odero POS
+    terminal is facilitated through Bluetooth, enabling seamless data exchange between the
+    two devices. OPIT Bluetooth provides developers with a reliable and secure channel for
+    sending commands such as Payment Requests, Settlements, Reports, and more, directly to
+    the Odero POS terminal. By leveraging this powerful toolkit, developers can create
+    custom workflows, tailor the user experience, and incorporate Odero POS functionality
+    seamlessly into their existing applications.<br/>
+</p>
+
+<p>
+    To use OPIT Bluetooth, developers need to ensure that the Odero POS terminal has the
+    host app installed. The host app is responsible for establishing a Bluetooth connection
+    with the Android device and handling the communication between the two devices. Once the
+    connection is established, developers can send commands from their Android applications
+    to the Odero POS terminal, enabling real-time, bidirectional communication over
+    Bluetooth.<br/>
+</p>
+
+<p>
+    If you want to use OPIT Bluetooth, you need to follow the below steps:<br/>
+</p>
+
+
+<blockquote>
+    <p>Dependencies</p>
+</blockquote>
+<div class="highlight">
+   <pre class="highlight groovy tab-groovy"><code><span class="c1">//in settings.gradle</span>
+<span class="n">maven</span> <span class="o">{</span>
+    <span class="n">url</span> <span class="s1">'https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/'</span>
+<span class="o">}</span>
+
+<span class="c1">//in app.gradle</span>
+<span class="k">dependencies</span> <span class="o">{</span>
+   <span class="n">implementation</span> <span class="err">'</span><span
+               class="n">OPIT</span><span
+               class="o">.</span><span class="na">pos-is-host</span><span
+               class="o">:</span><span class="na">common:</span><span
+               class="n">$commonLibVersion</span><span class="na">@aar</span><span
+               class="err">'</span>
+   <span class="n">implementation</span> <span class="err">'</span><span
+               class="n">OPIT</span><span
+               class="o">.</span><span class="na">pos-is-host</span><span
+               class="o">:</span><span class="na">clientlib:</span><span
+               class="n">$clientLibVersion</span><span class="na">@aar</span><span
+               class="err">'</span>
+   <span class="n">implementation</span> <span class="err">'</span><span
+               class="n">OPIT</span><span
+               class="o">.</span><span class="na">pos-is-host</span><span
+               class="o">:</span><span class="na">common_bluetooth:</span><span
+               class="n">$commonLibBluetoothVersion</span><span class="na">@aar</span><span
+               class="err">'</span>
+   <span class="n">implementation</span> <span class="err">'</span><span
+               class="n">OPIT</span><span
+               class="o">.</span><span class="na">pos-is-host</span><span
+               class="o">:</span><span class="na">clientlib_bluetooth:</span><span
+               class="n">$clientLibBluetoothVersion</span><span class="na">@aar</span><span
+               class="err">'</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<ol type="1">
+    <li>Install the host app on the Odero POS terminal.</li>
+    <li>
+        Implement the OPIT client libraries in your Android application. In this step, you
+        will integrate the OPIT Bluetooth libraries into your Android project to enable
+        communication with the Odero POS terminal.
+        <p>
+            <br> You need to add the following dependencies to your build.gradle files (check the
+            right side)
+        </p>
+        <p>
+            $commonLibVersion = Check latest version <a
+                href="https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/OPIT/pos-is-host/common">here</a><br>
+            $clientLibVersion = Check latest version <a
+                href="https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/OPIT/pos-is-host/clientlib">here</a><br>
+            $$commonLibBluetoothVersion = Check latest version <a
+                href="https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/OPIT/pos-is-host/common_bluetooth">here</a><br>
+            $clientLibBluetoothVersion = Check latest version <a
+                href="https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/OPIT/pos-is-host/clientlib_bluetooth">here</a><br>
+        </p>
+    </li>
+    <li>
+        Init the Opit object in your Android application. The Opit object is responsible for
+        establishing a Bluetooth connection with the Odero POS terminal and sending commands
+        to the terminal.
+    </li>
+    <li>Send commands from your Android application to the Odero POS terminal using the Opit
+        object.
+    </li>
+</ol>
+
+<p>
+    For more information on how to use OPIT Bluetooth in your Android application, you can
+    refer to the sample implementation provided below in the <a href="#opit-android-sample">Sample
+    Implementation</a> section.
+</p>

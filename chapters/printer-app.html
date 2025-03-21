@@ -1,0 +1,371 @@
+<p>Allows printing in a uniform way across all POS family.</p>
+
+<p>The API is agnostic of the underlying hardware but provides a set of well defined
+    PrintCommands.</p>
+
+<p><img src="images/317947907-a4f4b285.png" alt="alt text"/></p>
+<h3 id='setup-2'>Setup</h3>
+<p>In order to access the Printer App, the following <code>printer-launcher</code> and
+    <code>common</code> library should be included in the app. To do this add the following
+    code into <code>settings.gradle</code> under
+    dependencyResolutionManagement/repositories:</p>
+
+<blockquote>
+    <p>settings.gradle</p>
+</blockquote>
+<div class="highlight"><pre class="highlight gradle tab-gradle"><code><span
+        class="n">maven</span> <span class="o">{</span>
+    <span class="n">url</span> <span class="s1">'https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/'</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+<p>Add in <code>build.gradle</code> the lib dependencies: <code>implementation &#39;PrinterApp:printer-launcher:0.6.2&#39;</code>
+    (the pgw-launcher should also add the common lib, if not please add the dependency
+    <code>implementation &#39;Odero:printer-common:1.0.7&#39;</code>)</p>
+
+<blockquote>
+    <p>build.gradle</p>
+</blockquote>
+<div class="highlight"><pre class="highlight gradle tab-gradle"><code><span class="k">dependencies</span><span
+        class="o">{</span>
+    <span class="n">implementation</span> <span
+            class="s1">'PrinterApp:printer-launcher:0.6.2'</span>
+    <span class="n">implementation</span> <span class="s1">'Odero:printer-common:1.0.7'</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+<h3 id='printing'>Printing</h3>
+<p>There are two distinct flows that have to be implemented</p>
+
+<ul>
+    <li>Checking if printer is ready to print
+
+        <ul>
+            <li>The check includes also if paper is present</li>
+        </ul>
+    </li>
+</ul>
+
+<blockquote>
+    <p>When printer is ready print the receipts</p>
+</blockquote>
+<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code><span
+        class="kd">val</span> <span class="py">printerErrorCheck</span> <span
+        class="p">=</span> <span class="nf">registerForActivityResul</span><span
+        class="p">(</span>
+        <span class="nc">PrinterHealthResultContract</span><span class="p">()</span>
+    <span class="p">){ </span><span class="n">printerHealth</span><span class="p">:</span> <span
+            class="nc">PrinterHealthResponse</span><span class="p">?</span> <span class="p">-&gt;</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="n">printerHealth</span><span
+            class="p">.</span><span class="n">hasErrors</span><span class="p">.</span><span
+            class="nf">not</span><span class="p">()){</span>
+            <span class="nf">printReceipts</span><span class="p">()</span>
+        <span class="p">} </span><span class="k">else</span><span class="p"> {</span>
+            <span class="c1">//treat the error</span>
+        <span class="p">}</span>
+
+<span class="p">}</span>
+
+
+</code></pre>
+</div>
+<ul>
+    <li>Actual printing</li>
+</ul>
+
+<blockquote>
+    <p>Actual printing contract that is used to start the PrinterApp</p>
+</blockquote>
+<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code><span
+        class="kd">val</span> <span
+        class="py">printerLauncher = PrinterLauncher.</span><span class="nf">registerForPrinterResult</span><span
+        class="p">(</span>
+    <span class="n">onResult = </span><span class="p">{</span> <span
+            class="n">printerResponse</span><span class="p">:</span> <span class="nc">PrinterResponse</span><span
+            class="p">?</span> <span class="p">-&gt;</span>
+    <span class="c1">//treat printer response</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+</code></pre>
+</div>
+<blockquote>
+    <p>Receipts example</p>
+</blockquote>
+<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code>
+    <span class="kd">val</span> <span class="py">customerReceipt</span> <span
+        class="p">=</span> <span class="nf">listOf</span><span class="p">(</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintSpace</span><span class="p">,</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintImage</span><span class="p">(</span><span class="n">image</span><span
+            class="p">),</span> <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintSpace</span><span class="p">,</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintWithBold</span><span class="p">(</span><span
+            class="k">true</span><span class="p">),</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintText</span><span class="p">(</span>
+            <span class="s">"Test SRL"</span><span class="p">,</span>
+            <span class="nc">TextAlignment</span><span class="p">.</span><span
+            class="nc">Left</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintWithBold</span><span class="p">(</span><span
+            class="k">false</span><span class="p">),</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintSpace</span><span class="p">,</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintText</span><span class="p">(</span>
+            <span class="s">"Data:10.03.2023"</span><span class="p">,</span>
+            <span class="nc">TextAlignment</span><span class="p">.</span><span
+            class="nc">Left</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintText</span><span class="p">(</span>
+            <span class="s">"Ora:10:00"</span><span class="p">,</span>
+            <span class="nc">TextAlignment</span><span class="p">.</span><span
+            class="nc">Right</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintText</span><span class="p">(</span>
+            <span class="s">"TID:0 MID:0"</span><span class="p">,</span>
+            <span class="nc">TextAlignment</span><span class="p">.</span><span
+            class="nc">Left</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintSpace</span><span class="p">,</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintSpace</span><span class="p">,</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintText</span><span class="p">(</span>
+            <span class="s">"AID:00000"</span><span class="p">,</span>
+            <span class="nc">TextAlignment</span><span class="p">.</span><span
+            class="nc">Right</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintText</span><span class="p">(</span>
+            <span class="s">"0000000000"</span><span class="p">,</span>
+            <span class="nc">TextAlignment</span><span class="p">.</span><span
+            class="nc">Left</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintFontSize</span><span class="p">(</span><span
+            class="nc">FontSize</span><span class="p">.</span><span
+            class="nc">Small</span><span class="p">),</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintColumns</span><span class="p">(</span><span
+            class="nf">arrayOf</span><span class="p">(</span><span
+            class="s">"BATCH:000001"</span><span class="p">,</span> <span class="s">"BON:000001"</span><span
+            class="p">)),</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintColumns</span><span class="p">(</span><span
+            class="nf">arrayOf</span><span class="p">(</span><span class="s">"RRN:00123456789"</span><span
+            class="p">,</span> <span class="s">"RC: 00"</span><span class="p">)),</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintColumns</span><span class="p">(</span><span
+            class="nf">arrayOf</span><span class="p">(</span><span
+            class="s">"AUTH:775040"</span><span class="p">,</span> <span class="s">"STAN:012345"</span><span
+            class="p">)),</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintLine</span><span class="p">,</span> <span class="nc">PrintCommand</span><span
+            class="p">.</span><span class="nc">PrintWithBold</span><span
+            class="p">(</span><span class="k">true</span><span class="p">),</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintFontSize</span><span class="p">(</span><span
+            class="nc">FontSize</span><span class="p">.</span><span
+            class="nc">Large</span><span class="p">),</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintColumns</span><span class="p">(</span><span
+            class="nf">arrayOf</span><span class="p">(</span><span
+            class="s">"SUMA:"</span><span class="p">,</span> <span
+            class="s">"50"</span><span class="p">)),</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintWithBold</span><span class="p">(</span><span
+            class="k">false</span><span class="p">),</span> <span
+            class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintSpace</span><span
+            class="p">,</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintText</span><span class="p">(</span><span
+            class="s">"APPROVED"</span><span class="p">,</span> <span class="nc">TextAlignment</span><span
+            class="p">.</span><span class="nc">Left</span><span class="p">),</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintFontSize</span><span class="p">(</span><span
+            class="nc">FontSize</span><span class="p">.</span><span class="nc">Medium</span><span
+            class="p">),</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintText</span><span class="p">(</span><span class="s">"EXEMPLAR CLIENT"</span><span
+            class="p">,</span> <span class="nc">TextAlignment</span><span class="p">.</span><span
+            class="nc">Left</span><span class="p">),</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintLine</span><span class="p">,</span> <span class="nc">PrintCommand</span><span
+            class="p">.</span><span class="nc">PrintSpace</span><span class="p">,</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintSpace</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="kd">val</span> <span class="py">merchantReceipt</span> <span
+            class="p">=</span> <span class="nf">listOf</span><span class="p">(</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintSpace</span><span class="p">,</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintImage</span><span class="p">(</span><span class="n">image</span><span
+            class="p">),</span> <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintSpace</span><span class="p">,</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintWithBold</span><span class="p">(</span><span
+            class="k">true</span><span class="p">),</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintText</span><span class="p">(</span>
+            <span class="s">"Test SRL"</span><span class="p">,</span>
+            <span class="nc">TextAlignment</span><span class="p">.</span><span
+            class="nc">Left</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintWithBold</span><span class="p">(</span><span
+            class="k">false</span><span class="p">),</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintSpace</span><span class="p">,</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintText</span><span class="p">(</span>
+            <span class="s">"Data:10.03.2023"</span><span class="p">,</span>
+            <span class="nc">TextAlignment</span><span class="p">.</span><span
+            class="nc">Left</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintText</span><span class="p">(</span>
+            <span class="s">"Ora:10:00"</span><span class="p">,</span>
+            <span class="nc">TextAlignment</span><span class="p">.</span><span
+            class="nc">Right</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintText</span><span class="p">(</span>
+            <span class="s">"TID:0 MID:0"</span><span class="p">,</span>
+            <span class="nc">TextAlignment</span><span class="p">.</span><span
+            class="nc">Center</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintSpace</span><span class="p">,</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintSpace</span><span class="p">,</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintText</span><span class="p">(</span>
+            <span class="s">"AID:00000"</span><span class="p">,</span>
+            <span class="nc">TextAlignment</span><span class="p">.</span><span
+            class="nc">Right</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintText</span><span class="p">(</span>
+            <span class="s">"0000000000"</span><span class="p">,</span> <span
+            class="c1">// cardno</span>
+            <span class="nc">TextAlignment</span><span class="p">.</span><span
+            class="nc">Left</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintFontSize</span><span class="p">(</span><span
+            class="nc">FontSize</span><span class="p">.</span><span
+            class="nc">Small</span><span class="p">),</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintColumns</span><span class="p">(</span><span
+            class="nf">arrayOf</span><span class="p">(</span><span
+            class="s">"BATCH:000001"</span><span class="p">,</span> <span class="s">"BON:000001"</span><span
+            class="p">)),</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintColumns</span><span class="p">(</span><span
+            class="nf">arrayOf</span><span class="p">(</span><span class="s">"RRN:00123456789"</span><span
+            class="p">,</span> <span class="s">"RC: 00"</span><span class="p">)),</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintColumns</span><span class="p">(</span><span
+            class="nf">arrayOf</span><span class="p">(</span><span
+            class="s">"AUTH:775040"</span><span class="p">,</span> <span class="s">"STAN:012345"</span><span
+            class="p">)),</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintLine</span><span class="p">,</span> <span class="nc">PrintCommand</span><span
+            class="p">.</span><span class="nc">PrintWithBold</span><span
+            class="p">(</span><span class="k">true</span><span class="p">),</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintFontSize</span><span class="p">(</span><span
+            class="nc">FontSize</span><span class="p">.</span><span
+            class="nc">Large</span><span class="p">),</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintColumns</span><span class="p">(</span><span
+            class="nf">arrayOf</span><span class="p">(</span><span
+            class="s">"SUMA:"</span><span class="p">,</span> <span
+            class="s">"50"</span><span class="p">)),</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintWithBold</span><span class="p">(</span><span
+            class="k">false</span><span class="p">),</span> <span
+            class="nc">PrintCommand</span><span class="p">.</span><span class="nc">PrintSpace</span><span
+            class="p">,</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintText</span><span class="p">(</span><span
+            class="s">"APPROVED"</span><span class="p">,</span> <span class="nc">TextAlignment</span><span
+            class="p">.</span><span class="nc">Left</span><span class="p">),</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintFontSize</span><span class="p">(</span><span
+            class="nc">FontSize</span><span class="p">.</span><span class="nc">Medium</span><span
+            class="p">),</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintText</span><span class="p">(</span><span class="s">"EXEMPLAR VANZATOR"</span><span
+            class="p">,</span> <span class="nc">TextAlignment</span><span class="p">.</span><span
+            class="nc">Center</span><span class="p">),</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintLine</span><span class="p">,</span> <span class="nc">PrintCommand</span><span
+            class="p">.</span><span class="nc">PrintSpace</span><span class="p">,</span>
+        <span class="nc">PrintCommand</span><span class="p">.</span><span
+            class="nc">PrintSpace</span><span class="p">,</span>
+    <span class="p">)</span>
+</code></pre>
+</div>
+<blockquote>
+    <p>Printing</p>
+</blockquote>
+<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code><span
+        class="k">fun</span> <span class="nf">printReceipts</span><span class="p">(){</span>
+
+<span class="n">printerLauncher</span><span class="p">.</span><span class="nf">launch</span><span
+            class="p">(</span>
+            <span class="nc">PrinterRequest</span><span class="p">(</span>
+                <span class="nf">listOf</span><span class="p">(</span>
+                    <span class="nc">PrintDocument</span><span class="p">(</span>
+                        <span class="n">clientReceipt</span><span class="p">,</span>
+                        <span class="s">"Chitanta client"</span><span class="p">,</span>
+                    <span class="p">),</span>
+                    <span class="nc">PrintDocument</span><span class="p">(</span>
+                        <span class="n">merchantReceipt</span><span class="p">,</span>
+                        <span class="s">"Chitanta vanzator"</span>
+                    <span class="p">),</span>
+                <span class="p">),</span>
+                <span class="nc">PrintRequestType</span><span class="p">.</span><span class="nc">PrintWithDialog</span><span
+            class="p">,</span> <span
+            class="c1">// will show a dialog between each print</span>
+                <span class="c1">// document</span>
+                <span class="c1">// PrintRequestType.SimplePrint //will print each document back-to-back - useful</span>
+                <span class="c1">// for setlements, reports, etc</span>
+            <span class="p">)),</span>
+<span class="p">}</span>
+
+</code></pre>
+</div>
+<blockquote>
+    <p>PrinterResponse structure</p>
+</blockquote>
+<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code><span class="kd">data class</span> <span
+        class="nc">PrinterResponse</span><span class="p">(</span>
+    <span class="kd">val</span> <span class="py">status</span><span class="p">:</span> <span
+            class="nc">Status</span><span class="p">,</span>
+    <span class="kd">val</span> <span class="py">message</span><span class="p">:</span> <span
+            class="nc">String</span><span class="p">,</span>
+    <span class="kd">val</span> <span class="py">data</span><span class="p">:</span> <span
+            class="nc">List</span><span class="p">&lt;</span><span
+            class="nc">DocumentData</span><span class="p">&gt;,</span>
+<span class="p">)</span> <span class="p">{</span>
+
+    <span class="k">enum</span> <span class="kd">class</span> <span class="nc">Status</span> <span
+            class="p">{</span>
+        <span class="nc">SUCCESS</span><span class="p">,</span>
+        <span class="nc">ERROR</span><span class="p">,</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
