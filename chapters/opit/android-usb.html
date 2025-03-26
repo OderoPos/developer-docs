@@ -1,0 +1,133 @@
+<h3>Opit USB</h3>
+
+<!--  Pos is Host  -->
+<h3> Pos is Host</h3>
+
+<blockquote>
+    <p>Dependencies</p>
+</blockquote>
+<div class="highlight">
+   <pre class="highlight groovy tab-groovy"><code><span class="c1">//in settings.gradle</span>
+<span class="n">maven</span> <span class="o">{</span>
+    <span class="n">url</span> <span class="s1">'https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/'</span>
+<span class="o">}</span>
+
+<span class="c1">//in app.gradle</span>
+<span class="k">dependencies</span> <span class="o">{</span>
+   <span class="n">implementation</span> <span class="err">'</span><span
+               class="n">OPIT</span><span
+               class="o">.</span><span class="na">pos-is-host</span><span
+               class="o">:</span><span class="na">common:</span><span
+               class="n">$commonLibVersion</span><span class="na">@aar</span><span
+               class="err">'</span>
+   <span class="n">implementation</span> <span class="err">'</span><span
+               class="n">OPIT</span><span
+               class="o">.</span><span class="na">pos-is-host</span><span
+               class="o">:</span><span class="na">clientlib:</span><span
+               class="n">$clientLibVersion</span><span class="na">@aar</span><span
+               class="err">'</span>
+   <span class="n">implementation</span> <span class="err">'</span><span
+               class="n">OPIT</span><span
+               class="o">.</span><span class="na">pos-is-host</span><span
+               class="o">:</span><span class="na">clientusb:</span><span
+               class="n">$clientUsbVersion</span><span class="na">@aar</span><span
+               class="err">'</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>
+    <br> You need to add the following dependencies to your build.gradle files (check the
+    right side)
+</p>
+<p>
+    $commonLibVersion = Check latest version <a
+        href="https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/OPIT/pos-is-host/common">here</a><br>
+    $clientLibVersion = Check latest version <a
+        href="https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/OPIT/pos-is-host/clientlib">here</a><br>
+    $clientUsbVersion = Check latest version <a
+        href="https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/OPIT/pos-is-host/clientusb">here</a><br>
+</p>
+<p>
+    In this version of the library, the host app is installed on the POS device. The POS device
+    will act as the host and the tablet or other android device will act as the client. The POS
+    device will be connected to the client via USB. The client device will be responsible for
+    sending the commands to the POS device.
+</p>
+<p>
+    If you want to see how the solution works, we can provide you a demo app that you can install
+    on your android client device. For more details please check the <a href="#opit-android-sample">
+    Sample Implementation</a> section.
+</p>
+
+<h3> Tablet is Host</h3>
+
+<blockquote>
+    <p>Dependencies</p>
+</blockquote>
+<div class="highlight">
+   <pre class="highlight groovy tab-groovy"><code><span class="c1">//in settings.gradle</span>
+<span class="n">maven</span> <span class="o">{</span>
+    <span class="n">url</span> <span class="s1">'https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/'</span>
+<span class="o">}</span>
+
+<span class="c1">//in app.gradle dependencies file from the host app (tablet)</span>
+<span class="k">dependencies</span> <span class="o">{</span>
+   <span class="n">implementation</span> <span class="err">'</span><span
+               class="n">OPIT</span><span
+               class="o">.</span><span class="na">tablet-is-host</span><span
+               class="o">:</span><span class="na">common:</span><span
+               class="n">$commonLibVersion</span><span class="na">@aar</span><span
+               class="err">'</span>
+   <span class="n">implementation</span> <span class="err">'</span><span
+               class="n">OPIT</span><span
+               class="o">.</span><span class="na">tablet-is-host</span><span
+               class="o">:</span><span class="na">masterusb:</span><span
+               class="n">$masterUsbVersion</span><span class="na">@aar</span><span
+               class="err">'</span>
+   <span class="n">implementation</span> <span class="err">'</span><span
+               class="n">OPIT</span><span
+               class="o">.</span><span class="na">tablet-is-host</span><span
+               class="o">:</span><span class="na">masterlib:</span><span
+               class="n">$masterLibVersion</span><span class="na">@aar</span><span
+               class="err">'</span>
+<span class="o">}</span>
+
+<span class="c1">//in app.gradle dependencies file from the client app (POS)</span>
+<span class="k">dependencies</span> <span class="o">{</span>
+   <span class="n">implementation</span> <span class="err">'</span><span
+               class="n">OPIT</span><span
+               class="o">.</span><span class="na">tablet-is-host</span><span
+               class="o">:</span><span class="na">poslib:</span><span
+               class="n">$posLibVersion</span><span class="na">@aar</span><span
+               class="err">'</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>
+    <br> You need to add the following dependencies to your build.gradle files (check the
+    right side)
+</p>
+<p>
+    $commonLibVersion = Check latest version <a
+        href="https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/OPIT/tablet-is-host/common">here</a><br>
+    $masterUsbVersion = Check latest version <a
+        href="https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/OPIT/tablet-is-host/masterusb">here</a><br>
+    $masterLibVersion = Check latest version <a
+        href="https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/OPIT/tablet-is-host/masterlib">here</a><br>
+</p>
+<p>
+    These dependencies are for the host app (tablet) using these we will initialize the OPIT
+    library. The host app will be installed on the tablet. The tablet will act as the host and
+    the POS device will act as the client. The tablet will be connected to the POS device via
+    USB. The POS device will be responsible for sending the commands to the tablet.
+</p>
+<p>
+    On the client side, we need to add the following dependency to the build.gradle file. This
+    dependency is for the client app (POS) using this we will initialize the OPIT library.
+</p>
+<p>
+    $posLibVersion = Check latest version <a
+        href="https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/OPIT/tablet-is-host/poslib">here</a><br>
+</p>
