@@ -22,59 +22,39 @@
         href="https://ro-artifactory.devtokeninc.com/ui/native/PublicLibraries/X330/integrationLibs/fiscal">here</a>
 </p>
 
-<p><strong><em>NOTE:</em></strong> For best compatibility <code>libVersion</code> should
+<p><strong><em>NOTE:</em></strong> For best compatibility <code style="white-space: nowrap">libVersion</code> should
     match ECR version installed</p>
 
-<p>Use <code>EcrCommandExecutor</code> object for sending commands to the ECR and receiving
+<p>If you want to update the user screen from the TR330 device or execute a fiscal command, we need
+    to add the dependency of the fiscal integration lib <code style="white-space: nowrap">[libVersion]</code> in
+    the gradle file. After that, we will use the <code style="white-space: nowrap">EcrCommandExecutor</code> object for sending
+    commands to the ECR and receiving the result.</p>
+
+<p>The fiscal commands are sent to the ECR using the <code style="white-space: nowrap">executeFiscalCommand</code> method with
+    a context and a command. In this case the result will be received as a <code style="white-space: nowrap">Flow</code>. If you
+    want to receive as a <code style="white-space: nowrap">EcrCommandResultListener</code> you can use the
+    <code style="white-space: nowrap">executeFiscalCommand</code> method with a context, command and a listener.</p>
+
+<p>The user screen commands are sent to the ECR using the <code style="white-space: nowrap">executeUserScreenCommand</code>method
+    with a context and a new text. In this case the result will be received as a <code style="white-space: nowrap">Flow</code>.
+    If you want to receive as a <code style="white-space: nowrap">EcrCommandResultListener</code> you can use the
+    <code style="white-space: nowrap">executeUserScreenCommand</code> method with a context, new text and a listener.</p>
+
+<p>Use <code style="white-space: nowrap">EcrCommandExecutor</code> object for sending commands to the ECR and receiving
     the result.</p>
-
-<p>The fiscal commands are sent to the ECR using the <code>executeFiscalCommand</code>
-    method. The result can be received
-    as a <code>Flow</code> or if you want to receive as a
-    <code>EcrCommandResultListener</code>.</p>
-
-<p>The user screen commands follow the same <code>flow</code>, <code>listener</code>
-    pattern.</p>
-
-<p>Type of fiscal commands</p>
-
-<p><code>SetDateTime</code><br>
-    <code>SetCompanyData</code><br>
-    <code>GetCompanyData</code><br>
-    <code>SetVATRates</code><br>
-    <code>GetVATRates</code><br>
-    <code>Fiscalise</code><br>
-    <code>InitElectronicJournal</code><br>
-    <code>TechnicalReport</code><br>
-    <code>ZReport</code><br>
-    <code>XReport</code><br>
-    <code>InitJournal</code><br>
-    <code>Journal</code><br>
-    <code>JournalExport</code><br>
-    <code>XJournal</code><br>
-    <code>CustomerData</code><br>
-    <code>PeriodicReport</code><br>
-    - <code>ByDate</code><br>
-    - <code>ByZ</code><br>
-    <code>XMLReport</code><br>
-    <code>GetDailyTotals</code><br>
-    <code>GetStatus</code><br>
-    <code>GetSoftwareVersion</code><br>
-    <code>LoadProfile</code><br>
-    <code>ResetFiscalMemory</code><br>
-    <code>Sale</code><br>
-    <code>CashOperation</code></p>
 
 <blockquote>
     <p>Fiscal commands</p>
 </blockquote>
-<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code><span class="c1">//Example of usage for sending a fiscal command and receiving the result as a [Flow]:</span>
+<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code>
+<span class="c1">//Example of usage for sending a fiscal command and receiving the result as a [Flow]:</span>
 <span class="nc">EcrCommandExecutor</span><span class="p">.</span><span class="nf">executeFiscalCommand</span><span
             class="p">(</span>
    <span class="n">context</span> <span class="p">=</span> <span class="n">context</span><span
             class="p">,</span>
    <span class="n">command</span> <span class="p">=</span> <span
-            class="nc">FiscalCommand</span><span class="p">.</span><span class="nc">SetDateTime</span><span
+            class="nc">FiscalCommand</span><span class="p">.</span><span
+            class="nc">SetDateTime</span><span
             class="p">(</span><span class="nc">Calendar</span><span class="p">.</span><span
             class="nf">getInstance</span><span class="p">().</span><span
             class="n">time</span><span class="p">),</span>
@@ -112,7 +92,8 @@
    <span class="n">context</span> <span class="p">=</span> <span class="n">context</span><span
             class="p">,</span>
    <span class="n">command</span> <span class="p">=</span> <span
-            class="nc">FiscalCommand</span><span class="p">.</span><span class="nc">SetDateTime</span><span
+            class="nc">FiscalCommand</span><span class="p">.</span><span
+            class="nc">SetDateTime</span><span
             class="p">(</span><span class="nc">Calendar</span><span class="p">.</span><span
             class="nf">getInstance</span><span class="p">().</span><span
             class="n">time</span><span class="p">),</span>
@@ -129,69 +110,6 @@
             class="nc">String</span><span class="p">)</span> <span class="p">{</span>
              <span class="c1">// Handle the error result</span>
          <span class="p">}</span>
-   <span class="p">},</span>
-<span class="p">)</span>
-
-<span class="c1">//Example of usage for sending a user screen command and receiving the result as a [Flow]:</span>
-<span class="nc">EcrCommandExecutor</span><span class="p">.</span><span class="nf">executeUserScreenCommand</span><span
-            class="p">(</span>
-   <span class="n">context</span> <span class="p">=</span> <span class="n">context</span><span
-            class="p">,</span>
-   <span class="n">newText</span> <span class="p">=</span> <span class="nc">SecureRandom</span><span
-            class="p">().</span><span class="nf">nextInt</span><span class="p">(</span><span
-            class="mi">100</span><span class="p">).</span><span
-            class="nf">toString</span><span class="p">(),</span>
-<span class="p">).</span><span class="nf">collect</span> <span class="p">{</span> <span class="n">result</span> <span
-            class="p">-&gt;</span>
-    <span class="n">result</span><span class="p">.</span><span class="nf">runCatching</span> <span
-            class="p">{</span>
-        <span class="nc">Log</span><span class="p">.</span><span class="nf">d</span><span class="p">(</span><span
-            class="s">"MainActivity"</span><span class="p">,</span> <span class="s">"Result.Success: $result"</span><span
-            class="p">)</span>
-        <span class="nc">Toast</span><span class="p">.</span><span class="nf">makeText</span><span
-            class="p">(</span><span class="n">context</span><span class="p">,</span> <span
-            class="n">result</span><span class="p">.</span><span
-            class="nf">toString</span><span class="p">(),</span> <span
-            class="nc">Toast</span><span class="p">.</span><span
-            class="nc">LENGTH_SHORT</span><span class="p">)</span>
-            <span class="p">.</span><span class="nf">show</span><span class="p">()</span>
-    <span class="p">}.</span><span class="nf">onFailure</span> <span class="p">{</span>
-        <span class="nc">Log</span><span class="p">.</span><span class="nf">e</span><span class="p">(</span><span
-            class="s">"MainActivity"</span><span class="p">,</span> <span class="s">"Result.Failure: $result"</span><span
-            class="p">)</span>
-        <span class="nc">Toast</span><span class="p">.</span><span class="nf">makeText</span><span
-            class="p">(</span><span class="n">context</span><span class="p">,</span> <span
-            class="n">result</span><span class="p">.</span><span
-            class="nf">toString</span><span class="p">(),</span> <span
-            class="nc">Toast</span><span class="p">.</span><span
-            class="nc">LENGTH_SHORT</span><span class="p">)</span>
-            <span class="p">.</span><span class="nf">show</span><span class="p">()</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="c1">//Example of usage for sending a user screen command and receiving the result as a [EcrCommandResultListener]:</span>
-<span class="nc">EcrCommandExecutor</span><span class="p">.</span><span class="nf">executeUserScreenCommand</span><span
-            class="p">(</span>
-   <span class="n">context</span> <span class="p">=</span> <span class="n">context</span><span
-            class="p">,</span>
-   <span class="n">newText</span> <span class="p">=</span> <span class="nc">SecureRandom</span><span
-            class="p">().</span><span class="nf">nextInt</span><span class="p">(</span><span
-            class="mi">100</span><span class="p">).</span><span
-            class="nf">toString</span><span class="p">(),</span>
-   <span class="n">listener</span> <span class="p">=</span> <span class="kd">object</span> <span
-            class="err">: </span><span class="nc">EcrCommandResultListener</span> <span
-            class="p">{</span>
-       <span class="k">override</span> <span class="k">fun</span> <span class="nf">onEcrCommandResult</span><span
-            class="p">(</span><span class="n">result</span><span class="p">:</span> <span
-            class="nc">String</span><span class="p">)</span> <span class="p">{</span>
-           <span class="c1">// Handle the successful result</span>
-       <span class="p">}</span>
-       <span class="k">override</span> <span class="k">fun</span> <span
-            class="nf">onEcrCommandError</span><span class="p">(</span><span
-            class="n">error</span><span class="p">:</span> <span
-            class="nc">String</span><span class="p">)</span> <span class="p">{</span>
-           <span class="c1">// Handle the error result</span>
-       <span class="p">}</span>
    <span class="p">},</span>
 <span class="p">)</span>
 
@@ -247,3 +165,105 @@
 <span class="p">)</span>
 </code></pre>
 </div>
+
+<blockquote>
+    <p>User screen commands</p>
+</blockquote>
+<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code>
+<span class="c1">//Example of usage for sending a user screen command and receiving the result as a [Flow]:</span>
+<span class="nc">EcrCommandExecutor</span><span class="p">.</span><span class="nf">executeUserScreenCommand</span><span
+                class="p">(</span>
+   <span class="n">context</span> <span class="p">=</span> <span class="n">context</span><span
+                class="p">,</span>
+   <span class="n">newText</span> <span class="p">=</span> <span class="nc">SecureRandom</span><span
+                class="p">().</span><span class="nf">nextInt</span><span class="p">(</span><span
+                class="mi">100</span><span class="p">).</span><span
+                class="nf">toString</span><span class="p">(),</span>
+<span class="p">).</span><span class="nf">collect</span> <span class="p">{</span> <span class="n">result</span> <span
+                class="p">-&gt;</span>
+    <span class="n">result</span><span class="p">.</span><span class="nf">runCatching</span> <span
+                class="p">{</span>
+        <span class="nc">Log</span><span class="p">.</span><span class="nf">d</span><span class="p">(</span><span
+                class="s">"MainActivity"</span><span class="p">,</span> <span class="s">"Result.Success: $result"</span><span
+                class="p">)</span>
+        <span class="nc">Toast</span><span class="p">.</span><span class="nf">makeText</span><span
+                class="p">(</span><span class="n">context</span><span class="p">,</span> <span
+                class="n">result</span><span class="p">.</span><span
+                class="nf">toString</span><span class="p">(),</span> <span
+                class="nc">Toast</span><span class="p">.</span><span
+                class="nc">LENGTH_SHORT</span><span class="p">)</span>
+            <span class="p">.</span><span class="nf">show</span><span class="p">()</span>
+    <span class="p">}.</span><span class="nf">onFailure</span> <span class="p">{</span>
+        <span class="nc">Log</span><span class="p">.</span><span class="nf">e</span><span class="p">(</span><span
+                class="s">"MainActivity"</span><span class="p">,</span> <span class="s">"Result.Failure: $result"</span><span
+                class="p">)</span>
+        <span class="nc">Toast</span><span class="p">.</span><span class="nf">makeText</span><span
+                class="p">(</span><span class="n">context</span><span class="p">,</span> <span
+                class="n">result</span><span class="p">.</span><span
+                class="nf">toString</span><span class="p">(),</span> <span
+                class="nc">Toast</span><span class="p">.</span><span
+                class="nc">LENGTH_SHORT</span><span class="p">)</span>
+            <span class="p">.</span><span class="nf">show</span><span class="p">()</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">//Example of usage for sending a user screen command and receiving the result as a [EcrCommandResultListener]:</span>
+<span class="nc">EcrCommandExecutor</span><span class="p">.</span><span class="nf">executeUserScreenCommand</span><span
+                class="p">(</span>
+   <span class="n">context</span> <span class="p">=</span> <span class="n">context</span><span
+                class="p">,</span>
+   <span class="n">newText</span> <span class="p">=</span> <span class="nc">SecureRandom</span><span
+                class="p">().</span><span class="nf">nextInt</span><span class="p">(</span><span
+                class="mi">100</span><span class="p">).</span><span
+                class="nf">toString</span><span class="p">(),</span>
+   <span class="n">listener</span> <span class="p">=</span> <span class="kd">object</span> <span
+                class="err">: </span><span class="nc">EcrCommandResultListener</span> <span
+                class="p">{</span>
+       <span class="k">override</span> <span class="k">fun</span> <span class="nf">onEcrCommandResult</span><span
+                class="p">(</span><span class="n">result</span><span class="p">:</span> <span
+                class="nc">String</span><span class="p">)</span> <span class="p">{</span>
+           <span class="c1">// Handle the successful result</span>
+       <span class="p">}</span>
+       <span class="k">override</span> <span class="k">fun</span> <span
+                class="nf">onEcrCommandError</span><span class="p">(</span><span
+                class="n">error</span><span class="p">:</span> <span
+                class="nc">String</span><span class="p">)</span> <span class="p">{</span>
+           <span class="c1">// Handle the error result</span>
+       <span class="p">}</span>
+   <span class="p">},</span>
+<span class="p">)</span>
+        </code></pre>
+</div>
+
+<p>Type of fiscal commands</p>
+
+<p>
+    <code style="white-space: nowrap">SetDateTime</code><br>
+    <code style="white-space: nowrap">SetCompanyData</code><br>
+    <code style="white-space: nowrap">GetCompanyData</code><br>
+    <code style="white-space: nowrap">SetVATRates</code><br>
+    <code style="white-space: nowrap">GetVATRates</code><br>
+    <code style="white-space: nowrap">Fiscalise</code><br>
+    <code style="white-space: nowrap">InitElectronicJournal</code><br>
+    <code style="white-space: nowrap">TechnicalReport</code><br>
+    <code style="white-space: nowrap">ZReport</code><br>
+    <code style="white-space: nowrap">XReport</code><br>
+    <code style="white-space: nowrap">InitJournal</code><br>
+    <code style="white-space: nowrap">Journal</code><br>
+    <code style="white-space: nowrap">JournalExport</code><br>
+    <code style="white-space: nowrap">XJournal</code><br>
+    <code style="white-space: nowrap">CustomerData</code><br>
+    <code style="white-space: nowrap">PeriodicReport</code><br>
+    - <code style="white-space: nowrap">ByDate</code><br>
+    - <code style="white-space: nowrap">ByZ</code><br>
+    <code style="white-space: nowrap">XMLReport</code><br>
+    <code style="white-space: nowrap">GetDailyTotals</code><br>
+    <code style="white-space: nowrap">GetStatus</code><br>
+    <code style="white-space: nowrap">GetSoftwareVersion</code><br>
+    <code style="white-space: nowrap">LoadCertificate</code><br>
+    <code style="white-space: nowrap">LoadProfile</code><br>
+    <code style="white-space: nowrap">ResetFiscalMemory</code><br>
+    <code style="white-space: nowrap">Sale</code><br>
+    <code style="white-space: nowrap">CashOperation</code><br>
+    <code style="white-space: nowrap">NonFiscalReceipt</code><br>
+</p>
