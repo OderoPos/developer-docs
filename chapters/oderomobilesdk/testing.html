@@ -3,14 +3,20 @@
 <h3 id='testing-sandbox'>Sandbox Environment</h3>
 <p>Use the sandbox environment for all development and testing:</p>
 
-<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="nx">OderoSDK</span><span class="p">.</span><span class="nx">initialize</span><span class="p">({</span>
-  <span class="na">apiKey</span><span class="p">:</span> <span class="dl">'</span><span class="s1">sandbox_api_key</span><span class="dl">'</span><span class="p">,</span>
-  <span class="na">environment</span><span class="p">:</span> <span class="dl">'</span><span class="s1">sandbox</span><span class="dl">'</span>
-<span class="p">});</span>
-</code></pre></div>
-
 <h3 id='testing-cards'>Test Credit Cards</h3>
-<p>Use these test credit card numbers in sandbox:</p>
+
+<h4 id='testing-ios-apple-pay'>iOS - Apple Pay Testing</h4>
+<p>For testing Apple Pay integration on iOS, use the official Apple Pay sandbox testing cards. Apple provides comprehensive test card data including different card types, decline scenarios, and authentication flows.</p>
+
+<p><strong>Apple Pay Test Cards:</strong> <a href="https://developer.apple.com/apple-pay/sandbox-testing/" target="_blank">https://developer.apple.com/apple-pay/sandbox-testing/</a></p>
+
+<h4 id='testing-android-google-pay'>Android - Google Pay Testing</h4>
+<p>For testing Google Pay integration on Android, use Google's official test card suite which includes various card networks and payment scenarios.</p>
+
+<p><strong>Google Pay Test Cards:</strong> <a href="https://developers.google.com/pay/api/android/guides/resources/test-card-suite" target="_blank">https://developers.google.com/pay/api/android/guides/resources/test-card-suite</a></p>
+
+<h4 id='testing-direct-card-payment'>Direct Card Payment Testing</h4>
+<p>For direct card payment testing (manual card entry), use these test credit card numbers in sandbox:</p>
 <ul>
     <li><strong>Visa:</strong> 4111 1111 1111 1111</li>
     <li><strong>MasterCard:</strong> 5555 5555 5555 4444</li>
@@ -18,21 +24,6 @@
     <li><strong>Declined Card:</strong> 4000 0000 0000 0002</li>
 </ul>
 
-<h3 id='testing-unit-tests'>Unit Testing</h3>
-<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="c1">// Jest example</span>
-<span class="nx">describe</span><span class="p">(</span><span class="dl">'</span><span class="s1">Payment Processing</span><span class="dl">'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
-  <span class="nx">test</span><span class="p">(</span><span class="dl">'</span><span class="s1">should process payment successfully</span><span class="dl">'</span><span class="p">,</span> <span class="k">async</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="kd">const</span> <span class="nx">mockPayment</span> <span class="o">=</span> <span class="p">{</span>
-      <span class="na">amount</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
-      <span class="na">currency</span><span class="p">:</span> <span class="dl">'</span><span class="s1">USD</span><span class="dl">'</span><span class="p">,</span>
-      <span class="na">reference</span><span class="p">:</span> <span class="dl">'</span><span class="s1">test_123</span><span class="dl">'</span>
-    <span class="p">};</span>
-    
-    <span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">OderoSDK</span><span class="p">.</span><span class="nx">processPayment</span><span class="p">(</span><span class="nx">mockPayment</span><span class="p">);</span>
-    <span class="nx">expect</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">status</span><span class="p">).</span><span class="nx">toBe</span><span class="p">(</span><span class="dl">'</span><span class="s1">success</span><span class="dl">'</span><span class="p">);</span>
-  <span class="p">});</span>
-<span class="p">});</span>
-</code></pre></div>
-
-<h3 id='testing-integration'>Integration Testing</h3>
-<p>Test the complete payment flow in your application before going live.</p> 
+<blockquote>
+<p><strong>Important:</strong> Use any future expiry date (MM/YY format) and any 3-4 digit CVV for testing. These cards will work in sandbox environment only.</p>
+</blockquote> 

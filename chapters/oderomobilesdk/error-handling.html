@@ -1,43 +1,93 @@
 <p>Comprehensive error handling strategies for the Odero Mobile SDK.</p>
 
-<h3 id='error-types'>Error Types</h3>
-<h4>Network Errors</h4>
-<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">try</span> <span class="p">{</span>
-  <span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">OderoSDK</span><span class="p">.</span><span class="nx">processPayment</span><span class="p">(</span><span class="nx">request</span><span class="p">);</span>
-<span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">.</span><span class="nx">code</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">NETWORK_ERROR</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">// Handle network connectivity issues</span>
-    <span class="nx">showRetryDialog</span><span class="p">();</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
+<h3 id='odero-api-errors'>Odero API Error Codes</h3>
+<p>The SDK uses the following error codes for various failure scenarios:</p>
 
-<h4>Validation Errors</h4>
-<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">.</span><span class="nx">code</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">INVALID_AMOUNT</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
-  <span class="c1">// Handle invalid payment amount</span>
-  <span class="nx">showErrorMessage</span><span class="p">(</span><span class="dl">'</span><span class="s1">Please enter a valid amount</span><span class="dl">'</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<h3 id='error-codes'>Common Error Codes</h3>
 <ul>
-    <li><code>NETWORK_ERROR</code>: Network connectivity issues</li>
-    <li><code>INVALID_AMOUNT</code>: Invalid payment amount</li>
-    <li><code>INSUFFICIENT_FUNDS</code>: Insufficient funds on card</li>
-    <li><code>CARD_DECLINED</code>: Card was declined</li>
-    <li><code>EXPIRED_CARD</code>: Card has expired</li>
-    <li><code>INVALID_CREDENTIALS</code>: Invalid API credentials</li>
+    <li><code>UNEXPECTED_ERROR</code> - unexpected_error</li>
+    <li><code>API_CONNECTION_ERROR</code> - api_connection_error</li>
+    <li><code>API_FIELD_VALIDATION_ERROR</code> - api_field_validation_error</li>
+    <li><code>SESSION_NOT_FOUND</code> - create_payment_session_not_found</li>
+    <li><code>PAYMENT_METHOD_INVALID</code> - create_payment_payment_method_invalid</li>
+    <li><code>CARD_EXPIRED</code> - create_payment_card_expired</li>
+    <li><code>CARD_NUMBER_INVALID</code> - create_payment_card_number_invalid</li>
+    <li><code>MONTH_INVALID</code> - create_payment_month_invalid</li>
+    <li><code>YEAR_INVALID</code> - create_payment_year_invalid</li>
+    <li><code>CVV_INVALID</code> - create_payment_cvv_invalid</li>
+    <li><code>ERROR_3DS</code> - 3ds_error</li>
+    <li><code>ERROR_3DS_CLOSED</code> - 3ds_closed</li>
+    <li><code>CONNECTION_TIMEOUT</code> - connection_timeout</li>
+    <li><code>GOOGLE_PAY_NOT_AVAILABLE</code> - google_pay_not_available</li>
+    <li><code>APPLE_PAY_NOT_AVAILABLE</code> - apple_pay_not_available</li>
+    <li><code>APPLE_PAY_ERROR</code> - apple_pay_error</li>
+    <li><code>GOOGLE_PAY_ERROR</code> - google_pay_error</li>
+    <li><code>NO_INTERNET</code> - no_internet</li>
 </ul>
 
-<h3 id='error-retry-logic'>Retry Logic</h3>
-<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">retryPayment</span> <span class="o">=</span> <span class="k">async</span> <span class="p">(</span><span class="nx">request</span><span class="p">,</span> <span class="nx">maxRetries</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-  <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">attempt</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">attempt</span> <span class="o">&lt;=</span> <span class="nx">maxRetries</span><span class="p">;</span> <span class="nx">attempt</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">try</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="k">await</span> <span class="nx">OderoSDK</span><span class="p">.</span><span class="nx">processPayment</span><span class="p">(</span><span class="nx">request</span><span class="p">);</span>
-    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">attempt</span> <span class="o">===</span> <span class="nx">maxRetries</span><span class="p">)</span> <span class="k">throw</span> <span class="nx">error</span><span class="p">;</span>
-      <span class="k">await</span> <span class="k">new</span> <span class="nb">Promise</span><span class="p">(</span><span class="nx">resolve</span> <span class="o">=&gt;</span> <span class="nx">setTimeout</span><span class="p">(</span><span class="nx">resolve</span><span class="p">,</span> <span class="mi">1000</span> <span class="o">*</span> <span class="nx">attempt</span><span class="p">));</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">};</span>
-</code></pre></div> 
+<h3 id='payment-sheet-errors'>Payment Sheet Error Codes</h3>
+<p>Errors specific to the payment sheet UI component:</p>
+
+<ul>
+    <li><code>USER_CLOSED_PAYMENT_SHEET</code> - user_closed_payment_sheet</li>
+</ul>
+
+<h3 id='odero-api-status'>Odero API Status Codes</h3>
+<p>Status codes indicating different phases of the payment process:</p>
+
+<ul>
+    <li><code>LOADING_SESSION_START</code> - loading_session_start</li>
+    <li><code>LOADING_SESSION_END</code> - loading_session_end</li>
+    <li><code>SENDING_PAYMENT_START</code> - sending_payment_start</li>
+    <li><code>SENDING_PAYMENT_END</code> - sending_payment_end</li>
+    <li><code>HANDLING_3DS</code> - handling_3ds</li>
+    <li><code>CHECKING_PAYMENT_STATUS_START</code> - checking_payment_status_start</li>
+    <li><code>CHECKING_PAYMENT_STATUS_END</code> - checking_payment_status_end</li>
+    <li><code>INFINITE_LOOP</code> - INFINITE_LOOP</li>
+</ul>
+
+<h3 id='payment-status'>Payment Status Codes</h3>
+<p>Final payment transaction statuses:</p>
+
+<ul>
+    <li><code>INITIALIZED</code> - INITIALIZED</li>
+    <li><code>REQUEST_IN_PROGRESS</code> - REQUEST_IN_PROGRESS</li>
+    <li><code>SUCCESS</code> - SUCCESS</li>
+    <li><code>TRANSACTION_DECLINED</code> - TRANSACTION_DECLINED</li>
+    <li><code>CANCELLED</code> - CANCELLED</li>
+    <li><code>COMPLETED_PARTIALLY</code> - COMPLETED_PARTIALLY</li>
+    <li><code>INVALID_MERCHANT</code> - INVALID_MERCHANT</li>
+    <li><code>INVALID_INPUT</code> - INVALID_INPUT</li>
+    <li><code>INVALID_AMOUNT</code> - INVALID_AMOUNT</li>
+    <li><code>INVALID_CARD_NUMBER</code> - INVALID_CARD_NUMBER</li>
+    <li><code>WRONG_CARD_EXPIRATION_DATE</code> - WRONG_CARD_EXPIRATION_DATE</li>
+    <li><code>EXPIRED_CARD</code> - EXPIRED_CARD</li>
+    <li><code>CVV_MISMATCH</code> - CVV_MISMATCH</li>
+    <li><code>INCORRECT_PIN</code> - INCORRECT_PIN</li>
+    <li><code>ALLOWABLE_NUMBER_OF_PIN_TRIES_EXCEEDED</code> - ALLOWABLE_NUMBER_OF_PIN_TRIES_EXCEEDED</li>
+    <li><code>RESTRICTED_CARD</code> - RESTRICTED_CARD</li>
+    <li><code>INACTIVE_CARD</code> - INACTIVE_CARD</li>
+    <li><code>INVALID_CARD</code> - INVALID_CARD</li>
+    <li><code>INVALID_TRANSACTION</code> - INVALID_TRANSACTION</li>
+    <li><code>TRANSACTION_COULD_NOT_BE_ROUTED</code> - TRANSACTION_COULD_NOT_BE_ROUTED</li>
+    <li><code>TRANSACTION_LIMIT_EXCEEDED</code> - TRANSACTION_LIMIT_EXCEEDED</li>
+    <li><code>DUPLICATE_TRANSACTION</code> - DUPLICATE_TRANSACTION</li>
+    <li><code>REENTER_TRANSACTION</code> - REENTER_TRANSACTION</li>
+    <li><code>INSUFFICIENT_FUNDS</code> - INSUFFICIENT_FUNDS</li>
+    <li><code>EXCEEDS_WITHDRAWAL_AMOUNT_LIMIT</code> - EXCEEDS_WITHDRAWAL_AMOUNT_LIMIT</li>
+    <li><code>NO_ACTION_TAKEN</code> - NO_ACTION_TAKEN</li>
+    <li><code>ACTION_NOT_ALLOWED_FOR_PAYMENT</code> - ACTION_NOT_ALLOWED_FOR_PAYMENT</li>
+    <li><code>ALREADY_REVERSED</code> - ALREADY_REVERSED</li>
+    <li><code>CARD_LOST_OR_STOLEN</code> - CARD_LOST_OR_STOLEN</li>
+    <li><code>SUSPECTED_FRAUD</code> - SUSPECTED_FRAUD</li>
+    <li><code>ISSUER_DECLINED</code> - ISSUER_DECLINED</li>
+    <li><code>SYSTEM_ERROR</code> - SYSTEM_ERROR</li>
+    <li><code>DO_NOT_HONOR</code> - DO_NOT_HONOR</li>
+    <li><code>AUTHENTICATION_FAILED_3DS2</code> - AUTHENTICATION_FAILED_3DS2</li>
+    <li><code>UNHANDLED</code> - UNHANDLED</li>
+    <li><code>TIMEOUT</code> - TIMEOUT</li>
+    <li><code>INSTALMENT_CARD_NOT_VALID</code> - INSTALMENT_CARD_NOT_VALID</li>
+    <li><code>PAYMENT_RETRY_ERROR</code> - PAYMENT_RETRY_ERROR</li>
+    <li><code>VALIDATION_ERROR</code> - VALIDATION_ERROR</li>
+    <li><code>DECLINE_ISSUING_BANK</code> - DECLINE_ISSUING_BANK</li>
+    <li><code>ORDER_NOT_FOUND</code> - ORDER_NOT_FOUND</li>
+</ul> 
