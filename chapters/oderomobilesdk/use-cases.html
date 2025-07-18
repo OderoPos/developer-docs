@@ -1,0 +1,34 @@
+<p>Common integration scenarios and practical guides for implementing the Odero Mobile SDK in real-world applications.</p>
+
+<h3 id='use-case-ecommerce'>E-commerce App Integration</h3>
+<p>Learn how to integrate payment processing into your e-commerce mobile application.</p>
+
+<h4>Shopping Cart Checkout</h4>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">processCheckout</span> <span class="o">=</span> <span class="k">async</span> <span class="p">(</span><span class="nx">cartItems</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">totalAmount</span> <span class="o">=</span> <span class="nx">cartItems</span><span class="p">.</span><span class="nx">reduce</span><span class="p">((</span><span class="nx">sum</span><span class="p">,</span> <span class="nx">item</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">sum</span> <span class="o">+</span> <span class="nx">item</span><span class="p">.</span><span class="nx">price</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+  
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">OderoSDK</span><span class="p">.</span><span class="nx">processPayment</span><span class="p">({</span>
+      <span class="na">amount</span><span class="p">:</span> <span class="nx">totalAmount</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="c1">// Convert to cents</span>
+      <span class="na">currency</span><span class="p">:</span> <span class="dl">'</span><span class="s1">USD</span><span class="dl">'</span><span class="p">,</span>
+      <span class="na">reference</span><span class="p">:</span> <span class="s2">`order_</span><span class="p">${</span><span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()}</span><span class="s2">`</span><span class="p">,</span>
+      <span class="na">description</span><span class="p">:</span> <span class="s2">`</span><span class="p">${</span><span class="nx">cartItems</span><span class="p">.</span><span class="nx">length</span><span class="p">}</span><span class="s2"> items`</span>
+    <span class="p">});</span>
+    
+    <span class="c1">// Clear cart and redirect to success page</span>
+    <span class="nx">clearCart</span><span class="p">();</span>
+    <span class="nx">navigateToSuccess</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">showErrorMessage</span><span class="p">(</span><span class="nx">error</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<h3 id='use-case-subscription'>Subscription Payments</h3>
+<p>Handle recurring subscription payments in your app.</p>
+
+<h3 id='use-case-marketplace'>Marketplace Split Payments</h3>
+<p>Implement split payments for marketplace applications.</p>
+
+<h3 id='use-case-offline'>Offline Payment Handling</h3>
+<p>Best practices for handling payments when network connectivity is limited.</p>

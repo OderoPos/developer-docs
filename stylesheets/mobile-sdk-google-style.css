@@ -1,0 +1,462 @@
+/* Google Developer Docs Style for Odero Mobile SDK */
+/* This stylesheet overrides the default 2-column layout for Mobile SDK sections */
+
+/* Override the dark box for Mobile SDK sections */
+#mobile-sdk ~ .dark-box {
+    display: none !important;
+}
+
+/* Mobile SDK specific content styling */
+#mobile-sdk .content,
+#mobile-sdk-introduction ~ .content,
+#mobile-sdk-installation ~ .content,
+#mobile-sdk-configuration ~ .content,
+#mobile-sdk-quick-start ~ .content,
+#mobile-sdk-api-reference ~ .content,
+#mobile-sdk-use-cases ~ .content,
+#mobile-sdk-testing ~ .content,
+#mobile-sdk-error-handling ~ .content,
+#mobile-sdk-versioning ~ .content,
+#mobile-sdk-faq ~ .content,
+#mobile-sdk-support ~ .content,
+#mobile-sdk-best-practices ~ .content {
+    /* Override 2-column layout */
+    margin-right: 0 !important;
+    max-width: 100% !important;
+    padding: 0 40px !important;
+}
+
+/* Full-width content for Mobile SDK sections */
+#mobile-sdk-introduction ~ .content > *,
+#mobile-sdk-installation ~ .content > *,
+#mobile-sdk-configuration ~ .content > *,
+#mobile-sdk-quick-start ~ .content > *,
+#mobile-sdk-api-reference ~ .content > *,
+#mobile-sdk-use-cases ~ .content > *,
+#mobile-sdk-testing ~ .content > *,
+#mobile-sdk-error-handling ~ .content > *,
+#mobile-sdk-versioning ~ .content > *,
+#mobile-sdk-faq ~ .content > *,
+#mobile-sdk-support ~ .content > *,
+#mobile-sdk-best-practices ~ .content > * {
+    margin-right: 0 !important;
+    max-width: 100% !important;
+}
+
+/* Code blocks - single column, below text */
+#mobile-sdk-introduction ~ .content pre,
+#mobile-sdk-installation ~ .content pre,
+#mobile-sdk-configuration ~ .content pre,
+#mobile-sdk-quick-start ~ .content pre,
+#mobile-sdk-api-reference ~ .content pre,
+#mobile-sdk-use-cases ~ .content pre,
+#mobile-sdk-testing ~ .content pre,
+#mobile-sdk-error-handling ~ .content pre,
+#mobile-sdk-versioning ~ .content pre,
+#mobile-sdk-faq ~ .content pre,
+#mobile-sdk-support ~ .content pre,
+#mobile-sdk-best-practices ~ .content pre,
+#mobile-sdk-introduction ~ .content blockquote,
+#mobile-sdk-installation ~ .content blockquote,
+#mobile-sdk-configuration ~ .content blockquote,
+#mobile-sdk-quick-start ~ .content blockquote,
+#mobile-sdk-api-reference ~ .content blockquote,
+#mobile-sdk-use-cases ~ .content blockquote,
+#mobile-sdk-testing ~ .content blockquote,
+#mobile-sdk-error-handling ~ .content blockquote,
+#mobile-sdk-versioning ~ .content blockquote,
+#mobile-sdk-faq ~ .content blockquote,
+#mobile-sdk-support ~ .content blockquote,
+#mobile-sdk-best-practices ~ .content blockquote {
+    /* Remove float and make full width */
+    float: none !important;
+    width: 100% !important;
+    clear: both !important;
+    margin: 24px 0 !important;
+    
+    /* Google Docs style code blocks */
+    background-color: #f8f9fa !important;
+    color: #202124 !important;
+    border: 1px solid #dadce0 !important;
+    border-radius: 8px !important;
+    padding: 16px !important;
+    font-family: 'Roboto Mono', 'Consolas', 'Monaco', 'Courier New', monospace !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    overflow-x: auto !important;
+    position: relative !important;
+}
+
+/* Blockquote styling for Mobile SDK */
+#mobile-sdk-introduction ~ .content blockquote > p,
+#mobile-sdk-installation ~ .content blockquote > p,
+#mobile-sdk-configuration ~ .content blockquote > p,
+#mobile-sdk-quick-start ~ .content blockquote > p,
+#mobile-sdk-api-reference ~ .content blockquote > p,
+#mobile-sdk-use-cases ~ .content blockquote > p,
+#mobile-sdk-testing ~ .content blockquote > p,
+#mobile-sdk-error-handling ~ .content blockquote > p,
+#mobile-sdk-versioning ~ .content blockquote > p,
+#mobile-sdk-faq ~ .content blockquote > p,
+#mobile-sdk-support ~ .content blockquote > p,
+#mobile-sdk-best-practices ~ .content blockquote > p {
+    background-color: transparent !important;
+    color: #202124 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Typography improvements for Mobile SDK */
+#mobile-sdk-introduction ~ .content,
+#mobile-sdk-installation ~ .content,
+#mobile-sdk-configuration ~ .content,
+#mobile-sdk-quick-start ~ .content,
+#mobile-sdk-api-reference ~ .content,
+#mobile-sdk-use-cases ~ .content,
+#mobile-sdk-testing ~ .content,
+#mobile-sdk-error-handling ~ .content,
+#mobile-sdk-versioning ~ .content,
+#mobile-sdk-faq ~ .content,
+#mobile-sdk-support ~ .content,
+#mobile-sdk-best-practices ~ .content {
+    font-family: 'Google Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
+    font-size: 16px !important;
+    line-height: 1.6 !important;
+    color: #202124 !important;
+}
+
+/* Headings for Mobile SDK */
+#mobile-sdk-introduction ~ .content h1,
+#mobile-sdk-installation ~ .content h1,
+#mobile-sdk-configuration ~ .content h1,
+#mobile-sdk-quick-start ~ .content h1,
+#mobile-sdk-api-reference ~ .content h1,
+#mobile-sdk-use-cases ~ .content h1,
+#mobile-sdk-testing ~ .content h1,
+#mobile-sdk-error-handling ~ .content h1,
+#mobile-sdk-versioning ~ .content h1,
+#mobile-sdk-faq ~ .content h1,
+#mobile-sdk-support ~ .content h1,
+#mobile-sdk-best-practices ~ .content h1 {
+    font-size: 32px !important;
+    font-weight: 400 !important;
+    margin: 32px 0 16px 0 !important;
+    color: #202124 !important;
+    border: none !important;
+    background: none !important;
+    padding: 0 !important;
+}
+
+#mobile-sdk-introduction ~ .content h2,
+#mobile-sdk-installation ~ .content h2,
+#mobile-sdk-configuration ~ .content h2,
+#mobile-sdk-quick-start ~ .content h2,
+#mobile-sdk-api-reference ~ .content h2,
+#mobile-sdk-use-cases ~ .content h2,
+#mobile-sdk-testing ~ .content h2,
+#mobile-sdk-error-handling ~ .content h2,
+#mobile-sdk-versioning ~ .content h2,
+#mobile-sdk-faq ~ .content h2,
+#mobile-sdk-support ~ .content h2,
+#mobile-sdk-best-practices ~ .content h2 {
+    font-size: 24px !important;
+    font-weight: 400 !important;
+    margin: 32px 0 16px 0 !important;
+    color: #202124 !important;
+    border: none !important;
+    background: none !important;
+    padding: 0 !important;
+}
+
+#mobile-sdk-introduction ~ .content h3,
+#mobile-sdk-installation ~ .content h3,
+#mobile-sdk-configuration ~ .content h3,
+#mobile-sdk-quick-start ~ .content h3,
+#mobile-sdk-api-reference ~ .content h3,
+#mobile-sdk-use-cases ~ .content h3,
+#mobile-sdk-testing ~ .content h3,
+#mobile-sdk-error-handling ~ .content h3,
+#mobile-sdk-versioning ~ .content h3,
+#mobile-sdk-faq ~ .content h3,
+#mobile-sdk-support ~ .content h3,
+#mobile-sdk-best-practices ~ .content h3 {
+    font-size: 20px !important;
+    font-weight: 500 !important;
+    margin: 24px 0 12px 0 !important;
+    color: #202124 !important;
+}
+
+/* Paragraphs and lists */
+#mobile-sdk-introduction ~ .content p,
+#mobile-sdk-installation ~ .content p,
+#mobile-sdk-configuration ~ .content p,
+#mobile-sdk-quick-start ~ .content p,
+#mobile-sdk-api-reference ~ .content p,
+#mobile-sdk-use-cases ~ .content p,
+#mobile-sdk-testing ~ .content p,
+#mobile-sdk-error-handling ~ .content p,
+#mobile-sdk-versioning ~ .content p,
+#mobile-sdk-faq ~ .content p,
+#mobile-sdk-support ~ .content p,
+#mobile-sdk-best-practices ~ .content p {
+    margin: 16px 0 !important;
+    line-height: 1.6 !important;
+    color: #5f6368 !important;
+}
+
+#mobile-sdk-introduction ~ .content ul,
+#mobile-sdk-installation ~ .content ul,
+#mobile-sdk-configuration ~ .content ul,
+#mobile-sdk-quick-start ~ .content ul,
+#mobile-sdk-api-reference ~ .content ul,
+#mobile-sdk-use-cases ~ .content ul,
+#mobile-sdk-testing ~ .content ul,
+#mobile-sdk-error-handling ~ .content ul,
+#mobile-sdk-versioning ~ .content ul,
+#mobile-sdk-faq ~ .content ul,
+#mobile-sdk-support ~ .content ul,
+#mobile-sdk-best-practices ~ .content ul,
+#mobile-sdk-introduction ~ .content ol,
+#mobile-sdk-installation ~ .content ol,
+#mobile-sdk-configuration ~ .content ol,
+#mobile-sdk-quick-start ~ .content ol,
+#mobile-sdk-api-reference ~ .content ol,
+#mobile-sdk-use-cases ~ .content ol,
+#mobile-sdk-testing ~ .content ol,
+#mobile-sdk-error-handling ~ .content ol,
+#mobile-sdk-versioning ~ .content ol,
+#mobile-sdk-faq ~ .content ol,
+#mobile-sdk-support ~ .content ol,
+#mobile-sdk-best-practices ~ .content ol {
+    margin: 16px 0 !important;
+    padding-left: 24px !important;
+}
+
+#mobile-sdk-introduction ~ .content li,
+#mobile-sdk-installation ~ .content li,
+#mobile-sdk-configuration ~ .content li,
+#mobile-sdk-quick-start ~ .content li,
+#mobile-sdk-api-reference ~ .content li,
+#mobile-sdk-use-cases ~ .content li,
+#mobile-sdk-testing ~ .content li,
+#mobile-sdk-error-handling ~ .content li,
+#mobile-sdk-versioning ~ .content li,
+#mobile-sdk-faq ~ .content li,
+#mobile-sdk-support ~ .content li,
+#mobile-sdk-best-practices ~ .content li {
+    margin: 8px 0 !important;
+    color: #5f6368 !important;
+}
+
+/* Inline code styling */
+#mobile-sdk-introduction ~ .content code,
+#mobile-sdk-installation ~ .content code,
+#mobile-sdk-configuration ~ .content code,
+#mobile-sdk-quick-start ~ .content code,
+#mobile-sdk-api-reference ~ .content code,
+#mobile-sdk-use-cases ~ .content code,
+#mobile-sdk-testing ~ .content code,
+#mobile-sdk-error-handling ~ .content code,
+#mobile-sdk-versioning ~ .content code,
+#mobile-sdk-faq ~ .content code,
+#mobile-sdk-support ~ .content code,
+#mobile-sdk-best-practices ~ .content code {
+    background-color: #f1f3f4 !important;
+    color: #202124 !important;
+    padding: 2px 6px !important;
+    border-radius: 4px !important;
+    font-family: 'Roboto Mono', 'Consolas', 'Monaco', 'Courier New', monospace !important;
+    font-size: 14px !important;
+    border: none !important;
+}
+
+/* Code blocks inside pre tags */
+#mobile-sdk-introduction ~ .content pre code,
+#mobile-sdk-installation ~ .content pre code,
+#mobile-sdk-configuration ~ .content pre code,
+#mobile-sdk-quick-start ~ .content pre code,
+#mobile-sdk-api-reference ~ .content pre code,
+#mobile-sdk-use-cases ~ .content pre code,
+#mobile-sdk-testing ~ .content pre code,
+#mobile-sdk-error-handling ~ .content pre code,
+#mobile-sdk-versioning ~ .content pre code,
+#mobile-sdk-faq ~ .content pre code,
+#mobile-sdk-support ~ .content pre code,
+#mobile-sdk-best-practices ~ .content pre code {
+    background-color: transparent !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+}
+
+/* Copy button styling for Mobile SDK */
+#mobile-sdk-introduction ~ .content .copy-clipboard,
+#mobile-sdk-installation ~ .content .copy-clipboard,
+#mobile-sdk-configuration ~ .content .copy-clipboard,
+#mobile-sdk-quick-start ~ .content .copy-clipboard,
+#mobile-sdk-api-reference ~ .content .copy-clipboard,
+#mobile-sdk-use-cases ~ .content .copy-clipboard,
+#mobile-sdk-testing ~ .content .copy-clipboard,
+#mobile-sdk-error-handling ~ .content .copy-clipboard,
+#mobile-sdk-versioning ~ .content .copy-clipboard,
+#mobile-sdk-faq ~ .content .copy-clipboard,
+#mobile-sdk-support ~ .content .copy-clipboard,
+#mobile-sdk-best-practices ~ .content .copy-clipboard {
+    fill: #5f6368 !important;
+    position: absolute !important;
+    top: 12px !important;
+    right: 12px !important;
+}
+
+/* Tables for Mobile SDK */
+#mobile-sdk-introduction ~ .content table,
+#mobile-sdk-installation ~ .content table,
+#mobile-sdk-configuration ~ .content table,
+#mobile-sdk-quick-start ~ .content table,
+#mobile-sdk-api-reference ~ .content table,
+#mobile-sdk-use-cases ~ .content table,
+#mobile-sdk-testing ~ .content table,
+#mobile-sdk-error-handling ~ .content table,
+#mobile-sdk-versioning ~ .content table,
+#mobile-sdk-faq ~ .content table,
+#mobile-sdk-support ~ .content table,
+#mobile-sdk-best-practices ~ .content table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+    margin: 24px 0 !important;
+    border: 1px solid #dadce0 !important;
+}
+
+#mobile-sdk-introduction ~ .content table th,
+#mobile-sdk-installation ~ .content table th,
+#mobile-sdk-configuration ~ .content table th,
+#mobile-sdk-quick-start ~ .content table th,
+#mobile-sdk-api-reference ~ .content table th,
+#mobile-sdk-use-cases ~ .content table th,
+#mobile-sdk-testing ~ .content table th,
+#mobile-sdk-error-handling ~ .content table th,
+#mobile-sdk-versioning ~ .content table th,
+#mobile-sdk-faq ~ .content table th,
+#mobile-sdk-support ~ .content table th,
+#mobile-sdk-best-practices ~ .content table th {
+    background-color: #f8f9fa !important;
+    font-weight: 500 !important;
+    padding: 12px !important;
+    border: 1px solid #dadce0 !important;
+    color: #202124 !important;
+}
+
+#mobile-sdk-introduction ~ .content table td,
+#mobile-sdk-installation ~ .content table td,
+#mobile-sdk-configuration ~ .content table td,
+#mobile-sdk-quick-start ~ .content table td,
+#mobile-sdk-api-reference ~ .content table td,
+#mobile-sdk-use-cases ~ .content table td,
+#mobile-sdk-testing ~ .content table td,
+#mobile-sdk-error-handling ~ .content table td,
+#mobile-sdk-versioning ~ .content table td,
+#mobile-sdk-faq ~ .content table td,
+#mobile-sdk-support ~ .content table td,
+#mobile-sdk-best-practices ~ .content table td {
+    padding: 12px !important;
+    border: 1px solid #dadce0 !important;
+    color: #5f6368 !important;
+}
+
+/* Alerts/Asides for Mobile SDK */
+#mobile-sdk-introduction ~ .content aside,
+#mobile-sdk-installation ~ .content aside,
+#mobile-sdk-configuration ~ .content aside,
+#mobile-sdk-quick-start ~ .content aside,
+#mobile-sdk-api-reference ~ .content aside,
+#mobile-sdk-use-cases ~ .content aside,
+#mobile-sdk-testing ~ .content aside,
+#mobile-sdk-error-handling ~ .content aside,
+#mobile-sdk-versioning ~ .content aside,
+#mobile-sdk-faq ~ .content aside,
+#mobile-sdk-support ~ .content aside,
+#mobile-sdk-best-practices ~ .content aside {
+    background-color: #e8f0fe !important;
+    border-left: 4px solid #1a73e8 !important;
+    border-radius: 0 4px 4px 0 !important;
+    padding: 16px !important;
+    margin: 24px 0 !important;
+    color: #202124 !important;
+}
+
+#mobile-sdk-introduction ~ .content aside.warning,
+#mobile-sdk-installation ~ .content aside.warning,
+#mobile-sdk-configuration ~ .content aside.warning,
+#mobile-sdk-quick-start ~ .content aside.warning,
+#mobile-sdk-api-reference ~ .content aside.warning,
+#mobile-sdk-use-cases ~ .content aside.warning,
+#mobile-sdk-testing ~ .content aside.warning,
+#mobile-sdk-error-handling ~ .content aside.warning,
+#mobile-sdk-versioning ~ .content aside.warning,
+#mobile-sdk-faq ~ .content aside.warning,
+#mobile-sdk-support ~ .content aside.warning,
+#mobile-sdk-best-practices ~ .content aside.warning {
+    background-color: #fef7e0 !important;
+    border-left-color: #f9ab00 !important;
+}
+
+#mobile-sdk-introduction ~ .content aside.success,
+#mobile-sdk-installation ~ .content aside.success,
+#mobile-sdk-configuration ~ .content aside.success,
+#mobile-sdk-quick-start ~ .content aside.success,
+#mobile-sdk-api-reference ~ .content aside.success,
+#mobile-sdk-use-cases ~ .content aside.success,
+#mobile-sdk-testing ~ .content aside.success,
+#mobile-sdk-error-handling ~ .content aside.success,
+#mobile-sdk-versioning ~ .content aside.success,
+#mobile-sdk-faq ~ .content aside.success,
+#mobile-sdk-support ~ .content aside.success,
+#mobile-sdk-best-practices ~ .content aside.success {
+    background-color: #e6f4ea !important;
+    border-left-color: #34a853 !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #mobile-sdk-introduction ~ .content,
+    #mobile-sdk-installation ~ .content,
+    #mobile-sdk-configuration ~ .content,
+    #mobile-sdk-quick-start ~ .content,
+    #mobile-sdk-api-reference ~ .content,
+    #mobile-sdk-use-cases ~ .content,
+    #mobile-sdk-testing ~ .content,
+    #mobile-sdk-error-handling ~ .content,
+    #mobile-sdk-versioning ~ .content,
+    #mobile-sdk-faq ~ .content,
+    #mobile-sdk-support ~ .content,
+    #mobile-sdk-best-practices ~ .content {
+        padding: 0 20px !important;
+    }
+    
+    #mobile-sdk-introduction ~ .content pre,
+    #mobile-sdk-installation ~ .content pre,
+    #mobile-sdk-configuration ~ .content pre,
+    #mobile-sdk-quick-start ~ .content pre,
+    #mobile-sdk-api-reference ~ .content pre,
+    #mobile-sdk-use-cases ~ .content pre,
+    #mobile-sdk-testing ~ .content pre,
+    #mobile-sdk-error-handling ~ .content pre,
+    #mobile-sdk-versioning ~ .content pre,
+    #mobile-sdk-faq ~ .content pre,
+    #mobile-sdk-support ~ .content pre,
+    #mobile-sdk-best-practices ~ .content pre,
+    #mobile-sdk-introduction ~ .content blockquote,
+    #mobile-sdk-installation ~ .content blockquote,
+    #mobile-sdk-configuration ~ .content blockquote,
+    #mobile-sdk-quick-start ~ .content blockquote,
+    #mobile-sdk-api-reference ~ .content blockquote,
+    #mobile-sdk-use-cases ~ .content blockquote,
+    #mobile-sdk-testing ~ .content blockquote,
+    #mobile-sdk-error-handling ~ .content blockquote,
+    #mobile-sdk-versioning ~ .content blockquote,
+    #mobile-sdk-faq ~ .content blockquote,
+    #mobile-sdk-support ~ .content blockquote,
+    #mobile-sdk-best-practices ~ .content blockquote {
+        font-size: 12px !important;
+        padding: 12px !important;
+    }
+} 

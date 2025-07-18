@@ -1,0 +1,43 @@
+<p>Comprehensive error handling strategies for the Odero Mobile SDK.</p>
+
+<h3 id='error-types'>Error Types</h3>
+<h4>Network Errors</h4>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">try</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">OderoSDK</span><span class="p">.</span><span class="nx">processPayment</span><span class="p">(</span><span class="nx">request</span><span class="p">);</span>
+<span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">.</span><span class="nx">code</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">NETWORK_ERROR</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Handle network connectivity issues</span>
+    <span class="nx">showRetryDialog</span><span class="p">();</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h4>Validation Errors</h4>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">.</span><span class="nx">code</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">INVALID_AMOUNT</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// Handle invalid payment amount</span>
+  <span class="nx">showErrorMessage</span><span class="p">(</span><span class="dl">'</span><span class="s1">Please enter a valid amount</span><span class="dl">'</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id='error-codes'>Common Error Codes</h3>
+<ul>
+    <li><code>NETWORK_ERROR</code>: Network connectivity issues</li>
+    <li><code>INVALID_AMOUNT</code>: Invalid payment amount</li>
+    <li><code>INSUFFICIENT_FUNDS</code>: Insufficient funds on card</li>
+    <li><code>CARD_DECLINED</code>: Card was declined</li>
+    <li><code>EXPIRED_CARD</code>: Card has expired</li>
+    <li><code>INVALID_CREDENTIALS</code>: Invalid API credentials</li>
+</ul>
+
+<h3 id='error-retry-logic'>Retry Logic</h3>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">retryPayment</span> <span class="o">=</span> <span class="k">async</span> <span class="p">(</span><span class="nx">request</span><span class="p">,</span> <span class="nx">maxRetries</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">attempt</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">attempt</span> <span class="o">&lt;=</span> <span class="nx">maxRetries</span><span class="p">;</span> <span class="nx">attempt</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">try</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="k">await</span> <span class="nx">OderoSDK</span><span class="p">.</span><span class="nx">processPayment</span><span class="p">(</span><span class="nx">request</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">attempt</span> <span class="o">===</span> <span class="nx">maxRetries</span><span class="p">)</span> <span class="k">throw</span> <span class="nx">error</span><span class="p">;</span>
+      <span class="k">await</span> <span class="k">new</span> <span class="nb">Promise</span><span class="p">(</span><span class="nx">resolve</span> <span class="o">=&gt;</span> <span class="nx">setTimeout</span><span class="p">(</span><span class="nx">resolve</span><span class="p">,</span> <span class="mi">1000</span> <span class="o">*</span> <span class="nx">attempt</span><span class="p">));</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div> 

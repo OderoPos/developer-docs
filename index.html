@@ -324,6 +324,47 @@
             </ul>
         </li>
         <li>
+            <a href="#mobile-sdk" class="toc-h1 toc-link" data-title="Odero Mobile SDK">Odero Mobile SDK</a>
+            <ul class="toc-list-h2">
+                <li>
+                    <a href="#mobile-sdk-introduction" class="toc-h2 toc-link" data-title="📘 Introduction">📘 Introduction</a>
+                </li>
+                <li>
+                    <a href="#mobile-sdk-installation" class="toc-h2 toc-link" data-title="⚙️ Installation">⚙️ Installation</a>
+                </li>
+                <li>
+                    <a href="#mobile-sdk-configuration" class="toc-h2 toc-link" data-title="🛠️ Configuration">🛠️ Configuration</a>
+                </li>
+                <li>
+                    <a href="#mobile-sdk-quick-start" class="toc-h2 toc-link" data-title="🚀 Quick Start">🚀 Quick Start</a>
+                </li>
+                <li>
+                    <a href="#mobile-sdk-api-reference" class="toc-h2 toc-link" data-title="🧩 Customization">🧩 Customization</a>
+                </li>
+                <li>
+                    <a href="#mobile-sdk-use-cases" class="toc-h2 toc-link" data-title="💡 Common Use Cases / Guides">💡 Common Use Cases / Guides</a>
+                </li>
+                <li>
+                    <a href="#mobile-sdk-testing" class="toc-h2 toc-link" data-title="🧪 Testing">🧪 Testing</a>
+                </li>
+                <li>
+                    <a href="#mobile-sdk-error-handling" class="toc-h2 toc-link" data-title="❗ Error Handling">❗ Error Handling</a>
+                </li>
+                <li>
+                    <a href="#mobile-sdk-versioning" class="toc-h2 toc-link" data-title="🔁 Versioning / Changelog">🔁 Versioning / Changelog</a>
+                </li>
+                <li>
+                    <a href="#mobile-sdk-faq" class="toc-h2 toc-link" data-title="🙋‍♂️ FAQ">🙋‍♂️ FAQ</a>
+                </li>
+                <li>
+                    <a href="#mobile-sdk-support" class="toc-h2 toc-link" data-title="📩 Support">📩 Support</a>
+                </li>
+                <li>
+                    <a href="#mobile-sdk-best-practices" class="toc-h2 toc-link" data-title="✅ Best Practices">✅ Best Practices</a>
+                </li>
+            </ul>
+        </li>
+        <li>
             <a href="#opit" class="toc-h1 toc-link" data-title="OPIT">OPIT</a>
             <ul class="toc-list-h2">
                 <li>
@@ -386,6 +427,44 @@
 
         <h2 id='printer-app'>Printer App</h2>
         <div class="content" data-include="printer-app.html"></div>
+
+        <!--    Odero Mobile SDK    -->
+        <h1 id='mobile-sdk'>Odero Mobile SDK</h1>
+        <h2 id='mobile-sdk-introduction'>📘 Introduction</h2>
+        <div class="content" data-include="oderomobilesdk/introduction.html"></div>
+
+        <h2 id='mobile-sdk-installation'>⚙️ Installation</h2>
+        <div class="content" data-include="oderomobilesdk/installation.html"></div>
+
+        <h2 id='mobile-sdk-configuration'>🛠️ Configuration</h2>
+        <div class="content" data-include="oderomobilesdk/configuration.html"></div>
+
+        <h2 id='mobile-sdk-quick-start'>🚀 Quick Start</h2>
+        <div class="content" data-include="oderomobilesdk/quick-start.html"></div>
+
+        <h2 id='mobile-sdk-api-reference'>🧩 Customization</h2>
+        <div class="content" data-include="oderomobilesdk/api-reference.html"></div>
+
+        <h2 id='mobile-sdk-use-cases'>💡 Common Use Cases / Guides</h2>
+        <div class="content" data-include="oderomobilesdk/use-cases.html"></div>
+
+        <h2 id='mobile-sdk-testing'>🧪 Testing</h2>
+        <div class="content" data-include="oderomobilesdk/testing.html"></div>
+
+        <h2 id='mobile-sdk-error-handling'>❗ Error Handling</h2>
+        <div class="content" data-include="oderomobilesdk/error-handling.html"></div>
+
+        <h2 id='mobile-sdk-versioning'>🔁 Versioning / Changelog</h2>
+        <div class="content" data-include="oderomobilesdk/versioning.html"></div>
+
+        <h2 id='mobile-sdk-faq'>🙋‍♂️ FAQ</h2>
+        <div class="content" data-include="oderomobilesdk/faq.html"></div>
+
+        <h2 id='mobile-sdk-support'>📩 Support</h2>
+        <div class="content" data-include="oderomobilesdk/support.html"></div>
+
+        <h2 id='mobile-sdk-best-practices'>✅ Best Practices</h2>
+        <div class="content" data-include="oderomobilesdk/best-practices.html"></div>
 
         <!--    OPIT    -->
         <h1 id='opit'>OPIT</h1>
@@ -457,5 +536,47 @@
     <div class="dark-box"></div>
 </div>
 <script src="import_html.js"></script>
+<script>
+// Platform switcher functionality for Odero Mobile SDK
+document.addEventListener('DOMContentLoaded', function() {
+    // Wait a bit for the included content to load
+    setTimeout(function() {
+        initializePlatformSwitchers();
+    }, 500);
+});
+
+function initializePlatformSwitchers() {
+    const platformBtns = document.querySelectorAll('.platform-btn');
+    const platformSections = document.querySelectorAll('.platform-section');
+
+    if (platformBtns.length === 0) {
+        // If content isn't loaded yet, try again
+        setTimeout(initializePlatformSwitchers, 500);
+        return;
+    }
+
+    platformBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const platform = this.getAttribute('data-platform');
+            const parentContainer = this.closest('.content');
+            
+            // Find buttons and sections within this specific container
+            const containerBtns = parentContainer.querySelectorAll('.platform-btn');
+            const containerSections = parentContainer.querySelectorAll('.platform-section');
+            
+            // Remove active class from all buttons and sections in this container
+            containerBtns.forEach(b => b.classList.remove('active'));
+            containerSections.forEach(s => s.classList.remove('active'));
+            
+            // Add active class to clicked button and corresponding section
+            this.classList.add('active');
+            const targetSection = parentContainer.querySelector('#platform-' + platform);
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+        });
+    });
+}
+</script>
 </body>
 </html>

@@ -1,0 +1,30 @@
+<h4 id='ios-qs-init'>1. Initialize the SDK</h4>
+<div class="highlight"><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">OderoMobileSDK</span>
+
+<span class="kd">class</span> <span class="kt">AppDelegate</span><span class="p">:</span> <span class="kt">UIResponder</span><span class="p">,</span> <span class="kt">UIApplicationDelegate</span> <span class="p">{</span>
+    <span class="kd">func</span> <span class="nf">application</span><span class="p">(</span><span class="n">_</span> <span class="nv">application</span><span class="p">:</span> <span class="kt">UIApplication</span><span class="p">,</span> <span class="n">didFinishLaunchingWithOptions</span> <span class="nv">launchOptions</span><span class="p">:</span> <span class="p">[</span><span class="kt">UIApplication</span><span class="o">.</span><span class="kt">LaunchOptionsKey</span><span class="p">:</span> <span class="kt">Any</span><span class="p">]?)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span> <span class="p">{</span>
+        <span class="kt">OderoSDK</span><span class="o">.</span><span class="nf">initialize</span><span class="p">(</span>
+            <span class="nv">apiKey</span><span class="p">:</span> <span class="s">"your_api_key"</span><span class="p">,</span>
+            <span class="nv">environment</span><span class="p">:</span> <span class="o">.</span><span class="n">sandbox</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="kc">true</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h4 id='ios-qs-payment'>2. Create a Payment</h4>
+<div class="highlight"><pre class="highlight swift tab-swift"><code><span class="kd">let</span> <span class="nv">paymentRequest</span> <span class="o">=</span> <span class="kt">PaymentRequest</span><span class="p">(</span>
+    <span class="nv">amount</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span> <span class="c1">// in cents</span>
+    <span class="nv">currency</span><span class="p">:</span> <span class="s">"USD"</span><span class="p">,</span>
+    <span class="nv">reference</span><span class="p">:</span> <span class="s">"order_123"</span>
+<span class="p">)</span>
+
+<span class="kt">OderoSDK</span><span class="o">.</span><span class="nf">processPayment</span><span class="p">(</span><span class="nv">request</span><span class="p">:</span> <span class="n">paymentRequest</span><span class="p">)</span> <span class="p">{</span> <span class="n">result</span> <span class="k">in</span>
+    <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="k">let</span> <span class="nv">response</span><span class="p">):</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"Payment successful: </span><span class="se">\(</span><span class="n">response</span><span class="o">.</span><span class="n">transactionId</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">failure</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"Payment failed: </span><span class="se">\(</span><span class="n">error</span><span class="o">.</span><span class="n">localizedDescription</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div> 

@@ -1,0 +1,26 @@
+<p>Advanced configuration options for customizing the Odero Mobile SDK behavior.</p>
+
+<h3 id='config-merchant-id'>Merchant ID Configuration</h3>
+<p>You need to create a merchant ID on your developer account for both iOS and Android platforms:</p>
+
+<h4 id='config-ios-merchant'>iOS (Apple Pay)</h4>
+<p>For iOS Apple Pay integration, you need to:</p>
+<ol>
+    <li>Create certificates and merchant ID in your Apple Developer account</li>
+    <li>Add signing and capabilities to your app in Xcode</li>
+    <li>Configure Apple Pay in your app's capabilities settings</li>
+</ol>
+<p>Follow the Apple Pay setup guide to create your merchant ID and certificates:</p>
+<p><a href="https://developer.apple.com/documentation/passkit/setting-up-apple-pay" target="_blank">https://developer.apple.com/documentation/passkit/setting-up-apple-pay</a></p>
+
+<h4 id='config-android-merchant'>Android (Google Pay)</h4>
+<p>Follow the Google Pay setup guide to create your merchant ID:</p>
+<p><a href="https://developers.google.com/pay/api/web/guides/tutorial" target="_blank">https://developers.google.com/pay/api/web/guides/tutorial</a></p>
+
+<h4 id='config-upload-merchant'>Upload Merchant ID</h4>
+<p>After creating your merchant ID, you need to upload it to our token platform:</p>
+<p><a href="https://docs.adyen.com/payment-methods/apple-pay/ios-component/" target="_blank">https://docs.adyen.com/payment-methods/apple-pay/ios-component/</a></p>
+<p><strong>Important:</strong> These steps are required for the token Odero environment to respect your merchant ID.</p>
+
+<h4 id='config-payment-systems'>About Apple Pay and Google Pay</h4>
+<p>Apple Pay and Google Pay are the world's leading mobile payment services that enable users to make secure, contactless payments using their smartphones or smartwatches. Both platforms utilize Near Field Communication (NFC) technology, allowing customers to simply tap their device at payment terminals instead of using physical cards or cash. These digital wallets employ advanced security measures including tokenization, which replaces actual card numbers with encrypted virtual tokens, and biometric authentication through Face ID, Touch ID, or fingerprint recognition. Apple Pay is exclusive to Apple devices (iPhone, iPad, Apple Watch, Mac) and is available in over 80 countries, while Google Pay works primarily on Android devices and offers broader device compatibility. Both services are widely accepted by merchants globally, with over 85% of retailers supporting contactless payments. Our Odero Mobile SDK library provides comprehensive support for both Apple Pay and Google Pay payment systems, as well as direct card payment processing, ensuring your customers can choose their preferred payment method for a seamless checkout experience.</p> 

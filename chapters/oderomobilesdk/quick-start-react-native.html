@@ -1,0 +1,259 @@
+<p>The Odero Mobile SDK can be integrated into your mobile applications across multiple platforms. Choose your platform below for specific installation instructions.</p>
+
+<h3 id='installation-requirements'>System Requirements</h3>
+<ul>
+    <li><strong>iOS:</strong> iOS 12.0+ / Xcode 12.0+</li>
+    <li><strong>Android:</strong> API Level 21+ (Android 5.0+) / Android Studio 4.0+</li>
+    <li><strong>React Native:</strong> React Native 0.60+</li>
+</ul>
+
+<h3 id='installation-prerequisites'>Prerequisites</h3>
+<ul>
+    <li>Valid Odero merchant account</li>
+    <li>API credentials (API Key and Secret)</li>
+    <li>Development environment configured for your target platform</li>
+</ul>
+
+<h3 id='installation-platforms'>Platform-Specific Guides</h3>
+<p>Select your development platform:</p>
+<ul>
+    <li><a href="#mobile-sdk-installation-ios">iOS Installation</a></li>
+    <li><a href="#mobile-sdk-installation-android">Android Installation</a></li>
+    <li><a href="#mobile-sdk-installation-react-native">React Native Installation</a></li>
+</ul>
+
+<blockquote>
+    <p><strong>Note:</strong> Make sure to follow the platform-specific installation guide that matches your development environment.</p>
+</blockquote>
+
+## 2. iOS Installation
+
+```html:chapters/oderomobilesdk/installation-ios.html
+<h4 id='ios-cocoapods'>CocoaPods Installation</h4>
+<p>Add the Odero Mobile SDK to your Podfile:</p>
+
+<div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="n">pod</span> <span class="s1">'OderoMobileSDK'</span><span class="p">,</span> <span class="s1">'~> 1.0.0'</span>
+</code></pre></div>
+
+<p>Then run:</p>
+<div class="highlight"><pre class="highlight bash tab-bash"><code>pod install
+</code></pre></div>
+
+<h4 id='ios-spm'>Swift Package Manager</h4>
+<p>Add the following dependency to your Package.swift:</p>
+
+<div class="highlight"><pre class="highlight swift tab-swift"><code><span class="p">.</span><span class="nf">package</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="s">"https://github.com/odero/mobile-sdk-ios"</span><span class="p">,</span> <span class="nv">from</span><span class="p">:</span> <span class="s">"1.0.0"</span><span class="p">)</span>
+</code></pre></div>
+
+<h4 id='ios-permissions'>Required Permissions</h4>
+<p>Add the following permissions to your Info.plist:</p>
+
+<div class="highlight"><pre class="highlight xml tab-xml"><code><span class="nt">&lt;key&gt;</span>NSCameraUsageDescription<span class="nt">&lt;/key&gt;</span>
+<span class="nt">&lt;string&gt;</span>This app needs camera access to scan cards<span class="nt">&lt;/string&gt;</span>
+<span class="nt">&lt;key&gt;</span>NSLocationWhenInUseUsageDescription<span class="nt">&lt;/key&gt;</span>
+<span class="nt">&lt;string&gt;</span>Location is used for fraud prevention<span class="nt">&lt;/string&gt;</span>
+</code></pre></div>
+
+<h4 id='ios-import'>Import the SDK</h4>
+<div class="highlight"><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">OderoMobileSDK</span>
+</code></pre></div>
+```
+
+## 3. Android Installation
+
+```html:chapters/oderomobilesdk/installation-android.html
+<h4 id='android-gradle'>Gradle Setup</h4>
+<p>Add the Odero repository to your project-level build.gradle:</p>
+
+<div class="highlight"><pre class="highlight gradle tab-gradle"><code><span class="k">allprojects</span> <span class="o">{</span>
+    <span class="k">repositories</span> <span class="o">{</span>
+        <span class="n">maven</span> <span class="o">{</span> <span class="n">url</span> <span class="s1">'https://maven.odero.com/releases'</span> <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+
+<p>Add the dependency to your app-level build.gradle:</p>
+
+<div class="highlight"><pre class="highlight gradle tab-gradle"><code><span class="k">dependencies</span> <span class="o">{</span>
+    <span class="n">implementation</span> <span class="s1">'com.odero:mobile-sdk:1.0.0'</span>
+<span class="o">}</span>
+</code></pre></div>
+
+<h4 id='android-permissions'>Required Permissions</h4>
+<p>Add these permissions to your AndroidManifest.xml:</p>
+
+<div class="highlight"><pre class="highlight xml tab-xml"><code><span class="nt">&lt;uses-permission</span> <span class="na">android:name=</span><span class="s">"android.permission.INTERNET"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;uses-permission</span> <span class="na">android:name=</span><span class="s">"android.permission.CAMERA"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;uses-permission</span> <span class="na">android:name=</span><span class="s">"android.permission.ACCESS_FINE_LOCATION"</span> <span class="nt">/&gt;</span>
+</code></pre></div>
+
+<h4 id='android-proguard'>ProGuard Configuration</h4>
+<p>Add these rules to your proguard-rules.pro:</p>
+
+<div class="highlight"><pre class="highlight proguard tab-proguard"><code>-keep class com.odero.sdk.** { *; }
+-keepclassmembers class com.odero.sdk.** { *; }
+</code></pre></div>
+```
+
+## 4. React Native Installation
+
+```html:chapters/oderomobilesdk/installation-react-native.html
+<h4 id='rn-npm'>NPM Installation</h4>
+<div class="highlight"><pre class="highlight bash tab-bash"><code>npm install @odero/react-native-sdk
+</code></pre></div>
+
+<h4 id='rn-yarn'>Yarn Installation</h4>
+<div class="highlight"><pre class="highlight bash tab-bash"><code>yarn add @odero/react-native-sdk
+</code></pre></div>
+
+<h4 id='rn-ios-setup'>iOS Setup</h4>
+<p>Navigate to ios folder and install pods:</p>
+<div class="highlight"><pre class="highlight bash tab-bash"><code><span class="nb">cd </span>ios <span class="o">&amp;&amp;</span> pod install
+</code></pre></div>
+
+<h4 id='rn-android-setup'>Android Setup</h4>
+<p>The Android setup is automatic with React Native 0.60+ autolinking.</p>
+
+<h4 id='rn-import'>Import and Usage</h4>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">OderoSDK</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">@odero/react-native-sdk</span><span class="dl">'</span><span class="p">;</span>
+</code></pre></div>
+```
+
+## 5. Quick Start Overview
+
+```html:chapters/oderomobilesdk/quick-start.html
+<p>Get started with the Odero Mobile SDK in just a few steps. This guide will walk you through the basic setup and your first payment integration.</p>
+
+<h3 id='quick-start-overview'>Quick Start Steps</h3>
+<ol>
+    <li>Initialize the SDK with your credentials</li>
+    <li>Configure payment settings</li>
+    <li>Create a payment request</li>
+    <li>Handle the payment response</li>
+</ol>
+
+<h3 id='quick-start-credentials'>Getting Your Credentials</h3>
+<p>Before you begin, you'll need:</p>
+<ul>
+    <li><strong>API Key:</strong> Your unique identifier</li>
+    <li><strong>API Secret:</strong> Your authentication secret</li>
+    <li><strong>Environment:</strong> sandbox or production</li>
+</ul>
+
+<blockquote>
+    <p><strong>Important:</strong> Always use sandbox credentials during development and testing.</p>
+</blockquote>
+
+<h3 id='quick-start-platform-guides'>Platform-Specific Quick Start</h3>
+<ul>
+    <li><a href="#mobile-sdk-quick-start-ios">iOS Quick Start</a></li>
+    <li><a href="#mobile-sdk-quick-start-android">Android Quick Start</a></li>
+    <li><a href="#mobile-sdk-quick-start-react-native">React Native Quick Start</a></li>
+</ul>
+```
+
+## 6. iOS Quick Start
+
+```html:chapters/oderomobilesdk/quick-start-ios.html
+<h4 id='ios-qs-init'>1. Initialize the SDK</h4>
+<div class="highlight"><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">OderoMobileSDK</span>
+
+<span class="kd">class</span> <span class="kt">AppDelegate</span><span class="p">:</span> <span class="kt">UIResponder</span><span class="p">,</span> <span class="kt">UIApplicationDelegate</span> <span class="p">{</span>
+    <span class="kd">func</span> <span class="nf">application</span><span class="p">(</span><span class="n">_</span> <span class="nv">application</span><span class="p">:</span> <span class="kt">UIApplication</span><span class="p">,</span> <span class="n">didFinishLaunchingWithOptions</span> <span class="nv">launchOptions</span><span class="p">:</span> <span class="p">[</span><span class="kt">UIApplication</span><span class="o">.</span><span class="kt">LaunchOptionsKey</span><span class="p">:</span> <span class="kt">Any</span><span class="p">]?)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span> <span class="p">{</span>
+        <span class="kt">OderoSDK</span><span class="o">.</span><span class="nf">initialize</span><span class="p">(</span>
+            <span class="nv">apiKey</span><span class="p">:</span> <span class="s">"your_api_key"</span><span class="p">,</span>
+            <span class="nv">environment</span><span class="p">:</span> <span class="o">.</span><span class="n">sandbox</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="kc">true</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h4 id='ios-qs-payment'>2. Create a Payment</h4>
+<div class="highlight"><pre class="highlight swift tab-swift"><code><span class="kd">let</span> <span class="nv">paymentRequest</span> <span class="o">=</span> <span class="kt">PaymentRequest</span><span class="p">(</span>
+    <span class="nv">amount</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span> <span class="c1">// in cents</span>
+    <span class="nv">currency</span><span class="p">:</span> <span class="s">"USD"</span><span class="p">,</span>
+    <span class="nv">reference</span><span class="p">:</span> <span class="s">"order_123"</span>
+<span class="p">)</span>
+
+<span class="kt">OderoSDK</span><span class="o">.</span><span class="nf">processPayment</span><span class="p">(</span><span class="nv">request</span><span class="p">:</span> <span class="n">paymentRequest</span><span class="p">)</span> <span class="p">{</span> <span class="n">result</span> <span class="k">in</span>
+    <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="k">let</span> <span class="nv">response</span><span class="p">):</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"Payment successful: </span><span class="se">\(</span><span class="n">response</span><span class="o">.</span><span class="n">transactionId</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">failure</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"Payment failed: </span><span class="se">\(</span><span class="n">error</span><span class="o">.</span><span class="n">localizedDescription</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+```
+
+## 7. Android Quick Start
+
+```html:chapters/oderomobilesdk/quick-start-android.html
+<h4 id='android-qs-init'>1. Initialize the SDK</h4>
+<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code><span class="kd">class</span> <span class="nc">MainApplication</span> <span class="p">:</span> <span class="nc">Application</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">onCreate</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">super</span><span class="p">.</span><span class="nf">onCreate</span><span class="p">()</span>
+        
+        <span class="nc">OderoSDK</span><span class="p">.</span><span class="nf">initialize</span><span class="p">(</span>
+            <span class="k">this</span><span class="p">,</span>
+            <span class="n">apiKey</span> <span class="p">=</span> <span class="s">"your_api_key"</span><span class="p">,</span>
+            <span class="n">environment</span> <span class="p">=</span> <span class="nc">Environment</span><span class="p">.</span><span class="nc">SANDBOX</span>
+        <span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h4 id='android-qs-payment'>2. Create a Payment</h4>
+<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code><span class="kd">val</span> <span class="py">paymentRequest</span> <span class="p">=</span> <span class="nc">PaymentRequest</span><span class="p">(</span>
+    <span class="n">amount</span> <span class="p">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="c1">// in cents</span>
+    <span class="n">currency</span> <span class="p">=</span> <span class="s">"USD"</span><span class="p">,</span>
+    <span class="n">reference</span> <span class="p">=</span> <span class="s">"order_123"</span>
+<span class="p">)</span>
+
+<span class="nc">OderoSDK</span><span class="p">.</span><span class="nf">processPayment</span><span class="p">(</span><span class="n">paymentRequest</span><span class="p">)</span> <span class="p">{</span> <span class="n">result</span> <span class="p">-&gt;</span>
+    <span class="k">when</span> <span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">is</span> <span class="nc">PaymentResult</span><span class="p">.</span><span class="nc">Success</span> <span class="p">-&gt;</span> <span class="p">{</span>
+            <span class="nf">println</span><span class="p">(</span><span class="s">"Payment successful: ${result.response.transactionId}"</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="k">is</span> <span class="nc">PaymentResult</span><span class="p">.</span><span class="nc">Error</span> <span class="p">-&gt;</span> <span class="p">{</span>
+            <span class="nf">println</span><span class="p">(</span><span class="s">"Payment failed: ${result.error.message}"</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+```
+
+## 8. React Native Quick Start
+
+```html:chapters/oderomobilesdk/quick-start-react-native.html
+<h4 id='rn-qs-init'>1. Initialize the SDK</h4>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">OderoSDK</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">@odero/react-native-sdk</span><span class="dl">'</span><span class="p">;</span>
+
+<span class="c1">// Initialize in your App.js</span>
+<span class="nx">OderoSDK</span><span class="p">.</span><span class="nx">initialize</span><span class="p">({</span>
+  <span class="na">apiKey</span><span class="p">:</span> <span class="dl">'</span><span class="s1">your_api_key</span><span class="dl">'</span><span class="p">,</span>
+  <span class="na">environment</span><span class="p">:</span> <span class="dl">'</span><span class="s1">sandbox</span><span class="dl">'</span>
+<span class="p">});</span>
+</code></pre></div>
+
+<h4 id='rn-qs-payment'>2. Create a Payment</h4>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">import</span> <span class="nx">React</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">react</span><span class="dl">'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">Button</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">react-native</span><span class="dl">'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">OderoSDK</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">@odero/react-native-sdk</span><span class="dl">'</span><span class="p">;</span>
+
+<span class="kd">const</span> <span class="nx">handlePayment</span> <span class="o">=</span> <span class="k">async</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">OderoSDK</span><span class="p">.</span><span class="nx">processPayment</span><span class="p">({</span>
+      <span class="na">amount</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span> <span class="c1">// in cents</span>
+      <span class="na">currency</span><span class="p">:</span> <span class="dl">'</span><span class="s1">USD</span><span class="dl">'</span><span class="p">,</span>
+      <span class="na">reference</span><span class="p">:</span> <span class="dl">'</span><span class="s1">order_123</span><span class="dl">'</span>
+    <span class="p">});</span>
+    
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">Payment successful:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">transactionId</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Payment failed:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">error</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>
+```

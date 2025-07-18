@@ -1,0 +1,217 @@
+<p>Get started with the Odero Mobile SDK payment integration. This guide covers the essential backend setup required to create payment sessions.</p>
+
+<h3 id='quick-start-overview'>Payment Session Creation</h3>
+
+<p>In your merchant backend, after you validate your merchant ID and process products, you will need to provide us a payment session ID through our payment session creation endpoint.</p>
+
+<p>The payment session serves as the secure bridge between your backend validation and the mobile payment processing, ensuring that all transaction details are verified before payment initiation.</p>
+
+<h3 id='quick-start-session-parameters'>Create Session</h3>
+
+<p>Below is an example of the required parameters for creating a payment session:</p>
+
+<h4 id='payment-flow'>Payment Session Flow</h4>
+<div style="width: 50%; margin: 20px 0; background-color: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 20px; box-sizing: border-box;">
+    <div style="text-align: center; margin-bottom: 15px;">
+        <div style="background-color: #007bff; color: white; padding: 15px; border-radius: 6px; margin-bottom: 10px;">
+            <strong>1. Merchant Backend Processing</strong><br>
+            <span style="font-size: 14px;">Your backend validates merchant ID, processes products, and generates a secure payment session</span>
+        </div>
+        <div style="text-align: center; margin: 15px 0;">
+            <span style="font-size: 24px; color: #28a745;">⬇</span><br>
+            <small style="color: #6c757d;">Session ID Response</small>
+        </div>
+        <div style="background-color: #28a745; color: white; padding: 15px; border-radius: 6px;">
+            <strong>2. Odero Ecosystem Integration</strong><br>
+            <span style="font-size: 14px;">Session ID enters the Odero payment platform for secure transaction processing</span>
+        </div>
+    </div>
+</div>
+
+<blockquote>
+    <p>Payment Session Request Example (Merchant Backend)</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span>
+    <span class="nl">"merchantId"</span><span class="p">:</span> <span class="s2">"a20e5beb-f706-4f8e-b431-bea8a3b8b954"</span><span class="p">,</span>
+    <span class="nl">"amount"</span><span class="p">:</span> <span class="mf">22.22</span><span class="p">,</span>
+    <span class="nl">"currency"</span><span class="p">:</span> <span class="s2">"RON"</span><span class="p">,</span>
+    <span class="nl">"extOrderId"</span><span class="p">:</span> <span class="s2">"333abc"</span><span class="p">,</span>
+    <span class="nl">"extOrderUrl"</span><span class="p">:</span> <span class="s2">"aHR0cHM6Ly90b2tlbmNvLnNob3Avb3JkZXJzLzMyNDQyMzQ="</span><span class="p">,</span>
+    <span class="nl">"returnUrl"</span><span class="p">:</span> <span class="s2">"aHR0cHM6Ly90b2tlbmNvLnNob3Av"</span><span class="p">,</span>
+    <span class="nl">"successUrl"</span><span class="p">:</span> <span class="s2">"aHR0cHM6Ly9vZGVyby5yby8="</span><span class="p">,</span>
+    <span class="nl">"failUrl"</span><span class="p">:</span> <span class="s2">"aHR0cHM6Ly9vZGVyby5yby8="</span><span class="p">,</span>
+    <span class="nl">"saveCard"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nl">"recurring"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nl">"submerchants"</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nl">"extId"</span><span class="p">:</span> <span class="s2">"a20e5beb-f706-4f8e-b431-bea8a3b8b954"</span><span class="p">,</span>
+            <span class="nl">"name"</span><span class="p">:</span> <span class="s2">"My Store Name"</span><span class="p">,</span>
+            <span class="nl">"amount"</span><span class="p">:</span> <span class="mf">22.22</span><span class="p">,</span>
+            <span class="nl">"products"</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="nl">"extId"</span><span class="p">:</span> <span class="s2">"123123"</span><span class="p">,</span>
+                    <span class="nl">"price"</span><span class="p">:</span> <span class="mf">11.11</span><span class="p">,</span>
+                    <span class="nl">"quantity"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+                    <span class="nl">"total"</span><span class="p">:</span> <span class="mf">22.22</span><span class="p">,</span>
+                    <span class="nl">"name"</span><span class="p">:</span> <span class="s2">"Product Name 11111111111"</span><span class="p">,</span>
+                    <span class="nl">"imageUrl"</span><span class="p">:</span> <span class="s2">"aHR0cHM6Ly9sY2RuLmFsdGV4LnJvL3Jlc2l6ZS9tZWRpYS9jYXRhbG9nL3Byb2R1Y3QvTS9MLzJiZDQ4ZDI4ZDFjMzJhZGVhMGU1NTEzOWE0ZTY0MzRhL01MQ0VPU1JQQk9EWVJVMDIwNl8xXy5qcGc="</span>
+                <span class="p">}</span>
+            <span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="nl">"customer"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nl">"email"</span><span class="p">:</span> <span class="s2">"customer@email.com"</span><span class="p">,</span>
+        <span class="nl">"phoneNumber"</span><span class="p">:</span> <span class="s2">"+40700000000"</span><span class="p">,</span>
+        <span class="nl">"deliveryInformation"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nl">"country"</span><span class="p">:</span> <span class="s2">"ROU"</span><span class="p">,</span>
+            <span class="nl">"city"</span><span class="p">:</span> <span class="s2">"Bucuresti"</span><span class="p">,</span>
+            <span class="nl">"address"</span><span class="p">:</span> <span class="s2">"Unirii 1"</span><span class="p">,</span>
+            <span class="nl">"deliveryType"</span><span class="p">:</span> <span class="s2">"Courier"</span>
+        <span class="p">},</span>
+        <span class="nl">"billingInformation"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nl">"country"</span><span class="p">:</span> <span class="s2">"ROU"</span><span class="p">,</span>
+            <span class="nl">"city"</span><span class="p">:</span> <span class="s2">"Chiajna"</span><span class="p">,</span>
+            <span class="nl">"address"</span><span class="p">:</span> <span class="s2">"Principala 2"</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></div>
+
+<blockquote>
+    <p><strong>Important:</strong> Ensure all URLs are properly base64 encoded and all amounts match your order totals for successful payment processing.</p>
+</blockquote>
+
+<h3 id='quick-start-ios'>iOS Integration</h3>
+<p>Platform-specific implementation details for iOS applications using the Odero Mobile SDK.</p>
+
+<h4 id='ios-import-sdk'>1. Import SDK</h4>
+<div class="highlight"><pre class="highlight swift tab-swift"><code><span class="kd">import</span> <span class="kt">OderoPaySDKIOS</span></code></pre></div>
+
+<h4 id='ios-initialize-sdk'>2. Initialize SDK</h4>
+<div class="highlight"><pre class="highlight swift tab-swift"><code><span class="kd">private</span> <span class="kd">var</span> <span class="nv">oderoPaySDK</span><span class="p">:</span> <span class="kt">OderoPaySDK</span><span class="p">?</span> <span class="o">=</span> <span class="kt">OderoPaySDK</span><span class="p">()</span>
+
+<span class="c1">// Initialize the SDK instance</span>
+<span class="n">oderoPaySDK</span> <span class="o">=</span> <span class="kt">OderoPaySDK</span><span class="p">()</span></code></pre></div>
+
+<h4 id='ios-configure-saved-cards'>3. Configure Saved Cards</h4>
+<div class="highlight"><pre class="highlight swift tab-swift"><code><span class="c1">// Configure saved cards</span>
+<span class="kd">let</span> <span class="nv">savedCards</span><span class="p">:</span> <span class="p">[</span><span class="kt">SavedCardItem</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="kt">SavedCardItem</span><span class="p">(</span>
+        <span class="nv">cardToken</span><span class="p">:</span> <span class="n">userCardToken</span><span class="p">,</span> 
+        <span class="nv">cvv</span><span class="p">:</span> <span class="n">savedCvv</span><span class="p">,</span> 
+        <span class="nv">lastFourDigits</span><span class="p">:</span> <span class="n">cardLastFour</span><span class="p">,</span> 
+        <span class="nv">expirationMonth</span><span class="p">:</span> <span class="n">cardExpiryMonth</span><span class="p">,</span> 
+        <span class="nv">expirationYear</span><span class="p">:</span> <span class="n">cardExpiryYear</span>
+    <span class="p">),</span>
+    <span class="c1">// Add additional saved cards as needed</span>
+<span class="p">]</span></code></pre></div>
+
+<h4 id='ios-show-payment-sheet'>4. Show Payment Sheet</h4>
+<div class="highlight"><pre class="highlight swift tab-swift"><code><span class="c1">// Display the payment bottom sheet</span>
+<span class="n">oderoPaySDK</span><span class="p">?.</span><span class="nf">showPaymentSheet</span><span class="p">(</span>
+    <span class="nv">sessionId</span><span class="p">:</span> <span class="n">paymentSessionId</span><span class="p">,</span>
+    <span class="nv">appearance</span><span class="p">:</span> <span class="kt">OderoPaymentBottomSheetAppearance</span><span class="p">(</span>
+        <span class="nv">oderoPaymentDetailsPageAppearance</span><span class="p">:</span> <span class="kt">OderoPaymentDetailsPageAppearance</span><span class="p">(),</span>
+        <span class="nv">oderoPaymentProcessingPageAppearance</span><span class="p">:</span> <span class="kt">OderoPaymentProcessingPageAppearance</span><span class="p">(),</span>
+        <span class="nv">oderoPaymentResultSuccessPageAppearance</span><span class="p">:</span> <span class="kt">OderoPaymentResultSuccessPageAppearance</span><span class="p">(),</span>
+        <span class="nv">oderoPaymentResultFailurePageAppearance</span><span class="p">:</span> <span class="kt">OderoPaymentResultFailurePageAppearance</span><span class="p">(),</span>
+        <span class="nv">oderoPaymentSummaryPageAppearance</span><span class="p">:</span> <span class="kt">OderoPaymentSummaryPageAppearance</span><span class="p">(),</span>
+        <span class="nv">oderoPayWithAnotherCardPageAppearance</span><span class="p">:</span> <span class="kt">OderoPayWithAnotherCardPageAppearance</span><span class="p">(),</span>
+        <span class="nv">oderoEnterCVCPageAppearance</span><span class="p">:</span> <span class="kt">OderoEnterCVCPageAppearance</span><span class="p">()</span>
+    <span class="p">),</span>
+    <span class="nv">applePayMerchantId</span><span class="p">:</span> <span class="n">applePayMerchantIdentifier</span><span class="p">,</span>
+    <span class="nv">savedCards</span><span class="p">:</span> <span class="n">savedCards</span>
+<span class="p">)</span>
+
+<span class="c1">// Note: Replace paymentSessionId, applePayMerchantIdentifier, and saved card variables</span>
+<span class="c1">// with your actual values obtained from your backend and Apple Developer account.</span></code></pre></div>
+
+<h3 id='quick-start-android'>Android Integration</h3>
+<p>Platform-specific implementation details for Android applications using the Odero Mobile SDK.</p>
+
+<h4 id='android-initialize-sdk'>1. Initialize SDK</h4>
+<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code><span class="kd">private</span> <span class="kd">var</span> <span class="py">oderoPaySDK</span><span class="p">:</span> <span class="nc">OderoPaySdk</span><span class="p">?</span> <span class="o">=</span> <span class="k">null</span>
+
+<span class="c1">// Initialize the SDK instance</span>
+<span class="n">oderoPaySDK</span> <span class="o">=</span> <span class="nc">OderoPaySdk</span><span class="p">(</span>
+    <span class="n">activity</span> <span class="o">=</span> <span class="k">this</span><span class="p">,</span>
+    <span class="n">LOAD_PAYMENT_DATA_REQUEST_CODE</span> <span class="o">=</span> <span class="n">LOAD_PAYMENT_DATA_REQUEST_CODE</span><span class="p">,</span>
+    <span class="n">SCREEN_3DS_REQUEST_CODE</span> <span class="o">=</span> <span class="n">SCREEN_3DS_REQUEST_CODE</span>
+<span class="p">)</span></code></pre></div>
+
+<h4 id='android-configure-saved-cards'>2. Configure Saved Cards</h4>
+<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code><span class="c1">// Configure saved cards</span>
+<span class="kd">val</span> <span class="py">savedCards</span> <span class="o">=</span> <span class="n">listOf</span><span class="p">(</span>
+    <span class="nc">SavedCardItem</span><span class="p">(</span>
+        <span class="n">cardToken</span> <span class="o">=</span> <span class="n">userCardToken</span><span class="p">,</span>
+        <span class="n">cvv</span> <span class="o">=</span> <span class="n">savedCvv</span><span class="p">,</span>
+        <span class="n">lastFourDigits</span> <span class="o">=</span> <span class="n">cardLastFour</span><span class="p">,</span>
+        <span class="n">expirationMonth</span> <span class="o">=</span> <span class="n">cardExpiryMonth</span><span class="p">,</span>
+        <span class="n">expirationYear</span> <span class="o">=</span> <span class="n">cardExpiryYear</span>
+    <span class="p">),</span>
+    <span class="c1">// Add additional saved cards as needed</span>
+<span class="p">)</span></code></pre></div>
+
+<h4 id='android-show-payment-sheet'>3. Show Payment Sheet</h4>
+<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code><span class="c1">// Display the payment bottom sheet</span>
+<span class="n">oderoPaySDK</span><span class="p">?.</span><span class="nf">showPaymentSheet</span><span class="p">(</span>
+    <span class="n">sessionId</span> <span class="o">=</span> <span class="n">paymentSessionId</span><span class="p">,</span>
+    <span class="n">appearance</span> <span class="o">=</span> <span class="nc">OderoPaymentBottomSheetAppearance</span><span class="p">(</span>
+        <span class="n">oderoPaymentDetailsPageAppearance</span> <span class="o">=</span> <span class="nc">OderoPaymentDetailsPageAppearance</span><span class="p">(),</span>
+        <span class="n">oderoPaymentProcessingPageAppearance</span> <span class="o">=</span> <span class="nc">OderoPaymentProcessingPageAppearance</span><span class="p">(),</span>
+        <span class="n">oderoPaymentResultSuccessPageAppearance</span> <span class="o">=</span> <span class="nc">OderoPaymentResultSuccessPageAppearance</span><span class="p">(),</span>
+        <span class="n">oderoPaymentResultFailurePageAppearance</span> <span class="o">=</span> <span class="nc">OderoPaymentResultFailurePageAppearance</span><span class="p">(),</span>
+        <span class="n">oderoPaymentSummaryPageAppearance</span> <span class="o">=</span> <span class="nc">OderoPaymentSummaryPageAppearance</span><span class="p">(),</span>
+        <span class="n">oderoPayWithAnotherCardPageAppearance</span> <span class="o">=</span> <span class="nc">OderoPayWithAnotherCardPageAppearance</span><span class="p">(),</span>
+        <span class="n">oderoEnterCVCPageAppearance</span> <span class="o">=</span> <span class="nc">OderoEnterCVCPageAppearance</span><span class="p">()</span>
+    <span class="p">),</span>
+    <span class="n">savedCards</span> <span class="o">=</span> <span class="n">savedCards</span>
+<span class="p">)</span>
+
+<span class="c1">// Note: Replace paymentSessionId and saved card variables with your actual values</span>
+<span class="c1">// obtained from your backend and configured request codes.</span></code></pre></div>
+
+<h4 id='android-handle-activity-result'>4. Handle Activity Results</h4>
+<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code><span class="c1">// Handle Google Pay and 3DS authentication results</span>
+<span class="k">override</span> <span class="k">fun</span> <span class="nf">onActivityResult</span><span class="p">(</span><span class="n">requestCode</span><span class="p">:</span> <span class="nc">Int</span><span class="p">,</span> <span class="n">resultCode</span><span class="p">:</span> <span class="nc">Int</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nc">Intent</span><span class="p">?)</span> <span class="p">{</span>
+    <span class="k">super</span><span class="p">.</span><span class="nf">onActivityResult</span><span class="p">(</span><span class="n">requestCode</span><span class="p">,</span> <span class="n">resultCode</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+    
+    <span class="k">when</span> <span class="p">(</span><span class="n">requestCode</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">LOAD_PAYMENT_DATA_REQUEST_CODE</span> <span class="o">-&gt;</span> <span class="p">{</span>
+            <span class="n">oderoPaySDK</span><span class="p">?.</span><span class="nf">handleGooglePayActivityResult</span><span class="p">(</span><span class="n">resultCode</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="n">SCREEN_3DS_REQUEST_CODE</span> <span class="o">-&gt;</span> <span class="p">{</span>
+            <span class="n">oderoPaySDK</span><span class="p">?.</span><span class="nf">handle3DSScreenActivityResult</span><span class="p">(</span><span class="n">resultCode</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></div>
+
+<h3 id='quick-start-react-native'>React Native Integration</h3>
+<p>Platform-specific implementation details for React Native applications using the Odero Mobile SDK.</p>
+
+<h4 id='rn-import-sdk'>1. Import SDK</h4>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">import</span> <span class="p">{</span><span class="nx">OderoMobilesdk</span><span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">@OderoPos/react-odero-mobilesdk</span><span class="dl">'</span></code></pre></div>
+
+<h4 id='rn-configure-saved-cards'>2. Configure Saved Cards</h4>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="c1">// Configure saved cards</span>
+<span class="kd">const</span> <span class="nx">savedCards</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">{</span>
+    <span class="na">cardToken</span><span class="p">:</span> <span class="nx">userCardToken</span><span class="p">,</span>
+    <span class="na">cvv</span><span class="p">:</span> <span class="nx">savedCvv</span><span class="p">,</span>
+    <span class="na">lastFourDigits</span><span class="p">:</span> <span class="nx">cardLastFour</span><span class="p">,</span>
+    <span class="na">expirationMonth</span><span class="p">:</span> <span class="nx">cardExpiryMonth</span><span class="p">,</span>
+    <span class="na">expirationYear</span><span class="p">:</span> <span class="nx">cardExpiryYear</span>
+  <span class="p">},</span>
+  <span class="c1">// Add additional saved cards as needed</span>
+<span class="p">];</span></code></pre></div>
+
+<h4 id='rn-show-payment-sheet'>3. Show Payment Sheet</h4>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="c1">// Display the payment sheet</span>
+<span class="nx">OderoMobilesdk</span><span class="p">.</span><span class="nx">showPaymentSheet</span><span class="p">(</span>
+  <span class="nx">paymentSessionId</span><span class="p">,</span>
+  <span class="p">{},</span> <span class="c1">// appearance configuration</span>
+  <span class="nx">applePayMerchantIdentifier</span><span class="p">,</span>
+  <span class="nx">savedCards</span>
+<span class="p">);</span>
+
+<span class="c1">// Note: Replace paymentSessionId, applePayMerchantIdentifier, and saved card variables</span>
+<span class="c1">// with your actual values obtained from your backend and Apple Developer account.</span></code></pre></div>
