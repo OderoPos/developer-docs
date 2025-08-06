@@ -22,25 +22,36 @@
         href="https://ro-artifactory.devtokeninc.com/ui/native/PublicLibraries/X330/integrationLibs/fiscal">here</a>
 </p>
 
-<p><strong><em>NOTE:</em></strong> For best compatibility <code style="white-space: nowrap">libVersion</code> should
+<p><strong><em>NOTE:</em></strong> For best compatibility <code style="white-space: nowrap">libVersion</code>
+    should
     match ECR version installed</p>
 
 <p>If you want to update the user screen from the TR330 device or execute a fiscal command, we need
-    to add the dependency of the fiscal integration lib <code style="white-space: nowrap">[libVersion]</code> in
-    the gradle file. After that, we will use the <code style="white-space: nowrap">EcrCommandExecutor</code> object for sending
+    to add the dependency of the fiscal integration lib <code style="white-space: nowrap">[libVersion]</code>
+    in
+    the gradle file. After that, we will use the <code style="white-space: nowrap">EcrCommandExecutor</code>
+    object for sending
     commands to the ECR and receiving the result.</p>
 
-<p>The fiscal commands are sent to the ECR using the <code style="white-space: nowrap">executeFiscalCommand</code> method with
-    a context and a command. In this case the result will be received as a <code style="white-space: nowrap">Flow</code>. If you
-    want to receive as a <code style="white-space: nowrap">EcrCommandResultListener</code> you can use the
-    <code style="white-space: nowrap">executeFiscalCommand</code> method with a context, command and a listener.</p>
+<p>The fiscal commands are sent to the ECR using the <code style="white-space: nowrap">executeFiscalCommand</code>
+    method with
+    a context and a command. In this case the result will be received as a <code
+            style="white-space: nowrap">Flow</code>. If you
+    want to receive as a <code style="white-space: nowrap">EcrCommandResultListener</code> you can
+    use the
+    <code style="white-space: nowrap">executeFiscalCommand</code> method with a context, command and
+    a listener.</p>
 
 <p>The user screen commands are sent to the ECR using the <code style="white-space: nowrap">executeUserScreenCommand</code>method
-    with a context and a new text. In this case the result will be received as a <code style="white-space: nowrap">Flow</code>.
-    If you want to receive as a <code style="white-space: nowrap">EcrCommandResultListener</code> you can use the
-    <code style="white-space: nowrap">executeUserScreenCommand</code> method with a context, new text and a listener.</p>
+    with a context and a new text. In this case the result will be received as a <code
+            style="white-space: nowrap">Flow</code>.
+    If you want to receive as a <code style="white-space: nowrap">EcrCommandResultListener</code>
+    you can use the
+    <code style="white-space: nowrap">executeUserScreenCommand</code> method with a context, new
+    text and a listener.</p>
 
-<p>Use <code style="white-space: nowrap">EcrCommandExecutor</code> object for sending commands to the ECR and receiving
+<p>Use <code style="white-space: nowrap">EcrCommandExecutor</code> object for sending commands to
+    the ECR and receiving
     the result.</p>
 
 <blockquote>
@@ -49,65 +60,65 @@
 <div class="highlight"><pre class="highlight kotlin tab-kotlin"><code>
 <span class="c1">//Example of usage for sending a fiscal command and receiving the result as a [Flow]:</span>
 <span class="nc">EcrCommandExecutor</span><span class="p">.</span><span class="nf">executeFiscalCommand</span><span
-            class="p">(</span>
+        class="p">(</span>
    <span class="n">context</span> <span class="p">=</span> <span class="n">context</span><span
-            class="p">,</span>
+        class="p">,</span>
    <span class="n">command</span> <span class="p">=</span> <span
-            class="nc">FiscalCommand</span><span class="p">.</span><span
-            class="nc">SetDateTime</span><span
-            class="p">(</span><span class="nc">Calendar</span><span class="p">.</span><span
-            class="nf">getInstance</span><span class="p">().</span><span
-            class="n">time</span><span class="p">),</span>
+        class="nc">FiscalCommand</span><span class="p">.</span><span
+        class="nc">SetDateTime</span><span
+        class="p">(</span><span class="nc">Calendar</span><span class="p">.</span><span
+        class="nf">getInstance</span><span class="p">().</span><span
+        class="n">time</span><span class="p">),</span>
 <span class="p">).</span><span class="nf">collect</span> <span class="p">{</span> <span class="n">result</span> <span
-            class="p">-&gt;</span>
+        class="p">-&gt;</span>
     <span class="n">result</span><span class="p">.</span><span class="nf">runCatching</span> <span
-            class="p">{</span>
+        class="p">{</span>
         <span class="nc">Log</span><span class="p">.</span><span class="nf">d</span><span class="p">(</span><span
-            class="s">"MainActivity"</span><span class="p">,</span> <span class="s">"Result.Success: $result"</span><span
-            class="p">)</span>
+        class="s">"MainActivity"</span><span class="p">,</span> <span class="s">"Result.Success: $result"</span><span
+        class="p">)</span>
         <span class="nc">Toast</span><span class="p">.</span><span class="nf">makeText</span><span
-            class="p">(</span><span class="n">context</span><span class="p">,</span> <span
-            class="n">result</span><span class="p">.</span><span
-            class="nf">toString</span><span class="p">(),</span> <span
-            class="nc">Toast</span><span class="p">.</span><span
-            class="nc">LENGTH_SHORT</span><span class="p">)</span>
+        class="p">(</span><span class="n">context</span><span class="p">,</span> <span
+        class="n">result</span><span class="p">.</span><span
+        class="nf">toString</span><span class="p">(),</span> <span
+        class="nc">Toast</span><span class="p">.</span><span
+        class="nc">LENGTH_SHORT</span><span class="p">)</span>
             <span class="p">.</span><span class="nf">show</span><span class="p">()</span>
     <span class="p">}.</span><span class="nf">onFailure</span> <span class="p">{</span>
         <span class="nc">Log</span><span class="p">.</span><span class="nf">e</span><span class="p">(</span><span
-            class="s">"MainActivity"</span><span class="p">,</span> <span class="s">"Result.Failure: $result"</span><span
-            class="p">)</span>
+        class="s">"MainActivity"</span><span class="p">,</span> <span class="s">"Result.Failure: $result"</span><span
+        class="p">)</span>
         <span class="nc">Toast</span><span class="p">.</span><span class="nf">makeText</span><span
-            class="p">(</span><span class="n">context</span><span class="p">,</span> <span
-            class="n">result</span><span class="p">.</span><span
-            class="nf">toString</span><span class="p">(),</span> <span
-            class="nc">Toast</span><span class="p">.</span><span
-            class="nc">LENGTH_SHORT</span><span class="p">)</span>
+        class="p">(</span><span class="n">context</span><span class="p">,</span> <span
+        class="n">result</span><span class="p">.</span><span
+        class="nf">toString</span><span class="p">(),</span> <span
+        class="nc">Toast</span><span class="p">.</span><span
+        class="nc">LENGTH_SHORT</span><span class="p">)</span>
             <span class="p">.</span><span class="nf">show</span><span class="p">()</span>
      <span class="p">}</span>
 <span class="p">}</span>
 
 <span class="c1">//Example of usage for sending a fiscal command and receiving the result as a [EcrCommandResultListener]:</span>
 <span class="nc">EcrCommandExecutor</span><span class="p">.</span><span class="nf">executeFiscalCommand</span><span
-            class="p">(</span>
+        class="p">(</span>
    <span class="n">context</span> <span class="p">=</span> <span class="n">context</span><span
-            class="p">,</span>
+        class="p">,</span>
    <span class="n">command</span> <span class="p">=</span> <span
-            class="nc">FiscalCommand</span><span class="p">.</span><span
-            class="nc">SetDateTime</span><span
-            class="p">(</span><span class="nc">Calendar</span><span class="p">.</span><span
-            class="nf">getInstance</span><span class="p">().</span><span
-            class="n">time</span><span class="p">),</span>
+        class="nc">FiscalCommand</span><span class="p">.</span><span
+        class="nc">SetDateTime</span><span
+        class="p">(</span><span class="nc">Calendar</span><span class="p">.</span><span
+        class="nf">getInstance</span><span class="p">().</span><span
+        class="n">time</span><span class="p">),</span>
    <span class="n">listener</span> <span class="p">=</span> <span class="kd">object</span> <span
-            class="err">: </span><span class="nc">EcrCommandResultListener</span> <span
-            class="p">{</span>
+        class="err">: </span><span class="nc">EcrCommandResultListener</span> <span
+        class="p">{</span>
          <span class="k">override</span> <span class="k">fun</span> <span class="nf">onEcrCommandResult</span><span
-            class="p">(</span><span class="n">result</span><span class="p">:</span> <span
-            class="nc">String</span><span class="p">)</span> <span class="p">{</span>
+        class="p">(</span><span class="n">result</span><span class="p">:</span> <span
+        class="nc">String</span><span class="p">)</span> <span class="p">{</span>
              <span class="c1">// Handle the successful result</span>
          <span class="p">}</span>
          <span class="k">override</span> <span class="k">fun</span> <span class="nf">onEcrCommandError</span><span
-            class="p">(</span><span class="n">error</span><span class="p">:</span> <span
-            class="nc">String</span><span class="p">)</span> <span class="p">{</span>
+        class="p">(</span><span class="n">error</span><span class="p">:</span> <span
+        class="nc">String</span><span class="p">)</span> <span class="p">{</span>
              <span class="c1">// Handle the error result</span>
          <span class="p">}</span>
    <span class="p">},</span>
@@ -115,53 +126,53 @@
 
 <span class="c1">//Example of a sale fiscal command</span>
 <span class="nc">FiscalCommand</span><span class="p">.</span><span class="nc">Sale</span><span
-            class="p">(</span>
+        class="p">(</span>
     <span class="n">sellerInfo</span> <span class="p">=</span> <span
-            class="nc">SellerInfo</span><span class="p">(</span>
+        class="nc">SellerInfo</span><span class="p">(</span>
         <span class="n">cashierName</span> <span class="p">=</span> <span
-            class="s">"John Doe"</span><span class="p">,</span>
+        class="s">"John Doe"</span><span class="p">,</span>
         <span class="n">posNumber</span> <span class="p">=</span> <span
-            class="s">"123413"</span><span class="p">,</span>
+        class="s">"123413"</span><span class="p">,</span>
     <span class="p">),</span>
     <span class="n">products</span> <span class="p">=</span> <span class="nf">listOf</span><span
-            class="p">(</span>
+        class="p">(</span>
         <span class="nc">FiscalProduct</span><span class="p">(</span>
             <span class="n">productName</span> <span class="p">=</span> <span
-            class="s">"Product 1"</span><span class="p">,</span>
+        class="s">"Product 1"</span><span class="p">,</span>
             <span class="n">unit</span> <span class="p">=</span> <span class="s">"kg"</span><span
-            class="p">,</span>
+        class="p">,</span>
             <span class="n">quantity</span> <span class="p">=</span> <span class="s">"1"</span><span
-            class="p">,</span>
+        class="p">,</span>
             <span class="n">pricePerUnit</span> <span class="p">=</span> <span
-            class="s">"10,5"</span><span class="p">,</span>
+        class="s">"10,5"</span><span class="p">,</span>
             <span class="n">vatId</span> <span class="p">=</span> <span class="s">"B"</span><span
-            class="p">,</span>
+        class="p">,</span>
         <span class="p">),</span>
         <span class="nc">FiscalProduct</span><span class="p">(</span>
             <span class="n">productName</span> <span class="p">=</span> <span
-            class="s">"Product 2"</span><span class="p">,</span>
+        class="s">"Product 2"</span><span class="p">,</span>
             <span class="n">unit</span> <span class="p">=</span> <span class="s">"kg"</span><span
-            class="p">,</span>
+        class="p">,</span>
             <span class="n">quantity</span> <span class="p">=</span> <span class="s">"1"</span><span
-            class="p">,</span>
+        class="p">,</span>
             <span class="n">pricePerUnit</span> <span class="p">=</span> <span
-            class="s">"15,5"</span><span class="p">,</span>
+        class="s">"15,5"</span><span class="p">,</span>
             <span class="n">vatId</span> <span class="p">=</span> <span class="s">"B"</span><span
-            class="p">,</span>
+        class="p">,</span>
         <span class="p">),</span>
     <span class="p">),</span>
     <span class="n">payments</span> <span class="p">=</span> <span class="nf">listOf</span><span
-            class="p">(</span>
+        class="p">(</span>
         <span class="nc">FiscalPayment</span><span class="p">(</span>
             <span class="n">paymentMethod</span> <span class="p">=</span> <span class="nc">FiscalPayment</span><span
-            class="p">.</span><span class="nc">PaymentMethod</span><span
-            class="p">.</span><span class="nc">Card</span><span class="p">,</span>
+        class="p">.</span><span class="nc">PaymentMethod</span><span
+        class="p">.</span><span class="nc">Card</span><span class="p">,</span>
             <span class="n">amount</span> <span class="p">=</span> <span class="s">"26"</span><span
-            class="p">,</span>
+        class="p">,</span>
         <span class="p">),</span>
     <span class="p">),</span>
     <span class="n">cifNumber</span> <span class="p">=</span> <span class="s">"43511483"</span><span
-            class="p">,</span>
+        class="p">,</span>
 <span class="p">)</span>
 </code></pre>
 </div>
@@ -172,62 +183,62 @@
 <div class="highlight"><pre class="highlight kotlin tab-kotlin"><code>
 <span class="c1">//Example of usage for sending a user screen command and receiving the result as a [Flow]:</span>
 <span class="nc">EcrCommandExecutor</span><span class="p">.</span><span class="nf">executeUserScreenCommand</span><span
-                class="p">(</span>
+        class="p">(</span>
    <span class="n">context</span> <span class="p">=</span> <span class="n">context</span><span
-                class="p">,</span>
+        class="p">,</span>
    <span class="n">newText</span> <span class="p">=</span> <span class="nc">SecureRandom</span><span
-                class="p">().</span><span class="nf">nextInt</span><span class="p">(</span><span
-                class="mi">100</span><span class="p">).</span><span
-                class="nf">toString</span><span class="p">(),</span>
+        class="p">().</span><span class="nf">nextInt</span><span class="p">(</span><span
+        class="mi">100</span><span class="p">).</span><span
+        class="nf">toString</span><span class="p">(),</span>
 <span class="p">).</span><span class="nf">collect</span> <span class="p">{</span> <span class="n">result</span> <span
-                class="p">-&gt;</span>
+        class="p">-&gt;</span>
     <span class="n">result</span><span class="p">.</span><span class="nf">runCatching</span> <span
-                class="p">{</span>
+        class="p">{</span>
         <span class="nc">Log</span><span class="p">.</span><span class="nf">d</span><span class="p">(</span><span
-                class="s">"MainActivity"</span><span class="p">,</span> <span class="s">"Result.Success: $result"</span><span
-                class="p">)</span>
+        class="s">"MainActivity"</span><span class="p">,</span> <span class="s">"Result.Success: $result"</span><span
+        class="p">)</span>
         <span class="nc">Toast</span><span class="p">.</span><span class="nf">makeText</span><span
-                class="p">(</span><span class="n">context</span><span class="p">,</span> <span
-                class="n">result</span><span class="p">.</span><span
-                class="nf">toString</span><span class="p">(),</span> <span
-                class="nc">Toast</span><span class="p">.</span><span
-                class="nc">LENGTH_SHORT</span><span class="p">)</span>
+        class="p">(</span><span class="n">context</span><span class="p">,</span> <span
+        class="n">result</span><span class="p">.</span><span
+        class="nf">toString</span><span class="p">(),</span> <span
+        class="nc">Toast</span><span class="p">.</span><span
+        class="nc">LENGTH_SHORT</span><span class="p">)</span>
             <span class="p">.</span><span class="nf">show</span><span class="p">()</span>
     <span class="p">}.</span><span class="nf">onFailure</span> <span class="p">{</span>
         <span class="nc">Log</span><span class="p">.</span><span class="nf">e</span><span class="p">(</span><span
-                class="s">"MainActivity"</span><span class="p">,</span> <span class="s">"Result.Failure: $result"</span><span
-                class="p">)</span>
+        class="s">"MainActivity"</span><span class="p">,</span> <span class="s">"Result.Failure: $result"</span><span
+        class="p">)</span>
         <span class="nc">Toast</span><span class="p">.</span><span class="nf">makeText</span><span
-                class="p">(</span><span class="n">context</span><span class="p">,</span> <span
-                class="n">result</span><span class="p">.</span><span
-                class="nf">toString</span><span class="p">(),</span> <span
-                class="nc">Toast</span><span class="p">.</span><span
-                class="nc">LENGTH_SHORT</span><span class="p">)</span>
+        class="p">(</span><span class="n">context</span><span class="p">,</span> <span
+        class="n">result</span><span class="p">.</span><span
+        class="nf">toString</span><span class="p">(),</span> <span
+        class="nc">Toast</span><span class="p">.</span><span
+        class="nc">LENGTH_SHORT</span><span class="p">)</span>
             <span class="p">.</span><span class="nf">show</span><span class="p">()</span>
     <span class="p">}</span>
 <span class="p">}</span>
 
 <span class="c1">//Example of usage for sending a user screen command and receiving the result as a [EcrCommandResultListener]:</span>
 <span class="nc">EcrCommandExecutor</span><span class="p">.</span><span class="nf">executeUserScreenCommand</span><span
-                class="p">(</span>
+        class="p">(</span>
    <span class="n">context</span> <span class="p">=</span> <span class="n">context</span><span
-                class="p">,</span>
+        class="p">,</span>
    <span class="n">newText</span> <span class="p">=</span> <span class="nc">SecureRandom</span><span
-                class="p">().</span><span class="nf">nextInt</span><span class="p">(</span><span
-                class="mi">100</span><span class="p">).</span><span
-                class="nf">toString</span><span class="p">(),</span>
+        class="p">().</span><span class="nf">nextInt</span><span class="p">(</span><span
+        class="mi">100</span><span class="p">).</span><span
+        class="nf">toString</span><span class="p">(),</span>
    <span class="n">listener</span> <span class="p">=</span> <span class="kd">object</span> <span
-                class="err">: </span><span class="nc">EcrCommandResultListener</span> <span
-                class="p">{</span>
+        class="err">: </span><span class="nc">EcrCommandResultListener</span> <span
+        class="p">{</span>
        <span class="k">override</span> <span class="k">fun</span> <span class="nf">onEcrCommandResult</span><span
-                class="p">(</span><span class="n">result</span><span class="p">:</span> <span
-                class="nc">String</span><span class="p">)</span> <span class="p">{</span>
+        class="p">(</span><span class="n">result</span><span class="p">:</span> <span
+        class="nc">String</span><span class="p">)</span> <span class="p">{</span>
            <span class="c1">// Handle the successful result</span>
        <span class="p">}</span>
        <span class="k">override</span> <span class="k">fun</span> <span
-                class="nf">onEcrCommandError</span><span class="p">(</span><span
-                class="n">error</span><span class="p">:</span> <span
-                class="nc">String</span><span class="p">)</span> <span class="p">{</span>
+        class="nf">onEcrCommandError</span><span class="p">(</span><span
+        class="n">error</span><span class="p">:</span> <span
+        class="nc">String</span><span class="p">)</span> <span class="p">{</span>
            <span class="c1">// Handle the error result</span>
        <span class="p">}</span>
    <span class="p">},</span>
@@ -238,32 +249,554 @@
 <p>Type of fiscal commands</p>
 
 <p>
-    <code style="white-space: nowrap">SetDateTime</code><br>
-    <code style="white-space: nowrap">SetCompanyData</code><br>
-    <code style="white-space: nowrap">GetCompanyData</code><br>
-    <code style="white-space: nowrap">SetVATRates</code><br>
-    <code style="white-space: nowrap">GetVATRates</code><br>
-    <code style="white-space: nowrap">Fiscalise</code><br>
-    <code style="white-space: nowrap">InitElectronicJournal</code><br>
-    <code style="white-space: nowrap">TechnicalReport</code><br>
-    <code style="white-space: nowrap">ZReport</code><br>
-    <code style="white-space: nowrap">XReport</code><br>
-    <code style="white-space: nowrap">InitJournal</code><br>
-    <code style="white-space: nowrap">Journal</code><br>
-    <code style="white-space: nowrap">JournalExport</code><br>
-    <code style="white-space: nowrap">XJournal</code><br>
-    <code style="white-space: nowrap">CustomerData</code><br>
-    <code style="white-space: nowrap">PeriodicReport</code><br>
-    - <code style="white-space: nowrap">ByDate</code><br>
-    - <code style="white-space: nowrap">ByZ</code><br>
-    <code style="white-space: nowrap">XMLReport</code><br>
-    <code style="white-space: nowrap">GetDailyTotals</code><br>
-    <code style="white-space: nowrap">GetStatus</code><br>
-    <code style="white-space: nowrap">GetSoftwareVersion</code><br>
-    <code style="white-space: nowrap">LoadCertificate</code><br>
-    <code style="white-space: nowrap">LoadProfile</code><br>
-    <code style="white-space: nowrap">ResetFiscalMemory</code><br>
-    <code style="white-space: nowrap">Sale</code><br>
-    <code style="white-space: nowrap">CashOperation</code><br>
-    <code style="white-space: nowrap">NonFiscalReceipt</code><br>
+    <strong><em>
+        <code style="white-space: nowrap"> SetDateTime </code><br>
+    </em></strong>
+
+    <code style="white-space: nowrap">
+        /**<br>
+        * Set the date and time of the fiscal memory.<br>
+        * @param dateTime The date and time to set.<br>
+        */<br>
+        SetDateTime(val dateTime: Date)<br>
+    </code><br>
+</p>
+<p>
+    <strong><em>
+        <code style="white-space: nowrap"> SetCompanyData </code><br>
+    </em></strong>
+
+    <code>
+        /**<br>
+        * Set the company data for the fiscal memory.<br>
+        * @param company The company data to set.<br>
+        */<br>
+        SetCompanyData(val company: Company)<br>
+    </code><br>
+</p>
+<p>
+    <strong><em>
+        <code style="white-space: nowrap"> GetCompanyData </code><br>
+    </em></strong>
+
+    <code>
+        /**<br>
+        * Get the company data from the fiscal memory.<br>
+        */<br>
+    </code><br>
+</p>
+<p>
+    <strong><em>
+        <code style="white-space: nowrap"> SetVATRates </code><br>
+    </em></strong>
+
+    <code>
+        /**<br>
+        * Set the VAT rates for the fiscal memory.<br>
+        * @param vatList The list of VAT object to set.<br>
+        */<br>
+        SetVATRates(val vatList: List&lt;FiscalVAT&gt;)<br>
+    </code><br>
+</p>
+<p>
+    <strong><em>
+        <code style="white-space: nowrap"> GetVATRates </code><br>
+    </em></strong>
+
+    <code>
+        /**<br>
+        * Get the VAT rates from the fiscal memory.<br>
+        */<br>
+        GetVATRates<br>
+    </code><br>
+</p>
+<p>
+    <strong><em>
+        <code style="white-space: nowrap"> Fiscalise </code><br>
+    </em></strong>
+
+    <code>
+        /**<br>
+        * Initialize the fiscalise process for the fiscal memory.<br>
+        */<br>
+        Fiscalise<br>
+    </code><br>
+</p>
+<p>
+    <strong><em>
+        <code style="white-space: nowrap"> InitElectronicJournal </code><br>
+    </em></strong>
+
+    <code>
+        /**<br>
+        * Initialize the electronic journal for the fiscal memory.<br>
+        */<br>
+        InitElectronicJournal<br>
+    </code><br>
+</p>
+<p>
+    <strong><em>
+        <code style="white-space: nowrap"> TechnicalReport </code><br>
+    </em></strong>
+
+    <code>
+        /**<br>
+        * Get the technical report from the fiscal memory.<br>
+        */<br>
+        TechnicalReport<br>
+    </code><br>
+</p>
+<p>
+    <strong><em>
+        <code style="white-space: nowrap"> ZReport </code><br>
+    </em></strong>
+
+    <code>
+        /**<br>
+        * Get the Z report from the fiscal memory.<br>
+        */<br>
+        ZReport<br>
+    </code><br>
+</p>
+<p>
+    <strong><em>
+        <code style="white-space: nowrap"> XReport </code><br>
+    </em></strong>
+
+    <code>
+        /**<br>
+        * Get the X report from the fiscal memory.<br>
+        */<br>
+        XReport<br>
+    </code><br>
+</p>
+<p>
+    <strong><em>
+        <code style="white-space: nowrap"> InitJournal </code><br>
+    </em></strong>
+
+    <code>
+        /**<br>
+        * Get the journal initialization report from the fiscal memory.<br>
+        */<br>
+        InitJournal<br>
+    </code><br>
+</p>
+<p>
+    <strong><em>
+        <code style="white-space: nowrap"> Journal </code><br>
+    </em></strong>
+
+    <code>
+        /**<br>
+        * Get the journal report from the fiscal memory.<br>
+        * @param startDate The start date of the report.<br>
+        * @param endDate The end date of the report.<br>
+        * @param output The output type for the report.<br>
+        */<br>
+        Journal(<br>
+        &nbsp;&nbsp;&nbsp;val startDate: Date,<br>
+        &nbsp;&nbsp;&nbsp;val endDate: Date,<br>
+        &nbsp;&nbsp;&nbsp;val output: OutputFiscalSDK,<br>
+        )<br>
+    </code><br>
+</p>
+<p>
+    <strong><em>
+        <code style="white-space: nowrap"> JournalExport </code><br>
+    </em></strong>
+
+    <code>
+        /**<br>
+        * Get the journal export report from the fiscal memory.<br>
+        * @param startZNo The start Z number of the report.<br>
+        * @param endZNo The end Z number of the report.<br>
+        * @param output The output type for the report.<br>
+        */<br>
+        JournalExport(<br>
+        &nbsp;&nbsp;&nbsp;val startZNo: Int,<br>
+        &nbsp;&nbsp;&nbsp;val endZNo: Int,<br>
+        &nbsp;&nbsp;&nbsp;val output: OutputFiscalSDK.File,<br>
+        )<br>
+    </code><br>
+</p>
+<p>
+    <strong><em>
+        <code style="white-space: nowrap"> XJournal </code><br>
+    </em></strong>
+
+    <code>
+        /**<br>
+        * Get the X journal report from the fiscal memory.<br>
+        * @param output The output type for the report.<br>
+        */<br>
+        XJournal(<br>
+        &nbsp;&nbsp;&nbsp;val output: OutputFiscalSDK,<br>
+        )<br>
+    </code><br>
+</p>
+<p>
+    <strong><em>
+        <code style="white-space: nowrap"> CustomerData </code><br>
+    </em></strong>
+
+    <code>
+        /**<br>
+        * Get the customer data report from the fiscal memory.<br>
+        * @param output The output type for the report.<br>
+        */<br>
+        CustomerData(<br>
+        &nbsp;&nbsp;&nbsp;val output: OutputFiscalSDK,<br>
+        )<br>
+    </code><br>
+</p>
+<p>
+    <strong><em>
+        <code style="white-space: nowrap"> PeriodicReport.ByDate </code><br>
+    </em></strong>
+
+    <code>
+        /**<br>
+        * Get the periodic report by date from the fiscal memory.<br>
+        *<br>
+        * @param reportSize The size of the report.<br>
+        * @param output The output type for the report.<br>
+        * @param startDate The start date of the report.<br>
+        * @param endDate The end date of the report.<br>
+        */<br>
+        PeriodicReport.ByDate(<br>
+        &nbsp;&nbsp;&nbsp;val reportSize: FiscalReportSize,<br>
+        &nbsp;&nbsp;&nbsp;val output: OutputFiscalSDK,<br>
+        &nbsp;&nbsp;&nbsp;val startDate: Date,<br>
+        &nbsp;&nbsp;&nbsp;val endDate: Date,<br>
+        )<br>
+    </code><br>
+</p>
+<p>
+    <strong><em>
+        <code style="white-space: nowrap"> PeriodicReport.ByZ </code><br>
+    </em></strong>
+
+    <code>
+        /**<br>
+        * Get the periodic report by Z number from the fiscal memory.<br>
+        *<br>
+        * @param reportSize The size of the report.<br>
+        * @param output The output type for the report.<br>
+        * @param startZNo The start Z number of the report.<br>
+        * @param endZNo The end Z number of the report.<br>
+        */<br>
+        PeriodicReport.ByZ(<br>
+        &nbsp;&nbsp;&nbsp;val reportSize: FiscalReportSize,<br>
+        &nbsp;&nbsp;&nbsp;val output: OutputFiscalSDK,<br>
+        &nbsp;&nbsp;&nbsp;val startZNo: Int,<br>
+        &nbsp;&nbsp;&nbsp;val endZNo: Int,<br>
+        )<br>
+    </code><br>
+</p>
+<p>
+    <strong><em>
+        <code style="white-space: nowrap"> XMLReport </code><br>
+    </em></strong>
+
+    <code>
+        /**<br>
+        * Get the XML report from the fiscal memory.<br>
+        * @param startZNo The start Z number of the report.<br>
+        * @param endZNo The end Z number of the report.<br>
+        * @param output The output type for the report.<br>
+        */<br>
+        XMLReport(<br>
+        &nbsp;&nbsp;&nbsp;val startZNo: Int,<br>
+        &nbsp;&nbsp;&nbsp;val endZNo: Int,<br>
+        &nbsp;&nbsp;&nbsp;val output: OutputFiscalSDK.File,<br>
+        )<br>
+    </code><br>
+</p>
+<p>
+    <strong><em>
+        <code style="white-space: nowrap"> GetDailyTotals </code><br>
+    </em></strong>
+
+    <code>
+        /**<br>
+        * Get the daily totals report from the fiscal memory.<br>
+        */<br>
+        GetDailyTotals<br>
+    </code><br>
+</p>
+<p>
+    <strong><em>
+        <code style="white-space: nowrap"> GetStatus </code><br>
+    </em></strong>
+
+    <code>
+        /**<br>
+        * Get the status report from the fiscal memory.<br>
+        */<br>
+        GetStatus<br>
+    </code><br>
+</p>
+<p>
+    <strong><em>
+        <code style="white-space: nowrap"> GetSoftwareVersion </code><br>
+    </em></strong>
+
+    <code>
+        /**<br>
+        * Get the software version report from the fiscal memory.<br>
+        */<br>
+        GetSoftwareVersion<br>
+    </code><br>
+</p>
+<p>
+    <strong><em>
+        <code style="white-space: nowrap"> Sale </code><br>
+    </em></strong>
+
+    <code>
+        /**<br>
+        * Initialize the sale action using the fiscal memory. For this action you need to<br>
+        * provide the following parameters:<br>
+        *<br>
+        * @param sellerInfo The information about the seller.<br>
+        * @param products The list of products that you want to sell.<br>
+        * @param payments The list of payments that you want to use for the sale.<br>
+        * @param cifNumber The CIF number of the customer. This parameter is optional.<br>
+        * @param adjustments The list of adjustments that you want to apply to the
+        sale.(optional)<br>
+        * @param freeTexts The list of free texts that you want to print on the
+        receipt.(optional)<br>
+        */<br>
+        Sale(<br>
+        &nbsp;&nbsp;&nbsp;val sellerInfo: SellerInfo,<br>
+        &nbsp;&nbsp;&nbsp;val products: List&lt;FiscalProduct&gt;,<br>
+        &nbsp;&nbsp;&nbsp;val payments: List&lt;FiscalPayment&gt;,<br>
+        &nbsp;&nbsp;&nbsp;val cifNumber: String?,<br>
+        &nbsp;&nbsp;&nbsp;val adjustments: Map&lt;String, FiscalPriceAdjustment&gt; =
+        emptyMap(),<br>
+        &nbsp;&nbsp;&nbsp;val freeTexts: List&lt;FreeText&gt; = emptyList(),<br>
+        )<br>
+    </code><br>
+</p>
+<p>
+    <strong><em>
+        <code style="white-space: nowrap"> CashOperation </code><br>
+    </em></strong>
+
+    <code>
+        /**<br>
+        * Initialize the cash operation using the fiscal memory. For this action you need to<br>
+        * provide the following parameters:<br>
+        *<br>
+        * @param type The type of the cash operation.<br>
+        * @param amount The amount of the cash operation.<br>
+        * @param description The description of the cash operation.<br>
+        */<br>
+        CashOperation(<br>
+        &nbsp;&nbsp;&nbsp;val type: CashOperationType,<br>
+        &nbsp;&nbsp;&nbsp;val amount: String,<br>
+        &nbsp;&nbsp;&nbsp;val description: String,<br>
+        )<br>
+    </code><br>
+</p>
+<p>
+    <strong><em>
+        <code style="white-space: nowrap"> NonFiscalReceipt </code><br>
+    </em></strong>
+
+    <code>
+        /**<br>
+        * Initialize the non-fiscal receipt using the fiscal memory. For this action you need to<br>
+        * provide the following parameters:<br>
+        *<br>
+        * @param freeTexts The list of free texts that you want to print on the receipt.<br>
+        * @param hasHeader Indicates if the receipt has a header.<br>
+        * @param hasFooter Indicates if the receipt has a footer.<br>
+        */<br>
+        NonFiscalReceipt(<br>
+        &nbsp;&nbsp;&nbsp;val freeTexts: List&lt;NonFiscalText&gt;,<br>
+        &nbsp;&nbsp;&nbsp;val hasHeader: Boolean = false,<br>
+        &nbsp;&nbsp;&nbsp;val hasFooter: Boolean = false,<br>
+        )<br>
+    </code><br>
+</p>
+
+<p>Additional fiscal components</p>
+<p>
+    <strong><em>
+        <code style="white-space: nowrap"> Company </code><br>
+    </em></strong>
+
+    <code>
+        /**<br>
+        * Represents the company data.<br>
+        *<br>
+        * @property name The name of the company.<br>
+        * @property cui The unique identifier of the company.<br>
+        * @property address The address of the company.<br>
+        * @property fiscalSeries The fiscal series of the company.<br>
+        */<br>
+        Company(<br>
+        &nbsp;&nbsp;&nbsp;val name: String = emptyString(),<br>
+        &nbsp;&nbsp;&nbsp;val cui: String = emptyString(),<br>
+        &nbsp;&nbsp;&nbsp;val address: String = emptyString(),<br>
+        &nbsp;&nbsp;&nbsp;val fiscalSeries: String = emptyString(),<br>
+        )<br>
+    </code><br>
+</p>
+<p>
+    <strong><em>
+        <code style="white-space: nowrap"> FiscalVAT </code><br>
+    </em></strong>
+
+    <code>
+        /**<br>
+        * Represents a VAT that will be added to the fiscal receipt.<br>
+        *<br>
+        * @param vatId The ID of the VAT. Ex: "A", "B", "C", "D".<br>
+        * @param vatRate The rate of the VAT.<br>
+        */<br>
+        FiscalVAT(<br>
+        &nbsp;&nbsp;&nbsp;val vatId: String,<br>
+        &nbsp;&nbsp;&nbsp;var vatRate: String,<br>
+        )<br>
+    </code><br>
+</p>
+<p>
+    <strong><em>
+        <code style="white-space: nowrap"> OutputFiscalSDK.File </code><br>
+    </em></strong>
+
+    <code>
+        /**<br>
+        * Represents the output type for a fiscal operation.<br>
+        *<br>
+        * @param exportPath The path where the fiscal data will be exported.<br>
+        */<br>
+        OutputFiscalSDK.File(val exportPath: String)<br>
+    </code><br>
+</p>
+<p>
+    <strong><em>
+        <code style="white-space: nowrap"> OutputFiscalSDK.Printer </code><br>
+    </em></strong>
+
+    <code>
+        /**<br>
+        * Represents the output type for a fiscal operation that is printed directly to a
+        printer.<br>
+        */<br>
+        OutputFiscalSDK.Printer<br>
+    </code><br>
+</p>
+<p>
+    <strong><em>
+        <code style="white-space: nowrap"> SellerInfo </code><br>
+    </em></strong>
+
+    <code>
+        /**<br>
+        * Data class representing the seller information.<br>
+        *<br>
+        * @property cashierName The name of the cashier.<br>
+        * @property posNumber The point of sale number.<br>
+        */<br>
+        SellerInfo(<br>
+        &nbsp;&nbsp;&nbsp;val cashierName: String,<br>
+        &nbsp;&nbsp;&nbsp;val posNumber: String,<br>
+        )<br>
+    </code><br>
+</p>
+<p>
+    <strong><em>
+        <code style="white-space: nowrap"> SellerInfo </code><br>
+    </em></strong>
+
+    <code>
+        /**<br>
+        * Represents a product that will be added to the fiscal receipt.<br>
+        *<br>
+        * @param productName The name of the product.<br>
+        * @param unit The unit of the product.<br>
+        * @param quantity The quantity of the product.<br>
+        * @param pricePerUnit The price per unit of the product.<br>
+        * @param vatId The VAT ID of the product. Ex: "A", "B", "C", "D".<br>
+        * @param discountSign The sign of the discount. Ex: "0" for discount, "1" for surcharge.<br>
+        * @param discountType The type of the discount. Ex: "0" for amount, "1" for percentage.<br>
+        * @param discountValue The value of the discount.<br>
+        * @param specialTaxName The name of the special tax.<br>
+        * @param specialTaxValue The value of the special tax.<br>
+        */<br>
+        FiscalProduct(<br>
+        &nbsp;&nbsp;&nbsp;val productName: String,<br>
+        &nbsp;&nbsp;&nbsp;val unit: String,<br>
+        &nbsp;&nbsp;&nbsp;val quantity: String,<br>
+        &nbsp;&nbsp;&nbsp;val pricePerUnit: String,<br>
+        &nbsp;&nbsp;&nbsp;val vatId: String,<br>
+        &nbsp;&nbsp;&nbsp;val discountSign: String? = null,<br>
+        &nbsp;&nbsp;&nbsp;val discountType: String? = null,<br>
+        &nbsp;&nbsp;&nbsp;val discountValue: String? = null,<br>
+        &nbsp;&nbsp;&nbsp;val specialTaxName: String? = null,<br>
+        &nbsp;&nbsp;&nbsp;val specialTaxValue: String? = null,<br>
+        )<br>
+    </code><br>
+</p>
+<p>
+    <strong><em>
+        <code style="white-space: nowrap"> FiscalPayment </code><br>
+    </em></strong>
+
+    <code>
+        /**<br>
+        * Represents a fiscal payment.<br>
+        *<br>
+        * @property paymentMethod The method of payment.<br>
+        * @property amount The amount of the payment.<br>
+        */<br>
+        FiscalPayment(<br>
+        &nbsp;&nbsp;&nbsp;val paymentMethod: PaymentMethod,<br>
+        &nbsp;&nbsp;&nbsp;val amount: String,<br>
+        )<br>
+    </code><br>
+</p>
+<p>
+    <strong><em>
+        <code style="white-space: nowrap"> FiscalPriceAdjustment </code><br>
+    </em></strong>
+
+    <code>
+        /**<br>
+        * Represents a price adjustment that will be added to the fiscal receipt.<br>
+        *<br>
+        * @param adjustmentSign The sign of the adjustment. Ex: "-" for discount, "+" for surcharge.<br>
+        * @param adjustmentMode The mode of the adjustment. Ex: "0" for amount, "1" for
+        percentage.<br>
+        * @param adjustmentValue The value of the adjustment.<br>
+        */<br>
+        FiscalPriceAdjustment(<br>
+        &nbsp;&nbsp;&nbsp;val adjustmentSign: String,<br>
+        &nbsp;&nbsp;&nbsp;val adjustmentMode: Int,<br>
+        &nbsp;&nbsp;&nbsp;val adjustmentValue: String,<br>
+        )<br>
+    </code><br>
+</p>
+<p>
+    <strong><em>
+        <code style="white-space: nowrap"> CashOperationType </code><br>
+    </em></strong>
+
+    <code>
+        /**<br>
+        * Represents the type of cash operation.<br>
+        *<br>
+        * This sealed class defines three types of cash operations:<br>
+        * - [Initial]: Represents the initial cash operation.<br>
+        * - [Add]: Represents an addition to the cash operation.<br>
+        * - [Withdraw]: Represents a withdrawal from the cash operation.<br>
+        */<br>
+        CashOperationType.Initial<br>
+        CashOperationType.Add<br>
+        CashOperationType.Withdraw<br>
+    </code><br>
 </p>
