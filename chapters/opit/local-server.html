@@ -1,0 +1,592 @@
+<blockquote><p>Fiscal Commands API Documentation</p></blockquote>
+<p>This API allows interaction with the fiscal memory by sending commands as JSON objects.</p>
+<p><strong>General Note:</strong> All commands will be sent as a JSON object. The specified date and numeric formats must be strictly adhered to.</p>
+<hr>
+<blockquote><p>Common Data Types and Key Concepts</p></blockquote>
+<p>Before detailing each command, here are some common data types and concepts used in the API:</p>
+<ul>
+    <li>
+        <p><strong>Report Output (<code style="white-space: nowrap">output</code>)</strong>: This parameter, present in many reporting commands, defines where the report result will be sent. The primary value is:</p>
+        <ul>
+            <li><code style="white-space: nowrap">"Printer"</code>: Sends the report to the fiscal printer.</li>
+        </ul>
+    </li>
+    <li>
+        <p><strong>Report Size (<code style="white-space: nowrap">size</code>)</strong>: Specifies the level of detail for certain reports. Possible values are:</p>
+        <ul>
+            <li><code style="white-space: nowrap">"Compressed"</code>: Generates a summary report containing only essential information.</li>
+            <li><code style="white-space: nowrap">"Extended"</code>: Generates a detailed report, including all available information for that report type.</li>
+        </ul>
+    </li>
+    <li>
+        <p><strong>Position of Free Text on Receipt (<code style="white-space: nowrap">position</code> in <code style="white-space: nowrap">freeTexts</code> for <code style="white-space: nowrap">Sale</code>)</strong>: Indicates where free text will be printed on the fiscal receipt. Possible values are:</p>
+        <ul>
+            <li><code style="white-space: nowrap">"head"</code>: The text will be added to the header (top part) of the receipt.</li>
+            <li><code style="white-space: nowrap">"foot"</code>: The text will be added to the footer (bottom part) of the receipt.</li>
+        </ul>
+    </li>
+    <li>
+        <p><strong>Non-Fiscal Text Attributes (<code style="white-space: nowrap">printAttributes</code> in <code style="white-space: nowrap">NonFiscalReceipt.textLines</code>)</strong>: Specifies the formatting of text lines on a non-fiscal receipt. This is a string that can contain one or more comma-separated values, corresponding to print attributes. Possible values for each attribute are:</p>
+        <ul>
+            <li><code style="white-space: nowrap">"CENTER"</code>: Centers the text.</li>
+            <li><code style="white-space: nowrap">"BOLD"</code>: Prints the text in bold characters.</li>
+            <li><code style="white-space: nowrap">"DoubleHeight"</code>: Prints the text with double height.</li>
+            <li><code style="white-space: nowrap">"DoubleWidth"</code>: Prints the text with double width.</li>
+            <li>Example: <code style="white-space: nowrap">"BOLD,CENTER"</code> for bold and centered text. The exact implementation and availability of attributes may depend on the printer model.</li>
+        </ul>
+    </li>
+    <li>
+        <p><strong>Date/Time Format</strong>: All date and time fields must adhere to the <code style="white-space: nowrap">HHmmssddMMyy</code> format.</p>
+        <ul>
+            <li><code style="white-space: nowrap">HH</code>: Hour (00-23)</li>
+            <li><code style="white-space: nowrap">mm</code>: Minutes (00-59)</li>
+            <li><code style="white-space: nowrap">ss</code>: Seconds (00-59)</li>
+            <li><code style="white-space: nowrap">dd</code>: Day (01-31)</li>
+            <li><code style="white-space: nowrap">MM</code>: Month (01-12)</li>
+            <li><code style="white-space: nowrap">yy</code>: Year (last two digits, e.g., <code style="white-space: nowrap">23</code> for 2023)</li>
+            <li>Example: <code style="white-space: nowrap">143000231023</code> represents October 23, 2023, 02:30:00 PM.</li>
+        </ul>
+    </li>
+    <li>
+        <p><strong>Numeric Format (Mandatory for Amounts/Values)</strong>: Numbers representing monetary values (prices, amounts, discounts, adjustments) or quantities with decimals <strong>must</strong> be provided as strings, using a <strong>comma (<code style="white-space: nowrap">,</code>)</strong> as the decimal separator. The number of decimal places may vary depending on the context (e.g., 2 decimal places for prices, 3 for quantities).</p>
+        <ul>
+            <li><strong>Mandatory Example</strong>: <code style="white-space: nowrap">"100,00"</code>, <code style="white-space: nowrap">"1,500"</code>, <code style="white-space: nowrap">"25,75"</code>.</li>
+            <li><strong>DO NOT use a period (<code style="white-space: nowrap">.</code>)</strong> as a decimal separator in these strings.</li>
+        </ul>
+    </li>
+</ul>
+<hr>
+<hr>
+<blockquote><p>Commands and Parameters</p></blockquote>
+
+<p>Below is a list of available commands and their specific parameters. Each command should be sent as the root of a JSON object.</p>
+
+<p><strong>Example Command Structure:</strong></p>
+
+<hr>
+<!--<blockquote><p>Set Date Time</p></blockquote>-->
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+</span><span class="nt">"SetDateTime"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="nt">"dateTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"100000010124"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<p>Command: <code style="white-space: nowrap">SetDateTime</code></p>
+<p>Description: Sets the date and time of the fiscal memory.</p>
+<p>Parameters:</p>
+<ul>
+    <li><code style="white-space: nowrap">dateTime</code> (string, mandatory): The date and time to set. Format: <code style="white-space: nowrap">HHmmssddMMyy</code>.</li>
+</ul>
+
+<hr>
+<!--<blockquote><p>Set Company Data</p></blockquote>-->
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+</span><span class="nt">"SetCompanyData"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"My Company SRL"</span><span class="p">,</span><span class="w">
+</span><span class="nt">"cui"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RO12345678"</span><span class="p">,</span><span class="w">
+</span><span class="nt">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Str. Exemplu Nr. 10"</span><span class="p">,</span><span class="w">
+</span><span class="nt">"fiscalSeries"</span><span class="p">:</span><span class="w"> </span><span class="s2">"XYZ"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<p>Command: <code style="white-space: nowrap">SetCompanyData</code></p>
+<p>Description: Sets the company data for the fiscal memory.</p>
+<p>Parameters (all are strings and mandatory):</p>
+<ul>
+    <li><code style="white-space: nowrap">name</code>: Company name (max 36 characters).</li>
+    <li><code style="white-space: nowrap">cui</code>: Unique company identifier (max 16 characters).</li>
+    <li><code style="white-space: nowrap">address</code>: Company address (max 36 characters).</li>
+    <li><code style="white-space: nowrap">fiscalSeries</code>: Fiscal series identifier (max 8 characters).</li>
+</ul>
+
+<hr>
+<!--<blockquote><p>Get Company Data</p></blockquote>-->
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+</span><span class="nt">"GetCompanyData"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<p>Command: <code style="white-space: nowrap">GetCompanyData</code></p>
+<p>Description: Retrieves the company data from the fiscal memory.</p>
+<p>Parameters: None.</p>
+
+<hr>
+<!--<blockquote><p>Set VAT Rates</p></blockquote>-->
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+</span><span class="nt">"SetVATRates"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="nt">"vatList"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+</span><span class="p">{</span><span class="nt">"vatId"</span><span class="p">:</span><span class="s2">"A"</span><span class="p">,</span><span class="s2">"vatRate"</span><span class="p">:</span><span class="s2">"19,00"</span><span class="p">},</span><span class="w">
+</span><span class="p">{</span><span class="nt">"vatId"</span><span class="p">:</span><span class="s2">"B"</span><span class="p">,</span><span class="s2">"vatRate"</span><span class="p">:</span><span class="s2">"9,00"</span><span class="p">},</span><span class="w">
+</span><span class="p">{</span><span class="nt">"vatId"</span><span class="p">:</span><span class="s2">"C"</span><span class="p">,</span><span class="s2">"vatRate"</span><span class="p">:</span><span class="s2">"5,00"</span><span class="p">},</span><span class="w">
+</span><span class="p">{</span><span class="nt">"vatId"</span><span class="p">:</span><span class="s2">"I"</span><span class="p">,</span><span class="s2">"vatRate"</span><span class="p">:</span><span class="s2">"0,00"</span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<p>Command: <code style="white-space: nowrap">SetVATRates</code></p>
+<p>Description: Sets the VAT (Value Added Tax) rates for the fiscal memory.</p>
+<p>Parameters:</p>
+<ul>
+    <li><code style="white-space: nowrap">vatList</code> (array of objects, mandatory): A list of VAT objects to set. Each object has:
+        <ul>
+            <li><code style="white-space: nowrap">vatId</code> (string, mandatory): The VAT identifier (e.g., "A", "B", "C", "D", "E", "F", "G", "H", "I"). The ID "A" is typically for the standard VAT rate, "B" for the first reduced rate, etc. "I" is usually for VAT exempt items.</li>
+            <li><code style="white-space: nowrap">vatRate</code> (string, mandatory): The VAT rate as a percentage, using a comma as decimal separator (e.g., "19,00" for 19%, "9,00" for 9%, "0,00" for exempt). Max 5 characters including comma.</li>
+        </ul>
+    </li>
+</ul>
+
+<hr>
+<!--<blockquote><p>Get VAT Rates</p></blockquote>-->
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+</span><span class="nt">"GetVATRates"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<p>Command: <code style="white-space: nowrap">GetVATRates</code></p>
+<p>Description: Retrieves the VAT rates from the fiscal memory.</p>
+<p>Parameters: None.</p>
+
+<hr>
+<!--<blockquote><p>Fiscalize</p></blockquote>-->
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+</span><span class="nt">"Fiscalize"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<p>Command: <code style="white-space: nowrap">Fiscalize</code></p>
+<p>Description: Initializes the fiscalization process for the fiscal memory. This is a one-time operation for a new fiscal device.</p>
+<p>Parameters: None.</p>
+
+<hr>
+<!--<blockquote><p>Initialize Electronic Journal</p></blockquote>-->
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+</span><span class="nt">"InitElectronicJournal"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<p>Command: <code style="white-space: nowrap">InitElectronicJournal</code></p>
+<p>Description: Initializes the electronic journal of the fiscal memory.</p>
+<p>Parameters: None.</p>
+
+<hr>
+<!--<blockquote><p>Technical Report</p></blockquote>-->
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+</span><span class="nt">"TechnicalReport"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="nt">"output"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Printer"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<p>Command: <code style="white-space: nowrap">TechnicalReport</code></p>
+<p>Description: Generates a technical report from the fiscal memory. This report usually contains device status, configuration, and diagnostic information.</p>
+<p>Parameters:</p>
+<ul>
+    <li><code style="white-space: nowrap">output</code> (string, mandatory): See "Common Data Types". Typically <code style="white-space: nowrap">"Printer"</code>.</li>
+</ul>
+
+<hr>
+<!--<blockquote><p>Z Report (Daily Fiscal Closure)</p></blockquote>-->
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+</span><span class="nt">"ZReport"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="nt">"output"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Printer"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<p>Command: <code style="white-space: nowrap">ZReport</code></p>
+<p>Description: Generates the Z report, which is the daily fiscal closure. This report finalizes the day's transactions and resets daily totals.</p>
+<p>Parameters:</p>
+<ul>
+    <li><code style="white-space: nowrap">output</code> (string, mandatory): See "Common Data Types". Typically <code style="white-space: nowrap">"Printer"</code>.</li>
+</ul>
+
+<hr>
+<!--<blockquote><p>X Report (Interim Fiscal Report)</p></blockquote>-->
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+</span><span class="nt">"XReport"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="nt">"output"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Printer"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<p>Command: <code style="white-space: nowrap">XReport</code></p>
+<p>Description: Generates the X report, an interim fiscal report showing current day totals without closing the fiscal day.</p>
+<p>Parameters:</p>
+<ul>
+    <li><code style="white-space: nowrap">output</code> (string, mandatory): See "Common Data Types". Typically <code style="white-space: nowrap">"Printer"</code>.</li>
+</ul>
+
+<hr>
+<!--<blockquote><p>Initialize Journal (Report)</p></blockquote>-->
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+</span><span class="nt">"InitJournal"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="nt">"output"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Printer"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<p>Command: <code style="white-space: nowrap">InitJournal</code></p>
+<p>Description: Generates a report about the initialization of the electronic journal.</p>
+<p>Parameters:</p>
+<ul>
+    <li><code style="white-space: nowrap">output</code> (string, mandatory): See "Common Data Types". Typically <code style="white-space: nowrap">"Printer"</code>.</li>
+</ul>
+
+<hr>
+<!--<blockquote><p>Journal Report (Periodic by Date)</p></blockquote>-->
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+</span><span class="nt">"Journal"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="nt">"startDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"011023"</span><span class="p">,</span><span class="w">
+</span><span class="nt">"endDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"231023"</span><span class="p">,</span><span class="w">
+</span><span class="nt">"output"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Printer"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<p>Command: <code style="white-space: nowrap">Journal</code></p>
+<p>Description: Generates a journal report for a specified date range.</p>
+<p>Parameters:</p>
+<ul>
+    <li><code style="white-space: nowrap">startDate</code> (string, mandatory): The start date for the report. Format: <code style="white-space: nowrap">ddMMyy</code>.</li>
+    <li><code style="white-space: nowrap">endDate</code> (string, mandatory): The end date for the report. Format: <code style="white-space: nowrap">ddMMyy</code>.</li>
+    <li><code style="white-space: nowrap">output</code> (string, mandatory): See "Common Data Types". Typically <code style="white-space: nowrap">"Printer"</code>.</li>
+</ul>
+
+<hr>
+<!--<blockquote><p>Journal Export (Periodic by Z Number)</p></blockquote>-->
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+</span><span class="nt">"JournalExport"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="nt">"startZNo"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w">
+</span><span class="nt">"endZNo"</span><span class="p">:</span><span class="w"> </span><span class="mi">150</span><span class="p">,</span><span class="w">
+</span><span class="nt">"output"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="nt">"File"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="nt">"exportPath"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/root/Docs/Fiscal/Export/JOURNAL.TXT"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<p>Command: <code style="white-space: nowrap">JournalExport</code></p>
+<p>Description: Exports journal data for a specified range of Z report numbers. This command is usually used for exporting data to external storage or systems, not directly to the printer.</p>
+<p>Parameters:</p>
+<ul>
+    <li><code style="white-space: nowrap">startZNo</code> (integer, mandatory): The starting Z report number for the export.</li>
+    <li><code style="white-space: nowrap">endZNo</code> (integer, mandatory): The ending Z report number for the export.</li>
+    <li><code style="white-space: nowrap">output</code> (object, mandatory): Specifies the export path.
+        <ul>
+            <li><code style="white-space: nowrap">File</code> (object):
+                <ul>
+                    <li><code style="white-space: nowrap">exportPath</code> (string, mandatory): The full path where the export file will be saved (e.g., "/mnt/usb_storage/journal_export.txt"). The exact path format depends on the device's operating system and available storage.</li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+</ul>
+
+<hr>
+<!--<blockquote><p>XJournal Report</p></blockquote>-->
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+</span><span class="nt">"XJournal"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="nt">"output"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Printer"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<p>Command: <code style="white-space: nowrap">XJournal</code></p>
+<p>Description: Generates an XJournal report, which is an interim (non-closing) report of the electronic journal's current state.</p>
+<p>Parameters:</p>
+<ul>
+    <li><code style="white-space: nowrap">output</code> (string, mandatory): See "Common Data Types". Typically <code style="white-space: nowrap">"Printer"</code>.</li>
+</ul>
+
+<hr>
+<!--<blockquote><p>Customer Data Report</p></blockquote>-->
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+</span><span class="nt">"CustomerData"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="nt">"output"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Printer"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<p>Command: <code style="white-space: nowrap">CustomerData</code></p>
+<p>Description: Generates a report containing customer data stored in the fiscal memory (if applicable).</p>
+<p>Parameters:</p>
+<ul>
+    <li><code style="white-space: nowrap">output</code> (string, mandatory): See "Common Data Types". Typically <code style="white-space: nowrap">"Printer"</code>.</li>
+</ul>
+
+<hr>
+<!--<blockquote><p>Periodic Report by Date</p></blockquote>-->
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+</span><span class="nt">"PeriodicReport.ByDate"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="nt">"reportSize"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Extended"</span><span class="p">,</span><span class="w">
+</span><span class="nt">"output"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Printer"</span><span class="p">,</span><span class="w">
+</span><span class="nt">"startDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"010923"</span><span class="p">,</span><span class="w">
+</span><span class="nt">"endDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"300923"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<p>Command: <code style="white-space: nowrap">PeriodicReport.ByDate</code></p>
+<p>Description: Generates a periodic financial report for a specified date range.</p>
+<p>Parameters:</p>
+<ul>
+    <li><code style="white-space: nowrap">reportSize</code> (string, mandatory): See "Common Data Types". Can be <code style="white-space: nowrap">"Compressed"</code> or <code style="white-space: nowrap">"Extended"</code>.</li>
+    <li><code style="white-space: nowrap">output</code> (string, mandatory): See "Common Data Types". Typically <code style="white-space: nowrap">"Printer"</code>.</li>
+    <li><code style="white-space: nowrap">startDate</code> (string, mandatory): The start date for the report. Format: <code style="white-space: nowrap">ddMMyy</code>.</li>
+    <li><code style="white-space: nowrap">endDate</code> (string, mandatory): The end date for the report. Format: <code style="white-space: nowrap">ddMMyy</code>.</li>
+</ul>
+
+<hr>
+<!--<blockquote><p>Periodic Report by Z Number</p></blockquote>-->
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+</span><span class="nt">"PeriodicReport.ByZ"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="nt">"reportSize"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Compressed"</span><span class="p">,</span><span class="w">
+</span><span class="nt">"output"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Printer"</span><span class="p">,</span><span class="w">
+</span><span class="nt">"startZNo"</span><span class="p">:</span><span class="w"> </span><span class="mi">50</span><span class="p">,</span><span class="w">
+</span><span class="nt">"endZNo"</span><span class="p">:</span><span class="w"> </span><span class="mi">75</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<p>Command: <code style="white-space: nowrap">PeriodicReport.ByZ</code></p>
+<p>Description: Generates a periodic financial report for a specified range of Z report numbers.</p>
+<p>Parameters:</p>
+<ul>
+    <li><code style="white-space: nowrap">reportSize</code> (string, mandatory): See "Common Data Types". Can be <code style="white-space: nowrap">"Compressed"</code> or <code style="white-space: nowrap">"Extended"</code>.</li>
+    <li><code style="white-space: nowrap">output</code> (string, mandatory): See "Common Data Types". Typically <code style="white-space: nowrap">"Printer"</code>.</li>
+    <li><code style="white-space: nowrap">startZNo</code> (integer, mandatory): The starting Z report number.</li>
+    <li><code style="white-space: nowrap">endZNo</code> (integer, mandatory): The ending Z report number.</li>
+</ul>
+
+<hr>
+<!--<blockquote><p>XML Report (for ANAF)</p></blockquote>-->
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+</span><span class="nt">"XMLReport"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="nt">"startZNo"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+</span><span class="nt">"endZNo"</span><span class="p">:</span><span class="w"> </span><span class="mi">25</span><span class="p">,</span><span class="w">
+</span><span class="nt">"output"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="nt">"File"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="nt">"exportPath"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/root/Docs/Fiscal/Export/XMLREP.XML"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<p>Command: <code style="white-space: nowrap">XMLReport</code></p>
+<p>Description: Generates an XML report, typically for submission to tax authorities like ANAF in Romania. This command exports data to a file.</p>
+<p>Parameters:</p>
+<ul>
+    <li><code style="white-space: nowrap">startZNo</code> (integer, mandatory): The starting Z report number for the XML report.</li>
+    <li><code style="white-space: nowrap">endZNo</code> (integer, mandatory): The ending Z report number for the XML report.</li>
+    <li><code style="white-space: nowrap">output</code> (object, mandatory): Specifies the export path.
+        <ul>
+            <li><code style="white-space: nowrap">File</code> (object):
+                <ul>
+                    <li><code style="white-space: nowrap">exportPath</code> (string, mandatory): The full path where the XML file will be saved (e.g., "/mnt/usb_storage/ANAF_report.xml").</li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+</ul>
+
+<hr>
+<!--<blockquote><p>Get Daily Totals</p></blockquote>-->
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+</span><span class="nt">"GetDailyTotals"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<p>Command: <code style="white-space: nowrap">GetDailyTotals</code></p>
+<p>Description: Retrieves the current daily totals from the fiscal memory. This is similar to an XReport but might return data in a structured format rather than a printed report.</p>
+<p>Parameters: None.</p>
+
+<hr>
+<!--<blockquote><p>Get Status</p></blockquote>-->
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+</span><span class="nt">"GetStatus"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<p>Command: <code style="white-space: nowrap">GetStatus</code></p>
+<p>Description: Retrieves the current status of the fiscal device (e.g., operational state, errors, paper status).</p>
+<p>Parameters: None.</p>
+
+<hr>
+<!--<blockquote><p>Get Software Version</p></blockquote>-->
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+</span><span class="nt">"GetSoftwareVersion"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<p>Command: <code style="white-space: nowrap">GetSoftwareVersion</code></p>
+<p>Description: Retrieves the software/firmware version of the fiscal device.</p>
+<p>Parameters: None.</p>
+
+<hr>
+<!--<blockquote><p>Sale Transaction</p></blockquote>-->
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+</span><span class="nt">"Sale"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="nt">"sellerInfo"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"cashierName"</span><span class="p">:</span><span class="s2">"Ana Popescu"</span><span class="p">,</span><span class="nt">"posNumber"</span><span class="p">:</span><span class="s2">"001"</span><span class="p">},</span><span class="w">
+</span><span class="nt">"products"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+</span><span class="p">{</span><span class="nt">"productName"</span><span class="p">:</span><span class="s2">"Paine alba feliata"</span><span class="p">,</span><span class="nt">"unit"</span><span class="p">:</span><span class="s2">"buc"</span><span class="p">,</span><span class="nt">"quantity"</span><span class="p">:</span><span class="s2">"2,000"</span><span class="p">,</span><span class="nt">"pricePerUnit"</span><span class="p">:</span><span class="s2">"5,50"</span><span class="p">,</span><span class="nt">"vatId"</span><span class="p">:</span><span class="s2">"B"</span><span class="p">},</span><span class="w">
+</span><span class="p">{</span><span class="nt">"productName"</span><span class="p">:</span><span class="s2">"Lapte 1.5% UHT"</span><span class="p">,</span><span class="nt">"unit"</span><span class="p">:</span><span class="s2">"L"</span><span class="p">,</span><span class="nt">"quantity"</span><span class="p">:</span><span class="s2">"1,000"</span><span class="p">,</span><span class="nt">"pricePerUnit"</span><span class="p">:</span><span class="s2">"7,00"</span><span class="p">,</span><span class="nt">"vatId"</span><span class="p">:</span><span class="s2">"B"</span><span class="p">,</span><span class="nt">"discountSign"</span><span class="p">:</span><span class="s2">"0"</span><span class="p">,</span><span class="nt">"discountType"</span><span class="p">:</span><span class="s2">"1"</span><span class="p">,</span><span class="nt">"discountValue"</span><span class="p">:</span><span class="s2">"10,00"</span><span class="p">},</span><span class="w">
+</span><span class="p">{</span><span class="nt">"productName"</span><span class="p">:</span><span class="s2">"Suc natural de mere"</span><span class="p">,</span><span class="nt">"unit"</span><span class="p">:</span><span class="s2">"buc"</span><span class="p">,</span><span class="nt">"quantity"</span><span class="p">:</span><span class="s2">"1,000"</span><span class="p">,</span><span class="nt">"pricePerUnit"</span><span class="p">:</span><span class="s2">"12,00"</span><span class="p">,</span><span class="nt">"vatId"</span><span class="p">:</span><span class="s2">"A"</span><span class="p">}</span><span class="w">
+</span><span class="p">],</span><span class="w">
+</span><span class="nt">"payments"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+</span><span class="p">{</span><span class="nt">"paymentMethod"</span><span class="p">:</span><span class="s2">"Card"</span><span class="p">,</span><span class="nt">"amount"</span><span class="p">:</span><span class="s2">"20,00"</span><span class="p">},</span><span class="w">
+</span><span class="p">{</span><span class="nt">"paymentMethod"</span><span class="p">:</span><span class="s2">"Cash"</span><span class="p">,</span><span class="nt">"amount"</span><span class="p">:</span><span class="s2">"8,80"</span><span class="p">}</span><span class="w">
+</span><span class="p">],</span><span class="w">
+</span><span class="nt">"cifNumber"</span><span class="p">:</span><span class="s2">"RO98765432"</span><span class="p">,</span><span class="w">
+</span><span class="nt">"adjustments"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="nt">"B"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"adjustmentSign"</span><span class="p">:</span><span class="s2">"-"</span><span class="p">,</span><span class="nt">"adjustmentMode"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="nt">"adjustmentValue"</span><span class="p">:</span><span class="s2">"0,50"</span><span class="p">}</span><span class="w">
+</span><span class="p">},</span><span class="w">
+</span><span class="nt">"freeTexts"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+</span><span class="p">{</span><span class="nt">"text"</span><span class="p">:</span><span class="s2">"Multumim pentru cumparaturi!"</span><span class="p">,</span><span class="nt">"position"</span><span class="p">:</span><span class="s2">"foot"</span><span class="p">},</span><span class="w">
+</span><span class="p">{</span><span class="nt">"text"</span><span class="p">:</span><span class="s2">"Program: L-V 9-18"</span><span class="p">,</span><span class="nt">"position"</span><span class="p">:</span><span class="s2">"foot"</span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<p>Command: <code style="white-space: nowrap">Sale</code></p>
+<p>Description: Processes a sale transaction, printing a fiscal receipt.</p>
+<p>Parameters:</p>
+<ul>
+    <li><code style="white-space: nowrap">sellerInfo</code> (object, mandatory): Information about the seller/cashier.
+        <ul>
+            <li><code style="white-space: nowrap">cashierName</code> (string, mandatory): Name of the cashier (max 36 characters).</li>
+            <li><code style="white-space: nowrap">posNumber</code> (string, mandatory): Point of Sale (POS) or department identifier (max 3 characters).</li>
+        </ul>
+    </li>
+    <li><code style="white-space: nowrap">products</code> (array of objects, mandatory): List of products being sold. Each product object contains:
+        <ul>
+            <li><code style="white-space: nowrap">productName</code> (string, mandatory): Name of the product (max 36 characters).</li>
+            <li><code style="white-space: nowrap">unit</code> (string, mandatory): Unit of measure (e.g., "buc", "kg", "L") (max 6 characters).</li>
+            <li><code style="white-space: nowrap">quantity</code> (string, mandatory): Quantity sold. Numeric format with comma decimal separator (e.g., "1,000", "2,5"). Max 9 characters including comma.</li>
+            <li><code style="white-space: nowrap">pricePerUnit</code> (string, mandatory): Price per unit. Numeric format with comma decimal separator (e.g., "10,50", "100,00"). Max 11 characters including comma.</li>
+            <li><code style="white-space: nowrap">vatId</code> (string, mandatory): VAT identifier for this product (e.g., "A", "B", "I"). Must correspond to a pre-set VAT rate.</li>
+            <li><code style="white-space: nowrap">discountSign</code> (string, optional): Sign for discount/surcharge on this item.
+                <ul>
+                    <li><code style="white-space: nowrap">"0"</code>: Discount (value will be subtracted).</li>
+                    <li><code style="white-space: nowrap">"1"</code>: Surcharge (value will be added).</li>
+                </ul>
+            </li>
+            <li><code style="white-space: nowrap">discountType</code> (string, optional, required if <code style="white-space: nowrap">discountSign</code> is present): Type of discount/surcharge.
+                <ul>
+                    <li><code style="white-space: nowrap">"0"</code>: Amount-based.</li>
+                    <li><code style="white-space: nowrap">"1"</code>: Percentage-based.</li>
+                </ul>
+            </li>
+            <li><code style="white-space: nowrap">discountValue</code> (string, optional, required if <code style="white-space: nowrap">discountSign</code> is present): Value of the discount/surcharge. Numeric format with comma decimal separator (e.g., "1,00" for amount, "10,00" for 10%). Max 9 characters including comma.</li>
+            <li><code style="white-space: nowrap">specialTaxName</code> (string, optional): Name of any special tax applicable to this item (e.g., "Acciza") (max 16 characters).</li>
+            <li><code style="white-space: nowrap">specialTaxValue</code> (string, optional, required if <code style="white-space: nowrap">specialTaxName</code> is present): Value of the special tax. Numeric format with comma decimal separator (e.g., "0,50"). Max 9 characters including comma.</li>
+        </ul>
+    </li>
+    <li><code style="white-space: nowrap">payments</code> (array of objects, mandatory): List of payment methods used. Each payment object contains:
+        <ul>
+            <li><code style="white-space: nowrap">paymentMethod</code> (string, mandatory): Type of payment. Possible values:
+                <ul>
+                    <li><code style="white-space: nowrap">"Cash"</code></li>
+                    <li><code style="white-space: nowrap">"Card"</code></li>
+                    <li><code style="white-space: nowrap">"Voucher"</code></li>
+                    <li><code style="white-space: nowrap">"Credit"</code> (On Account/Invoice)</li>
+                    <li><code style="white-space: nowrap">"ModernPayment"</code> (e.g., mobile payments, specific apps)</li>
+                    <li><code style="white-space: nowrap">"Other"</code></li>
+                    <li><code style="white-space: nowrap">"MealVoucher"</code> (Bonuri de masa)</li>
+                    <li><code style="white-space: nowrap">"GiftVoucher"</code> (Tichete cadou)</li>
+                    <li><code style="white-space: nowrap">"HolidayVoucher"</code> (Tichete de vacanta)</li>
+                    <li><code style="white-space: nowrap">"CulturalVoucher"</code> (Tichete culturale)</li>
+                    <li><code style="white-space: nowrap">"SocialVoucher"</code> (Tichete sociale)</li>
+                    <li><code style="white-space: nowrap">"NurseryVoucher"</code> (Tichete de cresa)</li>
+                </ul>
+            </li>
+            <li><code style="white-space: nowrap">amount</code> (string, mandatory): Amount paid with this method. Numeric format with comma decimal separator (e.g., "125,50"). Max 11 characters including comma. The sum of amounts from all payment methods must equal the total sale amount.</li>
+        </ul>
+    </li>
+    <li><code style="white-space: nowrap">cifNumber</code> (string, optional): Customer's fiscal identification number (CIF/CUI) if applicable (max 16 characters).</li>
+    <li><code style="white-space: nowrap">adjustments</code> (object, optional): Overall adjustments to the total sale amount. The keys are the VAT IDs ("A", "B", etc.) for which the adjustment applies. Each value is an object:
+        <ul>
+            <li><code style="white-space: nowrap">adjustmentSign</code> (string, mandatory):
+                <ul>
+                    <li><code style="white-space: nowrap">"-"</code>: Discount (value will be subtracted from the total for that VAT rate).</li>
+                    <li><code style="white-space: nowrap">"+"</code>: Surcharge (value will be added to the total for that VAT rate).</li>
+                </ul>
+            </li>
+            <li><code style="white-space: nowrap">adjustmentMode</code> (integer, mandatory):
+                <ul>
+                    <li><code style="white-space: nowrap">0</code>: Amount-based adjustment.</li>
+                    <li><code style="white-space: nowrap">1</code>: Percentage-based adjustment (calculated on the total for that VAT rate).</li>
+                </ul>
+            </li>
+            <li><code style="white-space: nowrap">adjustmentValue</code> (string, mandatory): Value of the adjustment. Numeric format with comma decimal separator. Max 9 characters including comma.</li>
+        </ul>
+    </li>
+    <li><code style="white-space: nowrap">freeTexts</code> (array of objects, optional): List of free text lines to be printed on the receipt. Each object contains:
+        <ul>
+            <li><code style="white-space: nowrap">text</code> (string, mandatory): The text to print (max 36 characters per line).</li>
+            <li><code style="white-space: nowrap">position</code> (string, mandatory): See "Common Data Types". <code style="white-space: nowrap">"head"</code> or <code style="white-space: nowrap">"foot"</code>.</li>
+        </ul>
+    </li>
+</ul>
+
+<hr>
+<!--<blockquote><p>Cash Operation (Deposit/Withdrawal)</p></blockquote>-->
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+</span><span class="nt">"CashOperation"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Add"</span><span class="p">,</span><span class="w">
+</span><span class="nt">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"500,00"</span><span class="p">,</span><span class="w">
+</span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Depunere numerar sertar"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<p>Command: <code style="white-space: nowrap">CashOperation</code></p>
+<p>Description: Registers a cash deposit (IN) or withdrawal (OUT) operation.</p>
+<p>Parameters:</p>
+<ul>
+    <li><code style="white-space: nowrap">type</code> (string, mandatory): Type of cash operation.
+        <ul>
+            <li><code style="white-space: nowrap">"Initial"</code>: Initial cash deposit at the beginning of the day/shift.</li>
+            <li><code style="white-space: nowrap">"Add"</code>: Cash deposit (IN).</li>
+            <li><code style="white-space: nowrap">"Withdraw"</code>: Cash withdrawal (OUT).</li>
+        </ul>
+    </li>
+    <li><code style="white-space: nowrap">amount</code> (string, mandatory): The amount of cash. Numeric format with comma decimal separator (e.g., "100,00"). Max 11 characters including comma.</li>
+    <li><code style="white-space: nowrap">description</code> (string, mandatory): A brief description or reason for the operation (max 36 characters).</li>
+</ul>
+
+<hr>
+<!--<blockquote><p>Non-Fiscal Receipt</p></blockquote>-->
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+</span><span class="nt">"NonFiscalReceipt"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="nt">"textLines"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+</span><span class="p">{</span><span class="nt">"text"</span><span class="p">:</span><span class="s2">"** TEST PRINT **"</span><span class="p">,</span><span class="nt">"printAttributes"</span><span class="p">:</span><span class="s2">"CENTER,BOLD"</span><span class="p">},</span><span class="w">
+</span><span class="p">{</span><span class="nt">"text"</span><span class="p">:</span><span class="s2">"This is a non-fiscal receipt."</span><span class="p">},</span><span class="w">
+</span><span class="p">{</span><span class="nt">"text"</span><span class="p">:</span><span class="s2">"Line 3 with normal text."</span><span class="p">}</span><span class="w">
+</span><span class="p">],</span><span class="w">
+</span><span class="nt">"hasHeader"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+</span><span class="nt">"hasFooter"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<p>Command: <code style="white-space: nowrap">NonFiscalReceipt</code></p>
+<p>Description: Prints a non-fiscal receipt, which does not affect fiscal totals. Useful for various informational printouts.</p>
+<p>Parameters:</p>
+<ul>
+    <li><code style="white-space: nowrap">textLines</code> (array of objects, mandatory): Lines of text to be printed. Each object has:
+        <ul>
+            <li><code style="white-space: nowrap">text</code> (string, mandatory): The text content for the line (max 48 characters, but printer-dependent).</li>
+            <li><code style="white-space: nowrap">printAttributes</code> (string, optional): See "Common Data Types". Comma-separated attributes like "CENTER", "BOLD".</li>
+        </ul>
+    </li>
+    <li><code style="white-space: nowrap">hasHeader</code> (boolean, optional, default: <code style="white-space: nowrap">false</code>): If <code style="white-space: nowrap">true</code>, prints the standard fiscal header (company info, etc.) before the custom text.</li>
+    <li><code style="white-space: nowrap">hasFooter</code> (boolean, optional, default: <code style="white-space: nowrap">false</code>): If <code style="white-space: nowrap">true</code>, prints the standard fiscal footer (fiscal series, etc.) after the custom text.</li>
+</ul>
+<!--<hr>-->
