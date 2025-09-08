@@ -1,4 +1,34 @@
-<p>This API allows interaction with the fiscal memory by sending commands as JSON objects.</p>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_unique_identifier"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"callBack"</span><span class="p">:</span><span class="w"> </span><span class="s2">"url_or_identifier_for_callback_if_any"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"fiscalCommand"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="c1">// The specific fiscal command object will be included here</span>
+    <span class="c1">// For example: "dateTime": { "value": "..." } for SetDateTime</span>
+    <span class="c1">// Or: "sale": { ... } for a Sale transaction</span>
+    <span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>
+    Communication with the API for fiscal commands is achieved by sending a structured JSON object.
+    All requests to the fiscal command endpoint share a common base structure,
+    which includes a unique request identifier, an option for a callback, and a dedicated
+    object for the actual fiscal command.
+</p>
+<p>
+    The basic request model can be seen on the right side.
+</p>
+<p><strong>Common Request Parameters:</strong></p>
+<ul>
+    <li><code style="white-space: nowrap">requestId</code> (string, mandatory): A unique client-generated identifier for each request. This can be used to correlate responses with requests or for logging purposes. Example: <code style="white-space: nowrap">"rq_101"</code>, <code style="white-space: nowrap">"sale_tx_55789"</code>.</li>
+    <li><code style="white-space: nowrap">callBack</code> (string, optional): A URL or another identifier to which the OPit system might send an asynchronous notification regarding the processing of the command. If no callback is needed, this field can be an empty string (<code style="white-space: nowrap">""</code>) or omitted, depending on the API specifications.</li>
+    <li><code style="white-space: nowrap">fiscalCommand</code> (object, mandatory): A JSON object containing the specific details of the fiscal command to be executed. The internal structure of this object varies depending on the fiscal command being called (e.g., <code>SetDateTime</code>, <code>Sale</code>, <code>ZReport</code>, etc.), as detailed in the following sections for each command.</li>
+</ul>
+<p>
+    The following sections will present the specific structures for the <code>fiscalCommand</code> attribute for each of the supported fiscal commands.
+</p>
+<hr>
+
+
 <p><strong>General Note:</strong> All commands will be sent as a JSON object. The specified date and numeric formats must be strictly adhered to.</p>
 <p><strong>Common Data Types and Key Concepts</strong></p>
 <p>Before detailing each command, here are some common data types and concepts used in the API:</p>
