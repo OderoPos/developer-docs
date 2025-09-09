@@ -1,0 +1,68 @@
+<!--<blockquote><p>Process Payment Command</p></blockquote>-->
+<p>The <code>ProcessPayment</code> command is used to initiate a payment transaction on the POS terminal. This allows an external application to request a payment for a specified amount, and receive a response indicating the outcome of the transaction.</p>
+
+<p><strong>Request Body Structure:</strong></p>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_101"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"callBack"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">3.5</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"shouldPrintReceipts"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"currencyCode"</span><span class="p">:</span><span class="w"> </span><span class="mi">946</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<p>Command: <code style="white-space: nowrap">ProcessPayment</code></p>
+<p>Description: Initiates a payment process on the POS terminal for the given amount and currency. The command allows specifying whether receipts should be printed by the terminal.</p>
+<p><strong>Request Parameters:</strong></p>
+<ul>
+    <li><code style="white-space: nowrap">requestId</code> (string, mandatory): A unique client-generated identifier for each request. This can be used to correlate responses with requests. Example: <code style="white-space: nowrap">"rq_101"</code>, <code style="white-space: nowrap">"payment_tx_77234"</code>.</li>
+    <li><code style="white-space: nowrap">callBack</code> (string, optional): A URL or another identifier to which the system might send an asynchronous notification regarding the processing of the payment. If no callback is needed, this field can be null or an empty string (<code style="white-space: nowrap">""</code>).</li>
+    <li><code style="white-space: nowrap">amount</code> (number, mandatory): The monetary value of the transaction to be processed. This should be a numeric value representing the amount in the specified currency. Example: <code style="white-space: nowrap">3.5</code>, <code style="white-space: nowrap">100.00</code>, <code style="white-space: nowrap">50</code>.</li>
+    <li><code style="white-space: nowrap">shouldPrintReceipts</code> (boolean, optional): Indicates whether the POS terminal should print the transaction receipts. If omitted, the default value is <code style="white-space: nowrap">false</code>.
+        <ul>
+            <li><code style="white-space: nowrap">true</code>: The POS terminal will attempt to print the receipts.</li>
+            <li><code style="white-space: nowrap">false</code>: The POS terminal will not print the receipts (or follow its default behavior if printing is mandatory for certain transaction types).</li>
+        </ul>
+    </li>
+    <li><code style="white-space: nowrap">currencyCode</code> (integer, optional): The numeric ISO 4217 currency code for the transaction amount. If omitted, the default value is <code style="white-space: nowrap">946</code> (RON - Romanian Leu). Example: <code style="white-space: nowrap">978</code> for EUR, <code style="white-space: nowrap">840</code> for USD.</li>
+</ul>
+
+<p><strong>Response Body Structure:</strong></p>
+<p>The response will indicate the success or failure of the payment operation.</p>
+
+<div class="highlight"><pre class="highlight json tab-json">
+    <span><em>Successful response:</em></span>
+<code><span class="p">{</span><span class="w">
+    </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_101"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"extras"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{\"receiptNumber\":\"0\",\"bankActivityResultCode\":\"-1\",\"bankStatus\":\"0\"}"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<div class="highlight"><pre class="highlight json tab-json">
+    <span><em>Error Response:</em></span>
+<code><span class="p">{</span><span class="w">
+    </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_101"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"extras"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Error message"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<p><strong>Response Parameters:</strong></p>
+<ul>
+    <li><code style="white-space: nowrap">requestId</code> (string): The unique identifier that was sent in the request, used for correlation.</li>
+    <li><code style="white-space: nowrap">success</code> (boolean): Indicates the outcome of the payment operation.
+        <ul>
+            <li><code style="white-space: nowrap">true</code>: The payment was processed successfully (or the request to process it was successfully initiated, depending on the exact flow).</li>
+            <li><code style="white-space: nowrap">false</code>: The payment processing failed or an error occurred.</li>
+        </ul>
+    </li>
+    <li><code style="white-space: nowrap">extras</code> (string): Contains additional information about the transaction.
+        <ul>
+            <li>On success: This may be a JSON string containing details from the payment processor or bank, such as receipt numbers, authorization codes, or status codes. The exact content can vary. Example: <code style="white-space: nowrap">"{\"receiptNumber\":\"0\",\"bankActivityResultCode\":\"-1\",\"bankStatus\":\"0\"}"</code>. It is the client's responsibility to parse this JSON string if needed.</li>
+            <li>On error: This typically contains a human-readable error message describing the issue. Example: <code style="white-space: nowrap">"Insufficient funds"</code>, <code style="white-space: nowrap">"Card declined"</code>, <code style="white-space: nowrap">"Terminal busy"</code>.</li>
+        </ul>
+    </li>
+</ul>
+<br>
+

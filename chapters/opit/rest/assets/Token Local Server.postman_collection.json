@@ -1,0 +1,406 @@
+{
+	"info": {
+		"_postman_id": "1b1cb77b-e8f9-4acd-908c-92c4f43db386",
+		"name": "Token Local Server",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19978017",
+		"_collection_link": "https://zitec-freshful-202.postman.co/workspace/New-Team-Workspace~e4bdd1b7-1501-49f6-a509-c768231745f7/collection/19978017-1b1cb77b-e8f9-4acd-908c-92c4f43db386?action=share&source=collection_link&creator=19978017"
+	},
+	"item": [
+		{
+			"name": "Sample GET local server",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{deviceIP}}:9292/",
+					"protocol": "http",
+					"host": [
+						"{{deviceIP}}"
+					],
+					"port": "9292",
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "OPIT - Fiscal - SetDateTime",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"requestId\": \"rq_101\",\n    \"callBack\": \"\",\n    \"fiscalCommand\":{\n        \"dateTime\": {\n            // \"value\": \"HHmmssddMMyy\"\n            \"value\": \"160300080925\"\n        }\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{deviceIP}}:9292/command/ecr/fiscal",
+					"protocol": "http",
+					"host": [
+						"{{deviceIP}}"
+					],
+					"port": "9292",
+					"path": [
+						"command",
+						"ecr",
+						"fiscal"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "OPIT - Fiscal - SetCompanyData",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"requestId\": \"rq_101\",\n    \"callBack\": \"\",\n    \"fiscalCommand\":{\n        \"dateTime\": {\n            // \"value\": \"HHmmssddMMyy\"\n            \"value\": \"160300080925\"\n        }\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{deviceIP}}:9292/command/ecr/fiscal",
+					"protocol": "http",
+					"host": [
+						"{{deviceIP}}"
+					],
+					"port": "9292",
+					"path": [
+						"command",
+						"ecr",
+						"fiscal"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "OPIT - Fiscal - GetCompanyData",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"requestId\": \"rq_101\",\n    \"callBack\": \"\",\n    \"fiscalCommand\":{\n        \"command\": {\n            \"cmdCode\": \"GetCompanyData\"\n        }\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{deviceIP}}:9292/command/ecr/fiscal",
+					"protocol": "http",
+					"host": [
+						"{{deviceIP}}"
+					],
+					"port": "9292",
+					"path": [
+						"command",
+						"ecr",
+						"fiscal"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "OPIT - Fiscal - SetVATRates",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"requestId\": \"rq_101\",\n    \"callBack\": \"\",\n    \"fiscalCommand\":{\n        \"VATRates\": [\n            {\n                \"vatId\":\"A\", \n                \"vatRate\":\"19\"\n            },\n            {\n                \"vatId\":\"B\", \n                \"vatRate\":\"16\"\n            },\n            {\n                \"vatId\":\"C\", \n                \"vatRate\":\"21\"\n            },\n            {\n                \"vatId\":\"D\", \n                \"vatRate\":\"24\"\n            }\n        ]\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{deviceIP}}:9292/command/ecr/fiscal",
+					"protocol": "http",
+					"host": [
+						"{{deviceIP}}"
+					],
+					"port": "9292",
+					"path": [
+						"command",
+						"ecr",
+						"fiscal"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "OPIT - Fiscal - GetVATRates",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"requestId\": \"rq_101\",\n    \"callBack\": \"\",\n    \"fiscalCommand\":{\n        \"command\": {\n            \"cmdCode\": \"GetVatRates\"\n        }\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{deviceIP}}:9292/command/ecr/fiscal",
+					"protocol": "http",
+					"host": [
+						"{{deviceIP}}"
+					],
+					"port": "9292",
+					"path": [
+						"command",
+						"ecr",
+						"fiscal"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "OPIT - Fiscal - Fiscalize",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"requestId\": \"rq_101\",\n    \"callBack\": \"\",\n    \"fiscalCommand\":{\n        \"command\": {\n            \"cmdCode\": \"Fiscalise\"\n        }\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{deviceIP}}:9292/command/ecr/fiscal",
+					"protocol": "http",
+					"host": [
+						"{{deviceIP}}"
+					],
+					"port": "9292",
+					"path": [
+						"command",
+						"ecr",
+						"fiscal"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "OPIT - Fiscal - InitElectronicJournal",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"requestId\": \"rq_101\",\n    \"callBack\": \"\",\n    \"fiscalCommand\":{\n        \"command\": {\n            \"cmdCode\": \"JournalInit\"\n        }\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{deviceIP}}:9292/command/ecr/fiscal",
+					"protocol": "http",
+					"host": [
+						"{{deviceIP}}"
+					],
+					"port": "9292",
+					"path": [
+						"command",
+						"ecr",
+						"fiscal"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "OPIT - UserScreen",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "// user screen command\n{\n  \"requestId\": \"rq_101\",\n  \"callBack\": null,\n  \"text\": \"2.25\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{deviceIP}}:9292/command/ecr/user-screen",
+					"protocol": "http",
+					"host": [
+						"{{deviceIP}}"
+					],
+					"port": "9292",
+					"path": [
+						"command",
+						"ecr",
+						"user-screen"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "OPIT - PGW",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "// user screen command\n{\n  \"requestId\": \"rq_101\",\n  \"callBack\": \"\",\n  \"text\": \"2.25\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{deviceIP}}:9292/command/ecr/user-screen",
+					"protocol": "http",
+					"host": [
+						"{{deviceIP}}"
+					],
+					"port": "9292",
+					"path": [
+						"command",
+						"ecr",
+						"user-screen"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "deviceIP",
+			"value": "",
+			"type": "default"
+		}
+	]
+}

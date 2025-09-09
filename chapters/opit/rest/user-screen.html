@@ -1,0 +1,18 @@
+<!--<blockquote><p>Display Numeric Value on POS Screen</p></blockquote>-->
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_101"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"callBack"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2.25"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<p>Command: <code style="white-space: nowrap">DisplayNumericValueOnScreen</code></p>
+<p>Description: Displays a specified numeric value directly on the user screen of the POS terminal. This command is used to show amounts, quantities, or any other numeric information to the operator or customer as part of the primary display.</p>
+<p>The entire request body consists of the following parameters:</p>
+<ul>
+    <li><code style="white-space: nowrap">requestId</code> (string, mandatory): A unique identifier for the request, which can be used for tracking or callback purposes (e.g., "rq_101", "display_total_123").</li>
+    <li><code style="white-space: nowrap">callBack</code> (string, optional): A URL or identifier for a callback function to be invoked after the value is displayed, or if further interaction is expected. Can be an empty string if no callback is needed.</li>
+    <li><code style="white-space: nowrap">text</code> (string, mandatory): The numeric value to be displayed as text on the screen. It is recommended to use a period (<code style="white-space: nowrap">.</code>) as the decimal separator for display consistency if the POS system expects this format for non-fiscal display purposes (e.g., "2.25", "100", "0.5").</li>
+</ul>
+<br>
+
