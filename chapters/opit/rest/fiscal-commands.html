@@ -1,6 +1,8 @@
 <p>The Sale command within the OPit API is fundamental for processing sale transactions and issuing fiscal receipts. It allows external applications, such as POS (Point of Sale) systems, to transmit complete details of a sale to the fiscal terminal for recording and printing. By using this command, developers can ensure a smooth and fiscally compliant integration, automating the sale process.</p>
 
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">POST: http://{{deviceIP}}:9292/command/ecr/fiscal</span>
+<code><span class="p">{</span><span class="w">
   </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_unique_identifier"</span><span class="p">,</span><span class="w">
   </span><span class="nt">"callBack"</span><span class="p">:</span><span class="w"> </span><span class="s2">"url_or_identifier_for_callback_if_any"</span><span class="p">,</span><span class="w">
   </span><span class="nt">"fiscalCommand"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
@@ -19,6 +21,88 @@
 <p>
     The basic request model can be seen on the right side.
 </p>
+
+<p><strong>Common Data Types and Key Concepts</strong></p>
+<p>Before detailing each command, here are some common data types and concepts used in the API:</p>
+<ul>
+    <li>
+        <p><strong>Report Output (<code style="white-space: nowrap">output</code>)</strong>: This parameter, present in many reporting commands, defines where the report result will be sent. The primary value is:</p>
+        <ul>
+            <li><code style="white-space: nowrap">"Printer"</code>: Sends the report to the fiscal printer.</li>
+        </ul>
+    </li>
+    <li>
+        <p><strong>Report Size (<code style="white-space: nowrap">size</code>)</strong>: Specifies the level of detail for certain reports. Possible values are:</p>
+        <ul>
+            <li><code style="white-space: nowrap">"Compressed"</code>: Generates a summary report containing only essential information.</li>
+            <li><code style="white-space: nowrap">"Extended"</code>: Generates a detailed report, including all available information for that report type.</li>
+        </ul>
+    </li>
+    <li>
+        <p><strong>Position of Free Text on Receipt (<code style="white-space: nowrap">position</code> in <code style="white-space: nowrap">freeTexts</code> for <code style="white-space: nowrap">Sale</code>)</strong>: Indicates where free text will be printed on the fiscal receipt. Possible values are:</p>
+        <ul>
+            <li><code style="white-space: nowrap">"head"</code>: The text will be added to the header (top part) of the receipt.</li>
+            <li><code style="white-space: nowrap">"foot"</code>: The text will be added to the footer (bottom part) of the receipt.</li>
+        </ul>
+    </li>
+    <li>
+        <p><strong>Date/Time Format</strong>: All date and time fields must adhere to the <code style="white-space: nowrap">HHmmssddMMyy</code> format.</p>
+        <ul>
+            <li><code style="white-space: nowrap">HH</code>: Hour (00-23)</li>
+            <li><code style="white-space: nowrap">mm</code>: Minutes (00-59)</li>
+            <li><code style="white-space: nowrap">ss</code>: Seconds (00-59)</li>
+            <li><code style="white-space: nowrap">dd</code>: Day (01-31)</li>
+            <li><code style="white-space: nowrap">MM</code>: Month (01-12)</li>
+            <li><code style="white-space: nowrap">yy</code>: Year (last two digits, e.g., <code style="white-space: nowrap">23</code> for 2023)</li>
+            <li>Example: <code style="white-space: nowrap">143000231023</code> represents October 23, 2023, 02:30:00 PM.</li>
+        </ul>
+    </li>
+    <li>
+        <p><strong>Numeric Format (Mandatory for Amounts/Values)</strong>: Numbers representing monetary values (prices, amounts, discounts, adjustments) or quantities with decimals <strong>must</strong> be provided as strings, using a <strong>comma (<code style="white-space: nowrap">,</code>)</strong> as the decimal separator. The number of decimal places may vary depending on the context (e.g., 2 decimal places for prices, 3 for quantities).</p>
+        <ul>
+            <li><strong>Mandatory Example</strong>: <code style="white-space: nowrap">"100,00"</code>, <code style="white-space: nowrap">"1,500"</code>, <code style="white-space: nowrap">"25,75"</code>.</li>
+            <li><strong>DO NOT use a period (<code style="white-space: nowrap">.</code>)</strong> as a decimal separator in these strings.</li>
+        </ul>
+    </li>
+</ul>
+
+<p>
+    Communication with the API for fiscal commands is achieved by sending a structured JSON object.
+    All fiscal command executions are performed by making a <strong>POST</strong> request to the
+    following endpoint on the device:
+</p>
+<p><code>http://{{deviceIP}}:9292/command/ecr/fiscal</code></p>
+<p>
+    The <code>{{deviceIP}}</code> placeholder should be replaced with the actual IP address of the target POS device.
+</p>
+<p>
+    All requests to this endpoint share a common base JSON structure in the request body,
+    which includes a unique request identifier, an option for a callback, and a dedicated
+    object for the actual fiscal command.
+</p>
+<p><strong>The basic request body model is as follows:</strong></p>
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">POST: http://{{deviceIP}}:9292/command/ecr/fiscal</span>
+<code><span class="p">{</span><span class="w">
+  </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_unique_identifier"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"callBack"</span><span class="p">:</span><span class="w"> </span><span class="s2">"url_or_identifier_for_callback_if_any"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"fiscalCommand"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="c1">// The specific fiscal command object will be included here</span>
+    <span class="c1">// For example: "dateTime": { "value": "..." } for SetDateTime</span>
+    <span class="c1">// Or: "sale": { ... } for a Sale transaction</span>
+    <span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<ul>
+    <li><code style="white-space: nowrap">requestId</code> (string, mandatory): A unique client-generated identifier for each request. This can be used to correlate responses with requests or for logging purposes. Example: <code style="white-space: nowrap">"rq_101"</code>, <code style="white-space: nowrap">"sale_tx_55789"</code>.</li>
+    <li><code style="white-space: nowrap">callBack</code> (string, optional): A URL or another identifier to which the OPit system might send an asynchronous notification regarding the processing of the command. If no callback is needed, this field can be an empty string (<code style="white-space: nowrap">""</code>) or omitted, depending on the API specifications.</li>
+    <li><code style="white-space: nowrap">fiscalCommand</code> (object, mandatory): A JSON object containing the specific details of the fiscal command to be executed. The internal structure of this object varies depending on the fiscal command being called (e.g., <code>SetDateTime</code>, <code>Sale</code>, <code>ZReport</code>, etc.), as detailed in the following sections for each command.</li>
+</ul>
+<p>
+    The following sections will present the specific structures for the <code>fiscalCommand</code> attribute for each of the supported fiscal commands.
+</p>
+<hr>
+
 <p><strong>Common Request Parameters:</strong></p>
 <ul>
     <li><code style="white-space: nowrap">requestId</code> (string, mandatory): A unique client-generated identifier for each request. This can be used to correlate responses with requests or for logging purposes. Example: <code style="white-space: nowrap">"rq_101"</code>, <code style="white-space: nowrap">"sale_tx_55789"</code>.</li>
@@ -52,7 +136,7 @@
     </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"My Company SRL"</span><span class="p">,</span><span class="w">
     </span><span class="nt">"cui"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RO12345678"</span><span class="p">,</span><span class="w">
     </span><span class="nt">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Str. Exemplu Nr. 10"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"fiscalSeries"</span><span class="p">:</span><span class="w"> </span><span class="s2">"XYZ"</span><span class="w">
+    </span><span class="nt">"fiscalSeries"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0123456789"</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
@@ -61,10 +145,10 @@
 <p>Description: Sets the company data for the fiscal memory.</p>
 <p>Parameters (all are strings and mandatory):</p>
 <ul>
-    <li><code style="white-space: nowrap">name</code>: Company name (max 36 characters).</li>
-    <li><code style="white-space: nowrap">cui</code>: Unique company identifier (max 16 characters).</li>
-    <li><code style="white-space: nowrap">address</code>: Company address (max 36 characters).</li>
-    <li><code style="white-space: nowrap">fiscalSeries</code>: Fiscal series identifier (max 8 characters).</li>
+    <li><code style="white-space: nowrap">name</code>: Company name (max 75 characters).</li>
+    <li><code style="white-space: nowrap">cui</code>: Unique company identifier</li>
+    <li><code style="white-space: nowrap">address</code>: Company address (max 75 characters).</li>
+    <li><code style="white-space: nowrap">fiscalSeries</code>: Fiscal series identifier (10 characters).</li>
 </ul>
 
 <hr>
@@ -99,7 +183,7 @@
 <p>Description: Sets the VAT (Value Added Tax) rates for the fiscal memory.</p>
 <p>Parameters:</p>
 <ul>
-    <li><code style="white-space: nowrap">vatList</code> (array of objects, mandatory): A list of VAT objects to set. Each object has:
+    <li><code style="white-space: nowrap">VATRates</code> (array of objects, mandatory): A list of VAT objects to set. Each object has:
         <ul>
             <li><code style="white-space: nowrap">vatId</code> (string, mandatory): The VAT identifier (e.g., "A", "B", "C", "D", "E", "F", "G", "H", "I"). The ID "A" is typically for the standard VAT rate, "B" for the first reduced rate, etc. "I" is usually for VAT exempt items.</li>
             <li><code style="white-space: nowrap">vatRate</code> (string, mandatory): The VAT rate as a percentage, using a comma as decimal separator (e.g., "19,00" for 19%, "9,00" for 9%, "0,00" for exempt). Max 5 characters including comma.</li>
@@ -444,7 +528,15 @@
     <li>
         <p><code>paymentMethods</code> (array of objects, mandatory): Describes the payment methods used to pay for the transaction. The sum of values from all payment methods must cover the grand total of the receipt.</p>
         <ul>
-            <li><code>paymentMethodId</code> (integer, mandatory): A numeric identifier for the payment type (e.g., <code>0</code> for Cash, <code>1</code> for Card). Consult the terminal's specific documentation for the exact mapping of IDs.</li>
+            <li><code>paymentMethodId</code> (integer, mandatory): A numeric identifier for the payment type.
+                <ul>
+                    <li><code>0</code> for <strong>Cash</strong></li>
+                    <li><code>3</code> for <strong>Card</strong></li>
+                    <li><code>1</code> for <strong>Check</strong></li>
+                    <li><code>1</code> for <strong>Voucher</strong></li>
+                    <li><code>2</code> for <strong>Credit</strong></li>
+                </ul>
+            </li>
             <li><code>value</code> (string, mandatory): Amount collected through this payment method. Numeric format, with a comma as decimal separator (e.g., "20,25", "150,00").</li>
         </ul>
     </li>
