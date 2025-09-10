@@ -310,7 +310,7 @@
 <p>Parameters:</p>
 <ul>
     <li><code style="white-space: nowrap">startDate</code> (string, mandatory): The start date for the report. Format: <code style="white-space: nowrap">HHmmssddMMyy</code>.</li>
-    <li><code style="white-space: nowrap">endDate</code> (string, mandatory): The end date for the report. Format: <code style="white-space: nowrap">HHmmssddMMyy</code>.</li>
+    <li><code style="white-space: nowrap">stopDate</code> (string, mandatory): The end date for the report. Format: <code style="white-space: nowrap">HHmmssddMMyy</code>.</li>
     <li><code style="white-space: nowrap">media</code> (string, mandatory): See "Common Data Types". Typically <code style="white-space: nowrap">"Printer"</code>.</li>
 </ul>
 
@@ -354,7 +354,7 @@
   </span><span class="nt">"report"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Periodic"</span><span class="p">,</span><span class="w">
     </span><span class="nt">"startDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;startDate&gt;"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"stopDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;endDate&gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"stopDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;stopDate&gt;"</span><span class="p">,</span><span class="w">
     </span><span class="nt">"media"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Printer"</span><span class="p">,</span><span class="w">
     </span><span class="nt">"size"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Compressed"</span><span class="w">
   </span><span class="p">}</span><span class="w">
@@ -368,7 +368,7 @@
     <li><code style="white-space: nowrap">size</code> (string, mandatory): See "Common Data Types". Can be <code style="white-space: nowrap">"Compressed"</code> or <code style="white-space: nowrap">"Extended"</code>.</li>
     <li><code style="white-space: nowrap">media</code> (string, mandatory): See "Common Data Types". Typically <code style="white-space: nowrap">"Printer"</code>.</li>
     <li><code style="white-space: nowrap">startDate</code> (string, mandatory): The start date for the report. Format: <code style="white-space: nowrap">HHmmssddMMyy</code>.</li>
-    <li><code style="white-space: nowrap">endDate</code> (string, mandatory): The end date for the report. Format: <code style="white-space: nowrap">HHmmssddMMyy</code>.</li>
+    <li><code style="white-space: nowrap">stopDate</code> (string, mandatory): The end date for the report. Format: <code style="white-space: nowrap">HHmmssddMMyy</code>.</li>
 </ul>
 
 <hr>
@@ -595,12 +595,10 @@
     </span><span class="nt">"hasFooter"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
     </span><span class="nt">"textLines"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
       </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Linie text simpla"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"printAttributes"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="w">
+        </span><span class="nt">"printLine"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Linie text simpla 1"</span><span class="w">
       </span><span class="p">},</span><span class="w">
       </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Linie text centrat si bold"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"printAttributes"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CENTER,BOLD"</span><span class="w">
+        </span><span class="nt">"printLine"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Linie text simpla 2"</span><span class="w">
       </span><span class="p">}</span><span class="w">
     </span><span class="p">]</span><span class="w">
   </span><span class="p">}</span><span class="w">
@@ -614,7 +612,6 @@
     <li><code style="white-space: nowrap">textLines</code> (array of objects, mandatory): Lines of text to be printed. Each object has:
         <ul>
             <li><code style="white-space: nowrap">text</code> (string, mandatory): The text content for the line (max 48 characters, but printer-dependent).</li>
-            <li><code style="white-space: nowrap">printAttributes</code> (string, optional): See "Common Data Types". Comma-separated attributes like "CENTER", "BOLD".</li>
         </ul>
     </li>
     <li><code style="white-space: nowrap">hasHeader</code> (boolean, optional, default: <code style="white-space: nowrap">false</code>): If <code style="white-space: nowrap">true</code>, prints the standard fiscal header (company info, etc.) before the custom text.</li>
