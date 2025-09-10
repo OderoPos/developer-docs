@@ -1,56 +1,8 @@
-<p><strong>General Note:</strong> All commands will be sent as a JSON object. The specified date and numeric formats must be strictly adhered to. For some extra information you can <a href="assets/Token Local Server.postman_collection.json" download>check this Postman collection</a>.</p>
-<p><strong>Common Data Types and Key Concepts</strong></p>
-<p>Before detailing each command, here are some common data types and concepts used in the API:</p>
-<ul>
-    <li>
-        <p><strong>Report Output (<code style="white-space: nowrap">output</code>)</strong>: This parameter, present in many reporting commands, defines where the report result will be sent. The primary value is:</p>
-        <ul>
-            <li><code style="white-space: nowrap">"Printer"</code>: Sends the report to the fiscal printer.</li>
-        </ul>
-    </li>
-    <li>
-        <p><strong>Report Size (<code style="white-space: nowrap">size</code>)</strong>: Specifies the level of detail for certain reports. Possible values are:</p>
-        <ul>
-            <li><code style="white-space: nowrap">"Compressed"</code>: Generates a summary report containing only essential information.</li>
-            <li><code style="white-space: nowrap">"Extended"</code>: Generates a detailed report, including all available information for that report type.</li>
-        </ul>
-    </li>
-    <li>
-        <p><strong>Position of Free Text on Receipt (<code style="white-space: nowrap">position</code> in <code style="white-space: nowrap">freeTexts</code> for <code style="white-space: nowrap">Sale</code>)</strong>: Indicates where free text will be printed on the fiscal receipt. Possible values are:</p>
-        <ul>
-            <li><code style="white-space: nowrap">"head"</code>: The text will be added to the header (top part) of the receipt.</li>
-            <li><code style="white-space: nowrap">"foot"</code>: The text will be added to the footer (bottom part) of the receipt.</li>
-        </ul>
-    </li>
-    <li>
-        <p><strong>Non-Fiscal Text Attributes (<code style="white-space: nowrap">printAttributes</code> in <code style="white-space: nowrap">NonFiscalReceipt.textLines</code>)</strong>: Specifies the formatting of text lines on a non-fiscal receipt. This is a string that can contain one or more comma-separated values, corresponding to print attributes. Possible values for each attribute are:</p>
-        <ul>
-            <li><code style="white-space: nowrap">"CENTER"</code>: Centers the text.</li>
-            <li><code style="white-space: nowrap">"BOLD"</code>: Prints the text in bold characters.</li>
-            <li><code style="white-space: nowrap">"DoubleHeight"</code>: Prints the text with double height.</li>
-            <li><code style="white-space: nowrap">"DoubleWidth"</code>: Prints the text with double width.</li>
-            <li>Example: <code style="white-space: nowrap">"BOLD,CENTER"</code> for bold and centered text. The exact implementation and availability of attributes may depend on the printer model.</li>
-        </ul>
-    </li>
-    <li>
-        <p><strong>Date/Time Format</strong>: All date and time fields must adhere to the <code style="white-space: nowrap">HHmmssddMMyy</code> format.</p>
-        <ul>
-            <li><code style="white-space: nowrap">HH</code>: Hour (00-23)</li>
-            <li><code style="white-space: nowrap">mm</code>: Minutes (00-59)</li>
-            <li><code style="white-space: nowrap">ss</code>: Seconds (00-59)</li>
-            <li><code style="white-space: nowrap">dd</code>: Day (01-31)</li>
-            <li><code style="white-space: nowrap">MM</code>: Month (01-12)</li>
-            <li><code style="white-space: nowrap">yy</code>: Year (last two digits, e.g., <code style="white-space: nowrap">23</code> for 2023)</li>
-            <li>Example: <code style="white-space: nowrap">143000231023</code> represents October 23, 2023, 02:30:00 PM.</li>
-        </ul>
-    </li>
-    <li>
-        <p><strong>Numeric Format (Mandatory for Amounts/Values)</strong>: Numbers representing monetary values (prices, amounts, discounts, adjustments) or quantities with decimals <strong>must</strong> be provided as strings, using a <strong>comma (<code style="white-space: nowrap">,</code>)</strong> as the decimal separator. The number of decimal places may vary depending on the context (e.g., 2 decimal places for prices, 3 for quantities).</p>
-        <ul>
-            <li><strong>Mandatory Example</strong>: <code style="white-space: nowrap">"100,00"</code>, <code style="white-space: nowrap">"1,500"</code>, <code style="white-space: nowrap">"25,75"</code>.</li>
-            <li><strong>DO NOT use a period (<code style="white-space: nowrap">.</code>)</strong> as a decimal separator in these strings.</li>
-        </ul>
-    </li>
-</ul>
-
-<p>Below is a list of available commands and their specific parameters. Each command should be sent as the root of a JSON object.</p>
+<p>
+    <strong>General Note:</strong>
+    All commands will be sent as a JSON object.
+    The specified date and numeric formats must be strictly adhered to.
+    For some extra information you can
+    <a href="https://raw.githubusercontent.com/OderoPos/developer-docs/refs/heads/main/chapters/opit/rest/assets/TokenLocalServer.postman_collection.zip"
+       download>check this Postman collection</a>.
+</p>

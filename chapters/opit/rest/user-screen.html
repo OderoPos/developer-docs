@@ -1,5 +1,7 @@
 <!--<blockquote><p>Display Numeric Value on POS Screen</p></blockquote>-->
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">POST: http://{{deviceIP}}:9292/command/ecr/user-screen</span>
+<code><span class="p">{</span><span class="w">
   </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_101"</span><span class="p">,</span><span class="w">
   </span><span class="nt">"callBack"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
   </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2.25"</span><span class="w">
@@ -8,6 +10,12 @@
 
 <p>Command: <code style="white-space: nowrap">DisplayNumericValueOnScreen</code></p>
 <p>Description: Displays a specified numeric value directly on the user screen of the POS terminal. This command is used to show amounts, quantities, or any other numeric information to the operator or customer as part of the primary display.</p>
+<p>
+    Communication with the API for display commands is achieved by sending a structured JSON object.
+    This command is performed by making a <strong>POST</strong> request to the
+    following endpoint on the device:
+</p>
+<p><code>http://{{deviceIP}}:9292/command/ecr/user-screen</code></p>
 <p>The entire request body consists of the following parameters:</p>
 <ul>
     <li><code style="white-space: nowrap">requestId</code> (string, mandatory): A unique identifier for the request, which can be used for tracking or callback purposes (e.g., "rq_101", "display_total_123").</li>
