@@ -1,0 +1,197 @@
+<!-- Bank Commands Documentation -->
+<p>The bank commands functionality allows an external application to interact with the banking application on the POS terminal to perform various non-transactional operations, such as end-of-day settlement, printing reports, or reprinting receipts.</p>
+
+<p>
+    Communication with the API for bank commands is achieved by sending a structured JSON object.
+    These commands are executed by making a <strong>POST</strong> request to the following endpoint on the device:
+</p>
+<p><code>http://{{deviceIP}}:9292/command/bank</code></p>
+
+<p><strong>Base Request Structure:</strong></p>
+<p>All bank commands share a base request structure, to which specific fields are added depending on the desired operation.</p>
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">POST: http://{{deviceIP}}:9292/command/bank</span>
+<code><span class="p">{</span><span class="w">
+  </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unique_request_id"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"callBack"</span><span class="p">:</span><span class="w"> </span><span class="s2">"URL_for_callback_or_null"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"command"</span><span class="p">:</span><span class="w"> </span><span class="s2">"specific_bank_command_name"</span><span class="p">,</span><span class="w">
+  </span><span class="c1">// ... other command-specific fields</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<p><strong>Common Request Parameters:</strong></p>
+<ul>
+    <li><code style="white-space: nowrap">requestId</code> (string, mandatory): A unique client-generated identifier for each request. This can be used to correlate responses with requests. Example: <code style="white-space: nowrap">"rq_bank_001"</code>, <code style="white-space: nowrap">"op_12345"</code>.</li>
+    <li><code style="white-space: nowrap">callBack</code> (string, optional): A URL or another identifier to which the system might send an asynchronous notification regarding the command processing. If no callback is needed, this field can be null or an empty string (<code style="white-space: nowrap">""</code>).</li>
+    <li><code style="white-space: nowrap">command</code> (string, mandatory): The specific name of the bank command to be executed. Possible values are described below for each command.</li>
+</ul>
+
+<hr/>
+
+<p><strong>Command: Settlement</strong></p>
+<div class="highlight"><pre class="highlight json tab-json">
+<code><span class="p">{</span><span class="w">
+  </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_settlement_789"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"callBack"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"command"</span><span class="p">:</span><span class="w"> </span><span class="s2">"settlement"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Command: <code style="white-space: nowrap">settlement</code></p>
+<p>Description: Initiates the end-of-day settlement process on the POS terminal.</p>
+<p><strong>Sample Request Body:</strong></p>
+<p><strong>Specific Request Parameters:</strong></p>
+<ul>
+    <li>There are no additional specific parameters for this command.</li>
+</ul>
+
+<hr/>
+
+<p><strong>Command: Last Settlement</strong></p>
+<div class="highlight"><pre class="highlight json tab-json">
+<code><span class="p">{</span><span class="w">
+  </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_last_settlement_101"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"callBack"</span><span class="p">:</span><span class="w"> </span><span class="s2">null</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"command"</span><span class="p">:</span><span class="w"> </span><span class="s2">"last_settlement"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"currencyCode"</span><span class="p">:</span><span class="w"> </span><span class="mi">946</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Command: <code style="white-space: nowrap">last_settlement</code></p>
+<p>Description: Requests information about or reprinting of the last end-of-day settlement report.</p>
+<p><strong>Sample Request Body:</strong></p>
+<p><strong>Specific Request Parameters:</strong></p>
+<ul>
+    <li><code style="white-space: nowrap">currencyCode</code> (integer, optional): The numeric ISO 4217 currency code. The default value is <code style="white-space: nowrap">946</code> (RON). Example: <code style="white-space: nowrap">978</code> for EUR.</li>
+</ul>
+
+<hr/>
+
+<p><strong>Command: Simple X Report</strong></p>
+<div class="highlight"><pre class="highlight json tab-json">
+<code><span class="p">{</span><span class="w">
+  </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_simple_x_rep_102"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"callBack"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"command"</span><span class="p">:</span><span class="w"> </span><span class="s2">"simple_x_report"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"currencyCode"</span><span class="p">:</span><span class="w"> </span><span class="mi">946</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"totalsOnly"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Command: <code style="white-space: nowrap">simple_x_report</code></p>
+<p>Description: Generates a simplified X report (control report). By default, it displays totals only.</p>
+<p><strong>Sample Request Body:</strong></p>
+<p><strong>Specific Request Parameters:</strong></p>
+<ul>
+    <li><code style="white-space: nowrap">currencyCode</code> (integer, optional): The numeric ISO 4217 currency code. The default value is <code style="white-space: nowrap">946</code> (RON).</li>
+    <li><code style="white-space: nowrap">totalsOnly</code> (boolean, optional): If <code style="white-space: nowrap">true</code>, the report will only contain totals. The default value is <code style="white-space: nowrap">true</code>.</li>
+</ul>
+
+<hr/>
+
+<p><strong>Command: Detailed X Report</strong></p>
+<div class="highlight"><pre class="highlight json tab-json">
+<code><span class="p">{</span><span class="w">
+  </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_detailed_x_rep_103"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"callBack"</span><span class="p">:</span><span class="w"> </span><span class="s2">null</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"command"</span><span class="p">:</span><span class="w"> </span><span class="s2">"detailed_x_report"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"currencyCode"</span><span class="p">:</span><span class="w"> </span><span class="mi">946</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Command: <code style="white-space: nowrap">detailed_x_report</code></p>
+<p>Description: Generates a detailed X report (control report).</p>
+<p><strong>Sample Request Body:</strong></p>
+<p><strong>Specific Request Parameters:</strong></p>
+<ul>
+    <li><code style="white-space: nowrap">currencyCode</code> (integer, optional): The numeric ISO 4217 currency code. The default value is <code style="white-space: nowrap">946</code> (RON).</li>
+</ul>
+
+<hr/>
+
+<p><strong>Command: Reprint Receipt by Number</strong></p>
+<div class="highlight"><pre class="highlight json tab-json">
+<code><span class="p">{</span><span class="w">
+  </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_reprint_no_104"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"callBack"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"command"</span><span class="p">:</span><span class="w"> </span><span class="s2">"reprint_receipt_no"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"receiptNo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RECEIPT12345"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Command: <code style="white-space: nowrap">reprint_receipt_no</code></p>
+<p>Description: Reprints a specific receipt based on its number.</p>
+<p><strong>Sample Request Body:</strong></p>
+<p><strong>Specific Request Parameters:</strong></p>
+<ul>
+    <li><code style="white-space: nowrap">receiptNo</code> (string, mandatory): The number of the receipt to be reprinted.</li>
+</ul>
+
+<hr/>
+
+<p><strong>Command: Reprint Last Receipt</strong></p>
+<div class="highlight"><pre class="highlight json tab-json">
+<code><span class="p">{</span><span class="w">
+  </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_reprint_last_105"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"callBack"</span><span class="p">:</span><span class="w"> </span><span class="s2">null</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"command"</span><span class="p">:</span><span class="w"> </span><span class="s2">"reprint_last_receipt"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Command: <code style="white-space: nowrap">reprint_last_receipt</code></p>
+<p>Description: Reprints the last receipt issued by the terminal.</p>
+<p><strong>Sample Request Body:</strong></p>
+<p><strong>Specific Request Parameters:</strong></p>
+<ul>
+    <li>There are no additional specific parameters for this command.</li>
+</ul>
+
+<hr/>
+
+<p><strong>Command: Void Transaction</strong></p>
+<div class="highlight"><pre class="highlight json tab-json">
+<code><span class="p">{</span><span class="w">
+  </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_void_trans_106"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"callBack"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"command"</span><span class="p">:</span><span class="w"> </span><span class="s2">"void_transaction"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"receiptNo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RECEIPT7890"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Command: <code style="white-space: nowrap">void_transaction</code></p>
+<p>Description: Voids a specific transaction based on its receipt number.</p>
+<p><strong>Sample Request Body:</strong></p>
+<p><strong>Specific Request Parameters:</strong></p>
+<ul>
+    <li><code style="white-space: nowrap">receiptNo</code> (string, mandatory): The receipt number of the transaction to be voided.</li>
+</ul>
+
+<hr/>
+
+<p><strong>Response Structure (for all bank commands):</strong></p>
+
+<div class="highlight"><pre class="highlight json tab-json">
+    <span><em>Successful Response:</em></span>
+<code><span class="p">{</span><span class="w">
+    </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"the_id_sent_in_request"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"extras"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Operation completed successfully."</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<div class="highlight"><pre class="highlight json tab-json">
+    <span><em>Error Response:</em></span>
+<code><span class="p">{</span><span class="w">
+    </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"the_id_sent_in_request"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"extras"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Error message describing the issue."</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<p>The response will indicate the success or failure of the requested operation.</p>
+
+<p><strong>Response Parameters:</strong></p>
+<ul>
+    <li><code style="white-space: nowrap">requestId</code> (string): The unique identifier that was sent in the request, used for correlation.</li>
+    <li><code style="white-space: nowrap">success</code> (boolean): Indicates the outcome of the operation.
+        <ul>
+            <li><code style="white-space: nowrap">true</code>: The operation was processed successfully (or the request to process it was successfully initiated).</li>
+            <li><code style="white-space: nowrap">false</code>: Processing failed or an error occurred.</li>
+        </ul>
+    </li>
+    <li><code style="white-space: nowrap">extras</code> (string): Contains additional information about the operation.</li>
+</ul>
+<br>
