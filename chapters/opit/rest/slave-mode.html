@@ -1,0 +1,70 @@
+<p>The Slave Mode feature within the OPit API allows integrators to control the interaction with the terminal after it has been connected to the system. When this feature is activated, the POS terminal displays a locked screen without any interactive elements, preventing direct manipulation of the device until Slave Mode is deactivated. The primary purpose of this feature is to prevent unauthorized or accidental manipulation of the terminal while it is connected to and managed by an external system.</p>
+
+<p>
+    Communication with the Slave Mode API is achieved by sending a structured JSON object via a POST request
+    to the designated endpoint on the device.
+</p>
+
+<p><strong>The request model is as follows:</strong></p>
+
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">POST: http://{{deviceIP}}:9292/command/slave-mode</span>
+<code><span class="p">{</span><span class="w">
+  </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_unique_identifier"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"callBack"</span><span class="p">:</span><span class="w"> </span><span class="s2">null</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"enable"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Screen title text"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Screen message text"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<p><strong>Request Parameters:</strong></p>
+
+<ul>
+    <li>
+        <p><code style="white-space: nowrap">requestId</code> (string, mandatory): A unique client-generated identifier for each request. This is used to correlate responses with requests or for logging and auditing purposes. Example: <code style="white-space: nowrap">"rq_101"</code>, <code style="white-space: nowrap">"slave_mode_001"</code>.</p>
+    </li>
+    <li>
+        <p><code style="white-space: nowrap">callBack</code> (string or null, optional): A URL or identifier to which the OPit system might send an asynchronous notification regarding the processing of the command. If no callback is needed, this field can be <code style="white-space: nowrap">null</code> or omitted, depending on the API specifications.</p>
+    </li>
+    <li>
+        <p><code style="white-space: nowrap">enable</code> (boolean, mandatory): A flag that controls whether the slave mode feature is activated or deactivated on the fiscal terminal.</p>
+        <ul>
+            <li><code style="white-space: nowrap">true</code>: Activates slave mode, enabling the terminal to display the provided title and message.</li>
+            <li><code style="white-space: nowrap">false</code>: Deactivates slave mode, returning the terminal to its default operational state.</li>
+        </ul>
+    </li>
+    <li>
+        <p><code style="white-space: nowrap">title</code> (string, optional): The title text to be displayed on the fiscal terminal's screen. This parameter is most relevant when <code style="white-space: nowrap">enable</code> is set to <code style="white-space: nowrap">true</code>. The title provides context or identifies the current state or purpose. Example: <code style="white-space: nowrap">"Ready for Payment"</code>, <code style="white-space: nowrap">"Waiting for Confirmation"</code>.</p>
+    </li>
+    <li>
+        <p><code style="white-space: nowrap">message</code> (string, optional): The main message text to be displayed on the fiscal terminal's screen. This parameter is most relevant when <code style="white-space: nowrap">enable</code> is set to <code style="white-space: nowrap">true</code>. The message typically provides instructions, status information, or user guidance. Example: <code style="white-space: nowrap">"Please wait while processing..."</code>, <code style="white-space: nowrap">"Transaction completed successfully"</code>.</p>
+    </li>
+</ul>
+
+<p><strong>Response Model:</strong></p>
+
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_101"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"extras"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Slave request handled."</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<p><strong>Response Parameters:</strong></p>
+
+<ul>
+    <li>
+        <p><code style="white-space: nowrap">requestId</code> (string): The unique identifier that was provided in the corresponding request. This allows clients to match responses with their requests, especially important when handling asynchronous operations or batch processing.</p>
+    </li>
+    <li>
+        <p><code style="white-space: nowrap">success</code> (boolean): A flag indicating whether the slave mode command was executed successfully.</p>
+        <ul>
+            <li><code style="white-space: nowrap">true</code>: The command was processed successfully, and the slave mode has been configured as requested.</li>
+            <li><code style="white-space: nowrap">false</code>: The command encountered an error during processing, and the slave mode configuration was not applied.</li>
+        </ul>
+    </li>
+    <li>
+        <p><code style="white-space: nowrap">extras</code> (string): Additional information or status message returned by the server. Typical responses include <code style="white-space: nowrap">"Slave request handled."</code> to confirm successful processing, or error descriptions if the operation failed.</p>
+    </li>
+</ul>
