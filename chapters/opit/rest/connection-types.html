@@ -1,0 +1,126 @@
+<p>
+    To integrate with the OPit fiscal terminal and use the REST API, you need to establish a network connection between your application and the device.
+    The OPit terminal supports two primary connection methods: WiFi and USB (via USB Tethering).
+    Once connected, you will obtain an IP address that will be used to make REST API calls to the device.
+</p>
+
+<p><strong>Available Connection Methods:</strong></p>
+
+<h3>WiFi Connection</h3>
+
+<p>
+    The WiFi connection method is the most straightforward way to integrate with the OPit terminal.
+    This approach is ideal for wireless environments and provides flexibility in device placement.
+</p>
+
+<p><strong>Setup Steps:</strong></p>
+
+<ol>
+    <li>
+        <p><strong>Connect the OPit device to your WiFi network:</strong></p>
+        <ul>
+            <li>Navigate to the device's WiFi settings</li>
+            <li>Select your WiFi network from the available networks list</li>
+            <li>Enter the WiFi password if required</li>
+            <li>Wait for the device to establish the connection</li>
+        </ul>
+    </li>
+    <li>
+        <p><strong>Obtain the device IP address:</strong></p>
+        <ul>
+            <li>Once connected, the device will receive an IP address from your network's DHCP server</li>
+            <li>You can find the IP address in the device's network settings or system information screen</li>
+            <li>The IP address will typically be in the format: <code style="white-space: nowrap">192.168.x.x</code> or <code style="white-space: nowrap">10.x.x.x</code> depending on your network configuration</li>
+        </ul>
+    </li>
+    <li>
+        <p><strong>Test the connection:</strong></p>
+        <ul>
+            <li>Use the obtained IP address to make REST API calls to the device</li>
+            <li>Example: <code style="white-space: nowrap">http://192.168.1.100:9292/</code></li>
+            <li>Ensure your application and the OPit device are on the same network or that network routing is properly configured</li>
+        </ul>
+    </li>
+</ol>
+
+<h3>USB Connection (USB Tethering)</h3>
+
+<p>
+    The USB connection method uses USB Tethering to create a direct network connection between the OPit terminal and your system.
+    This method is ideal for scenarios where WiFi is unavailable or when a more stable, dedicated connection is required.
+</p>
+
+<p><strong>Setup Steps:</strong></p>
+
+<ol>
+    <li>
+        <p><strong>Connect the OPit device to your system via USB cable:</strong></p>
+        <ul>
+            <li>Use a compatible USB cable to physically connect the OPit terminal to your system</li>
+            <li>Ensure the USB cable supports data transfer (not charge-only cables)</li>
+        </ul>
+    </li>
+    <li>
+        <p><strong>Enable USB Tethering on the OPit device:</strong></p>
+        <ul>
+            <li>Open the device <strong>Settings</strong> menu</li>
+            <li>Navigate to <strong>Network & Internet</strong> (or <strong>Connections</strong>, depending on the Android version)</li>
+            <li>Select <strong>Hotspot & Tethering</strong> (or <strong>Mobile Hotspot and Tethering</strong>)</li>
+            <li>Enable the <strong>USB Tethering</strong> option by toggling the switch</li>
+            <li>You should see a notification confirming that USB tethering is active</li>
+        </ul>
+    </li>
+    <li>
+        <p><strong>Verify the network connection:</strong></p>
+        <ul>
+            <li>Once USB tethering is enabled, a local network will be created between your system and the OPit device</li>
+            <li>Your system will automatically receive an IP address from the local network created by the device</li>
+        </ul>
+    </li>
+    <li>
+        <p><strong>Identify the device IP address:</strong></p>
+        <ul>
+            <li>Check your system's network settings to identify the new network interface created by USB tethering</li>
+            <li>When the local server is active, the device screen displays a notification indicating this and the server IP address.</li>
+        </ul>
+    </li>
+    <li>
+        <p><strong>Test the connection:</strong></p>
+        <ul>
+            <li>Use the obtained IP address to make REST API calls to the device</li>
+            <li>Example: <code style="white-space: nowrap">http://192.168.42.129:9292/</code></li>
+            <li>Verify that your system can successfully communicate with the device</li>
+        </ul>
+    </li>
+</ol>
+
+<p><strong>Important Notes:</strong></p>
+
+<ul>
+    <li>
+        <p><strong>Port Number:</strong> All REST API calls are made to port <code style="white-space: nowrap">9292</code> regardless of the connection method used.</p>
+    </li>
+    <li>
+        <p><strong>Network Requirements:</strong> For WiFi connections, ensure that your network allows communication between devices (some networks have client isolation enabled which prevents device-to-device communication).</p>
+    </li>
+    <li>
+        <p><strong>USB Driver:</strong> For USB tethering on Windows systems, you may need to install appropriate USB drivers for the Android device. Most modern operating systems will automatically install the required drivers.</p>
+    </li>
+    <li>
+        <p><strong>Firewall:</strong> Ensure that your system's firewall allows outbound connections to the device's IP address on port 9292.</p>
+    </li>
+    <li>
+        <p><strong>Connection Stability:</strong> USB tethering generally provides a more stable connection compared to WiFi, especially in environments with WiFi interference.</p>
+    </li>
+</ul>
+
+<p><strong>API Usage:</strong></p>
+
+<p>
+    Once you have established a connection and obtained the device's IP address, you can start making REST API calls.
+    All commands will be sent as JSON objects to the device's REST endpoints.
+    The specified date and numeric formats must be strictly adhered to.
+    For additional information and example API calls, you can
+    <a href="https://raw.githubusercontent.com/OderoPos/developer-docs/refs/heads/main/chapters/opit/rest/assets/OpitLocalServer.postman_collection.zip"
+       download>download this Postman collection</a>.
+</p>
