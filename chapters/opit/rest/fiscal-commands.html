@@ -115,12 +115,32 @@
 
 <hr>
 <!--<blockquote><p>Set Date Time</p></blockquote>-->
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<div style="display: contents;">
+<div class="highlight">
+    <pre class="highlight json tab-json">
+    <span class="p">Request:</span>
+<code><span class="p">{</span><span class="w">
   </span><span class="nt">"dateTime"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"100000010124"</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
+
+<div class="highlight">
+    <pre class="highlight json tab-json">
+    <span class="p">Response:</span>
+<code><span class="p">{</span><span class="w">
+    </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_101"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"extras"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fiscal command executed successfully"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"fiscalResult"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{\"result\":{\"code\":0,\"nativeCode\":\"FR_SUCCESS\"}}"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+</div>
 
 <p>Command: <code style="white-space: nowrap">SetDateTime</code></p>
 <p>Description: Sets the date and time of the fiscal memory.</p>
@@ -129,15 +149,48 @@
     <li><code style="white-space: nowrap">value</code> (string, mandatory): The date and time to set. Format: <code style="white-space: nowrap">HHmmssddMMyy</code>.</li>
 </ul>
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 <hr>
 <!--<blockquote><p>Set Company Data</p></blockquote>-->
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Request:</span>
+<code><span class="p">{</span><span class="w">
   </span><span class="nt">"companyData"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"My Company SRL"</span><span class="p">,</span><span class="w">
     </span><span class="nt">"cui"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RO12345678"</span><span class="p">,</span><span class="w">
     </span><span class="nt">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Str. Exemplu Nr. 10"</span><span class="p">,</span><span class="w">
     </span><span class="nt">"fiscalSeries"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0123456789"</span><span class="w">
   </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Response:</span>
+<code><span class="p">{</span><span class="w">
+    </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_101"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"extras"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fiscal command executed successfully"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"fiscalResult"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{\"result\":{\"code\":0,\"location\":\"\",\"nativeCode\":\"FR_SUCCESS\"}}"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 
@@ -151,12 +204,44 @@
     <li><code style="white-space: nowrap">fiscalSeries</code>: Fiscal series identifier (10 characters).</li>
 </ul>
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 <hr>
 <!--<blockquote><p>Get Company Data</p></blockquote>-->
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Request:</span>
+<code><span class="p">{</span><span class="w">
   </span><span class="nt">"command"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="nt">"cmdCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GetCompanyData"</span><span class="w">
   </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Response:</span>
+<code><span class="p">{</span><span class="w">
+    </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_101"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"extras"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fiscal command executed successfully"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"fiscalResult"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{\"result\":{\"code\":0,\"nativeCode\":\"FR_SUCCESS\"},\"companyData\":{\"name\":\"     My Company SRL     \",\"address\":\"  Str. Exemplu Nr. 10   \",\"cui\":\"RO12345678\",\"fiscalSeries\":\"0123456789\"}}"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 
@@ -164,17 +249,51 @@
 <p>Command: <code style="white-space: nowrap">GetCompanyData</code></p>
 <p>Description: Retrieves the company data from the fiscal memory.</p>
 <p>Parameters: None.</p>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 <br>
 
 <hr>
 <!--<blockquote><p>Set VAT Rates</p></blockquote>-->
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Request:</span>
+<code><span class="p">{</span><span class="w">
   </span><span class="nt">"VATRates"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
     </span><span class="p">{</span><span class="nt">"vatId"</span><span class="p">:</span><span class="s2">"A"</span><span class="p">,</span><span class="w"> </span><span class="nt">"vatRate"</span><span class="p">:</span><span class="s2">"19"</span><span class="p">},</span><span class="w">
     </span><span class="p">{</span><span class="nt">"vatId"</span><span class="p">:</span><span class="s2">"B"</span><span class="p">,</span><span class="w"> </span><span class="nt">"vatRate"</span><span class="p">:</span><span class="s2">"16"</span><span class="p">},</span><span class="w">
     </span><span class="p">{</span><span class="nt">"vatId"</span><span class="p">:</span><span class="s2">"C"</span><span class="p">,</span><span class="w"> </span><span class="nt">"vatRate"</span><span class="p">:</span><span class="s2">"21"</span><span class="p">},</span><span class="w">
     </span><span class="p">{</span><span class="nt">"vatId"</span><span class="p">:</span><span class="s2">"D"</span><span class="p">,</span><span class="w"> </span><span class="nt">"vatRate"</span><span class="p">:</span><span class="s2">"24"</span><span class="p">}</span><span class="w">
   </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Response:</span>
+<code><span class="p">{</span><span class="w">
+    </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_101"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"extras"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fiscal command executed successfully"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"fiscalResult"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{\"result\":{\"code\":0,\"location\":\"\",\"nativeCode\":\"FR_SUCCESS\"}}"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 
@@ -191,26 +310,88 @@
     </li>
 </ul>
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 <hr>
 <!--<blockquote><p>Get VAT Rates</p></blockquote>-->
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Request:</span>
+<code><span class="p">{</span><span class="w">
   </span><span class="nt">"command"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="nt">"cmdCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GetVatRates"</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Response:</span>
+<code><span class="p">{</span><span class="w">
+    </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_101"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"extras"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fiscal command executed successfully"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"fiscalResult"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{\"result\":{\"code\":0,\"nativeCode\":\"FR_SUCCESS\"},\"VATRates\":[{\"vatId\":\"A\",\"vatRate\":\"19\"},{\"vatId\":\"B\",\"vatRate\":\"16\"},{\"vatId\":\"C\",\"vatRate\":\"21\"},{\"vatId\":\"D\",\"vatRate\":\"24\"}]}"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
 <p>Command: <code style="white-space: nowrap">GetVATRates</code></p>
 <p>Description: Retrieves the VAT rates from the fiscal memory.</p>
 <p>Parameters: None.</p>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 <br>
 
 <hr>
 <!--<blockquote><p>Fiscalize</p></blockquote>-->
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Request:</span>
+<code><span class="p">{</span><span class="w">
   </span><span class="nt">"command"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="nt">"cmdCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fiscalise"</span><span class="w">
   </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Response:</span>
+<code><span class="p">{</span><span class="w">
+    </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_101"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"extras"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fiscal command executed successfully"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"fiscalResult"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{\"result\":{\"code\":0,\"nativeCode\":\"FR_SUCCESS\"}}"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 
@@ -218,28 +399,95 @@
 <p>Command: <code style="white-space: nowrap">Fiscalize</code></p>
 <p>Description: Initializes the fiscalization process for the fiscal memory. This is a one-time operation for a new fiscal device.</p>
 <p>Parameters: None.</p>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 <br>
 
 <hr>
 <!--<blockquote><p>Initialize Electronic Journal</p></blockquote>-->
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Request:</span>
+<code><span class="p">{</span><span class="w">
   </span><span class="nt">"command"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="nt">"cmdCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"JournalInit"</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Response:</span>
+<code><span class="p">{</span><span class="w">
+    </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_101"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"extras"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fiscal command executed successfully"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"fiscalResult"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{\"result\":{\"code\":0,\"nativeCode\":\"FR_SUCCESS\"}}"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
 <p>Command: <code style="white-space: nowrap">InitElectronicJournal</code></p>
 <p>Description: Initializes the electronic journal of the fiscal memory.</p>
 <p>Parameters: None.</p>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 <br>
 
 <hr>
 <!--<blockquote><p>Technical Report</p></blockquote>-->
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Request:</span>
+<code><span class="p">{</span><span class="w">
   </span><span class="nt">"report"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Technical"</span><span class="w">
   </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Response:</span>
+<code><span class="p">{</span><span class="w">
+    </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_101"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"extras"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fiscal command executed successfully"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"fiscalResult"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{\"result\":{\"code\":0,\"location\":\"\",\"nativeCode\":\"FR_SUCCESS\"}}"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 
@@ -247,41 +495,143 @@
 <p>Description: Generates a technical report from the fiscal memory. This report usually contains device status, configuration, and diagnostic information.</p>
 <p>Parameters: None.</p>
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 <hr>
 <!--<blockquote><p>Z Report (Daily Fiscal Closure)</p></blockquote>-->
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Request:</span>
+<code><span class="p">{</span><span class="w">
   </span><span class="nt">"report"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Z"</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Response:</span>
+<code><span class="p">{</span><span class="w">
+    </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_101"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"extras"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fiscal command executed successfully"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"fiscalResult"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{\"result\":{\"code\":0,\"location\":\"\",\"nativeCode\":\"FR_SUCCESS\"}}"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"zNumber"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
 <p>Command: <code style="white-space: nowrap">ZReport</code></p>
 <p>Description: Generates the Z report, which is the daily fiscal closure. This report finalizes the day's transactions and resets daily totals.</p>
 <p>Parameters: None.</p>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 <br>
 
 <hr>
 <!--<blockquote><p>X Report (Interim Fiscal Report)</p></blockquote>-->
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Request:</span>
+<code><span class="p">{</span><span class="w">
   </span><span class="nt">"report"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"X"</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Response:</span>
+<code><span class="p">{</span><span class="w">
+    </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_101"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"extras"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fiscal command executed successfully"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"fiscalResult"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{\"result\":{\"code\":0,\"location\":\"\",\"nativeCode\":\"FR_SUCCESS\"}}"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
 <p>Command: <code style="white-space: nowrap">XReport</code></p>
 <p>Description: Generates the X report, an interim fiscal report showing current day totals without closing the fiscal day.</p>
 <p>Parameters: None.</p>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 <br>
 
 <hr>
 <!--<blockquote><p>Initialize Journal (Report)</p></blockquote>-->
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Request:</span>
+<code><span class="p">{</span><span class="w">
   </span><span class="nt">"report"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"JournalInit"</span><span class="p">,</span><span class="w">
     </span><span class="nt">"media"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Printer"</span><span class="w">
   </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Response:</span>
+<code><span class="p">{</span><span class="w">
+    </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_101"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"extras"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fiscal command executed successfully"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"fiscalResult"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{\"result\":{\"code\":0,\"location\":\"\",\"nativeCode\":\"FR_SUCCESS\"}}"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 
@@ -291,17 +641,50 @@
 <ul>
     <li><code style="white-space: nowrap">media</code> (string, mandatory): See "Common Data Types". Typically <code style="white-space: nowrap">"Printer"</code>.</li>
 </ul>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 <br>
 
 <hr>
 <!--<blockquote><p>Journal Report (Periodic by Date)</p></blockquote>-->
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Request:</span>
+<code><span class="p">{</span><span class="w">
   </span><span class="nt">"report"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Journal"</span><span class="p">,</span><span class="w">
     </span><span class="nt">"startDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"100000010124"</span><span class="p">,</span><span class="w">
     </span><span class="nt">"stopDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"100000010124"</span><span class="p">,</span><span class="w">
     </span><span class="nt">"media"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Printer"</span><span class="w">
   </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Response:</span>
+<code><span class="p">{</span><span class="w">
+    </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_101"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"extras"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fiscal command executed successfully"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"fiscalResult"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{\"result\":{\"code\":0,\"location\":\"\",\"nativeCode\":\"FR_SUCCESS\"}}"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 
@@ -314,13 +697,46 @@
     <li><code style="white-space: nowrap">media</code> (string, mandatory): See "Common Data Types". Typically <code style="white-space: nowrap">"Printer"</code>.</li>
 </ul>
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 <hr>
 <!--<blockquote><p>XJournal Report</p></blockquote>-->
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Request:</span>
+<code><span class="p">{</span><span class="w">
   </span><span class="nt">"report"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"XJournal"</span><span class="p">,</span><span class="w">
     </span><span class="nt">"media"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Printer"</span><span class="w">
   </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Response:</span>
+<code><span class="p">{</span><span class="w">
+    </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_101"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"extras"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fiscal command executed successfully"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"fiscalResult"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{\"result\":{\"code\":0,\"location\":\"\",\"nativeCode\":\"FR_SUCCESS\"}}"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 
@@ -331,13 +747,45 @@
     <li><code style="white-space: nowrap">media</code> (string, mandatory): See "Common Data Types". Typically <code style="white-space: nowrap">"Printer"</code>.</li>
 </ul>
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 <hr>
 <!--<blockquote><p>Customer Data Report</p></blockquote>-->
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Request:</span>
+<code><span class="p">{</span><span class="w">
   </span><span class="nt">"report"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CustomerData"</span><span class="p">,</span><span class="w">
     </span><span class="nt">"media"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Printer"</span><span class="w">
   </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Response:</span>
+<code><span class="p">{</span><span class="w">
+    </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_101"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"extras"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fiscal command executed successfully"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"fiscalResult"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{\"result\":{\"code\":0,\"location\":\"\",\"nativeCode\":\"FR_SUCCESS\"}}"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 
@@ -348,9 +796,29 @@
     <li><code style="white-space: nowrap">media</code> (string, mandatory): See "Common Data Types". Typically <code style="white-space: nowrap">"Printer"</code>.</li>
 </ul>
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 <hr>
 <!--<blockquote><p>Periodic Report by Date</p></blockquote>-->
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Request:</span>
+<code><span class="p">{</span><span class="w">
   </span><span class="nt">"report"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Periodic"</span><span class="p">,</span><span class="w">
     </span><span class="nt">"startDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;startDate&gt;"</span><span class="p">,</span><span class="w">
@@ -358,6 +826,20 @@
     </span><span class="nt">"media"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Printer"</span><span class="p">,</span><span class="w">
     </span><span class="nt">"size"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Compressed"</span><span class="w">
   </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Response:</span>
+<code><span class="p">{</span><span class="w">
+    </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_101"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"extras"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fiscal command executed successfully"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"fiscalResult"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{\"result\":{\"code\":0,\"location\":\"\",\"nativeCode\":\"FR_SUCCESS\"}}"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 
@@ -371,9 +853,28 @@
     <li><code style="white-space: nowrap">stopDate</code> (string, mandatory): The end date for the report. Format: <code style="white-space: nowrap">HHmmssddMMyy</code>.</li>
 </ul>
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 <hr>
 <!--<blockquote><p>Periodic Report by Z Number</p></blockquote>-->
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Request:</span>
+<code><span class="p">{</span><span class="w">
   </span><span class="nt">"report"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
     <span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Periodic"</span><span class="p">,</span><span class="w">
     </span><span class="nt">"startZ"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;startZNo&gt;"</span><span class="p">,</span><span class="w">
@@ -381,6 +882,20 @@
     </span><span class="nt">"media"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Printer"</span><span class="p">,</span><span class="w">
     </span><span class="nt">"size"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Compressed"</span><span class="w">
   </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Response:</span>
+<code><span class="p">{</span><span class="w">
+    </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_101"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"extras"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fiscal command executed successfully"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"fiscalResult"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{\"result\":{\"code\":0,\"location\":\"\",\"nativeCode\":\"FR_SUCCESS\"}}"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 
@@ -394,12 +909,45 @@
     <li><code style="white-space: nowrap">endZNo</code> (integer, mandatory): The ending Z report number.</li>
 </ul>
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 <hr>
 <!--<blockquote><p>Get Daily Totals</p></blockquote>-->
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Request:</span>
+<code><span class="p">{</span><span class="w">
   </span><span class="nt">"command"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="nt">"cmdCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GetDailyTotals"</span><span class="w">
   </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Response:</span>
+<code><span class="p">{</span><span class="w">
+    </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_101"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"extras"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fiscal command executed successfully"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"fiscalResult"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{\"result\":{\"code\":0,\"location\":\"GetDailyTotals\",\"nativeCode\":\"FR_SUCCESS\"},\"dailyTotals\":{\"zNumber\":3,\"fiscalReceipts\":0,\"nonFiscalReceipts\":0,\"canceledReceipts\":0,\"discountsNumber\":0,\"surchargesNumber\":0,\"drawerInNumber\":0,\"drawerOutNumber\":0,\"cuiReceipts\":0,\"saleTotals\":[{\"vatId\":\"A\",\"saleTotal\":\"0,00\"},{\"vatId\":\"B\",\"saleTotal\":\"0,00\"},{\"vatId\":\"C\",\"saleTotal\":\"0,00\"},{\"vatId\":\"D\",\"saleTotal\":\"0,00\"},{\"vatId\":\"E\",\"saleTotal\":\"0,00\"},{\"vatId\":\"F\",\"saleTotal\":\"0,00\"},{\"vatId\":\"G\",\"saleTotal\":\"0,00\"},{\"vatId\":\"H\",\"saleTotal\":\"0,00\"}],\"vatValues\":[{\"vatId\":\"A\",\"vatValue\":\"0,00\"},{\"vatId\":\"B\",\"vatValue\":\"0,00\"},{\"vatId\":\"C\",\"vatValue\":\"0,00\"},{\"vatId\":\"D\",\"vatValue\":\"0,00\"},{\"vatId\":\"E\",\"vatValue\":\"0,00\"},{\"vatId\":\"F\",\"vatValue\":\"0,00\"},{\"vatId\":\"G\",\"vatValue\":\"0,00\"},{\"vatId\":\"H\",\"vatValue\":\"0,00\"}],\"noTax\":\"0,00\",\"otherTaxes\":\"0,00\",\"surcharges\":\"0,00\",\"discounts\":\"0,00\",\"storno\":\"0,00\",\"initialCash\":\"0,00\",\"inCashValue\":\"0,00\",\"outCashValue\":\"0,00\",\"cashInDrawer\":\"0,00\",\"paymentMethods\":[{\"paymentMethodId\":0,\"value\":\"0,00\"},{\"paymentMethodId\":1,\"value\":\"0,00\"},{\"paymentMethodId\":2,\"value\":\"0,00\"},{\"paymentMethodId\":3,\"value\":\"0,00\"},{\"paymentMethodId\":4,\"value\":\"0,00\"},{\"paymentMethodId\":5,\"value\":\"0,00\"},{\"paymentMethodId\":6,\"value\":\"0,00\"},{\"paymentMethodId\":7,\"value\":\"0,00\"}],\"cuiSalesValue\":\"0,00\",\"cuiSalesVATValue\":\"0,00\",\"dailyTotal\":\"0,00\",\"dailyVATTotal\":\"0,00\"}}"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 
@@ -407,12 +955,46 @@
 <p>Description: Retrieves the current daily totals from the fiscal memory. This is similar to an XReport but might return data in a structured format rather than a printed report.</p>
 <p>Parameters: None.</p>
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 <hr>
 <!--<blockquote><p>Get Status</p></blockquote>-->
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Request:</span>
+<code><span class="p">{</span><span class="w">
   </span><span class="nt">"command"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="nt">"cmdCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GetStatus"</span><span class="w">
   </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Response:</span>
+<code><span class="p">{</span><span class="w">
+    </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_101"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"extras"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fiscal command executed successfully"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"fiscalResult"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{\"result\":{\"code\":0,\"location\":\"GetStatus\",\"nativeCode\":\"FR_SUCCESS\"},\"status\":{\"printer\":{\"warning\":{\"lowPaper\":false},\"error\":{\"offline\":false,\"mechanicalError\":false,\"outOfPaper\":false}},\"system\":{\"info\":{\"isFiscalised\":true,\"zReportRequired\":false,\"isReadOnly\":false,\"invalidDateTime\":false,\"fullZLocations\":false,\"fullVATLocations\":false,\"fullRamRLocations\":false},\"warning\":{\"lowVATLocations\":false,\"lowZLocations\":false,\"lowRamRLocations\":false},\"error\":{\"fiscalMemoryError\":false,\"fiscalMemoryDisconnected\":false,\"displayDisconnected\":false,\"restartRequired\":false}},\"journal\":{\"info\":{\"capacity\":8951644,\"available\":12115652,\"journalInitRequired\":false},\"warning\":{\"lowJournalSpace\":false},\"error\":{\"journalError\":false,\"journalDisconnected\":false}}}}"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 
@@ -420,24 +1002,78 @@
 <p>Description: Retrieves the current status of the fiscal device (e.g., operational state, errors, paper status).</p>
 <p>Parameters: None.</p>
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 <hr>
 <!--<blockquote><p>Get Software Version</p></blockquote>-->
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Request:</span>
+<code><span class="p">{</span><span class="w">
   </span><span class="nt">"command"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="nt">"cmdCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GetSoftwareVersion"</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Response:</span>
+<code><span class="p">{</span><span class="w">
+    </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_101"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"extras"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fiscal command executed successfully"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"fiscalResult"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{\"result\":{\"code\":0,\"location\":\"GetSoftwareVersion\",\"nativeCode\":\"FR_SUCCESS\"},\"swVersion\":{\"MCVersion\":\"1.6.2.0 - 330TR\",\"Incremental\":\"652\",\"Release\":\"11\"}}"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
 <p>Command: <code style="white-space: nowrap">GetSoftwareVersion</code></p>
 <p>Description: Retrieves the software/firmware version of the fiscal device.</p>
 <p>Parameters: None.</p>
+
 <br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 <br>
 
 <hr>
 <!--<blockquote><p>Sale Transaction</p></blockquote>-->
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Request:</span>
+<code><span class="p">{</span><span class="w">
   </span><span class="nt">"sale"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="nt">"sysInfo"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
       </span><span class="nt">"posNo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w">
@@ -486,6 +1122,20 @@
       </span><span class="p">}</span><span class="w">
     </span><span class="p">]</span><span class="w">
   </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Response:</span>
+<code><span class="p">{</span><span class="w">
+    </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_101"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"extras"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fiscal command executed successfully"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"fiscalResult"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{\"result\":{\"code\":0,\"location\":\"\",\"nativeCode\":\"FR_SUCCESS\"},\"saleResponse\":{\"ZNo\":3,\"recNo\":1,\"changeDue\":\"1,50\"}}"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 
@@ -564,12 +1214,28 @@
 
 <hr>
 <!--<blockquote><p>Cash Operation (Deposit/Withdrawal)</p></blockquote>-->
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Request:</span>
+<code><span class="p">{</span><span class="w">
   </span><span class="nt">"cashOperation"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="nt">"operationType"</span><span class="p">:</span><span class="w"></span><span class="s2">"Current"</span><span class="p">,</span><span class="w">
     </span><span class="nt">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"100,00"</span><span class="p">,</span><span class="w">
     </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Depunere numerar"</span><span class="w">
   </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Response:</span>
+<code><span class="p">{</span><span class="w">
+    </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_101"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"extras"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fiscal command executed successfully"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"fiscalResult"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{\"result\":{\"code\":0,\"nativeCode\":\"FR_SUCCESS\"}}"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 
@@ -587,9 +1253,23 @@
     <li><code style="white-space: nowrap">description</code> (string, mandatory): A brief description or reason for the operation.</li>
 </ul>
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 <hr>
 <!--<blockquote><p>Non-Fiscal Receipt</p></blockquote>-->
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Request:</span>
+<code><span class="p">{</span><span class="w">
   </span><span class="nt">"nonFiscalReceipt"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="nt">"hasHeader"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
     </span><span class="nt">"hasFooter"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
@@ -602,6 +1282,20 @@
       </span><span class="p">}</span><span class="w">
     </span><span class="p">]</span><span class="w">
   </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Response:</span>
+<code><span class="p">{</span><span class="w">
+    </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_101"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"extras"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fiscal command executed successfully"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"fiscalResult"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{\"result\":{\"code\":0,\"location\":\"\",\"nativeCode\":\"FR_SUCCESS\"},\"nonFiscalReceipt\":{\"ZNo\":3,\"recNo\":1}}"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 
