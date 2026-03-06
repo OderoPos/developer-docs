@@ -1,0 +1,98 @@
+<p>The Opit REST application runs an NSD (Network Service Discovery) service on Android devices. This service is automatically available whenever the device has an active network connection with a valid IP address. Integrators can use NSD to discover the device on the local network and communicate with the REST API server.</p>
+
+<h3 id="service-availability">Service Availability</h3>
+
+<h3 id="when-the-service-runs">When the Service Runs</h3>
+
+<p>The NSD service is active under the following conditions:</p>
+<ul>
+    <li>The Android device has an active network connection (WiFi, Ethernet, USB Tethering, or other network interface)</li>
+    <li>The device has obtained a valid IP address on that network</li>
+    <li>The Opit REST application is running and the <code style="white-space: nowrap">LocalServerService</code> is started</li>
+</ul>
+
+<p>The NSD service automatically:</p>
+<ul>
+    <li><strong>Registers</strong> when a network becomes available and an IP address is assigned</li>
+    <li><strong>Re-registers</strong> when the device switches networks (e.g., from WiFi to USB Tethering)</li>
+    <li><strong>Unregisters</strong> when the device loses network connectivity</li>
+</ul>
+
+<h3 id="service-details">Service Details</h3>
+
+<ul>
+    <li><strong>Service Type</strong>: <code style="white-space: nowrap">_http._tcp.</code></li>
+    <li><strong>Service Name Format</strong>: <code style="white-space: nowrap">opit_rest_api_&lt;DEVICE_ID&gt;</code>
+        <ul>
+            <li>Example: <code style="white-space: nowrap">opit_rest_api_PT03D34M00170</code></li>
+        </ul>
+    </li>
+    <li><strong>Port</strong>: <code style="white-space: nowrap">9292</code></li>
+    <li><strong>Protocol</strong>: HTTP</li>
+</ul>
+
+<h3 id="discovering-the-nsd-service">Discovering the NSD Service</h3>
+
+<p>Example: Once a service is found, resolve it to obtain the host IP address and port.</p>
+<p>After resolving an <code style="white-space: nowrap">opit_rest_api_PT03D34M00170</code> service:</p>
+
+<ul>
+    <li><strong>IP Address</strong>: <code style="white-space: nowrap">172.30.23.251</code></li>
+    <li><strong>Port</strong>: <code style="white-space: nowrap">9292</code></li>
+    <li><strong>Server URL</strong>: <code style="white-space: nowrap">http://172.30.23.251:9292</code></li>
+</ul>
+
+<p>Once you have discovered the device and obtained its IP address and port, you can communicate with the REST API server using standard HTTP requests.</p>
+
+<h3 id="important-considerations">Important Considerations</h3>
+
+<h3 id="network-stability">Network Stability</h3>
+
+<ul>
+    <li>The device may switch networks (e.g., WiFi to USB Tethering), causing the IP address to change</li>
+    <li>When a network switch occurs, the NSD service will re-register with the new IP address</li>
+    <li>Integrators should re-discover the service if connection attempts fail</li>
+</ul>
+
+<h3 id="same-network-requirement">Same Network Requirement</h3>
+
+<ul>
+    <li>The device running the Opit REST application and the integrating application <strong>must be on the same local network</strong></li>
+    <li>NSD discovery will not work across different networks or the internet</li>
+    <li>Both devices must support mDNS (Multicast DNS), which is standard on modern Android devices</li>
+</ul>
+
+<h3 id="service-not-discovered">Service Not Discovered</h3>
+
+<p>If you cannot discover the service, check the following:</p>
+<ol>
+    <li><strong>Verify Network Connectivity</strong>: Ensure both devices are on the same local network</li>
+    <li><strong>Check IP Address</strong>: Confirm the device has obtained a valid IP address</li>
+    <li><strong>Verify Service is Running</strong>: Ensure the Opit REST application is running on the device</li>
+    <li><strong>Restart Discovery</strong>: Stop and restart the device</li>
+</ol>
+
+<h3 id="connection-refused">Connection Refused</h3>
+
+<p>If connection attempts are refused, verify the following:</p>
+<ol>
+    <li><strong>Verify IP and Port</strong>: Double-check the discovered IP address and port (9292)</li>
+    <li><strong>Check Firewall</strong>: Ensure no firewall is blocking port 9292</li>
+    <li><strong>Verify HTTP Protocol</strong>: Use HTTP, not HTTPS, for local API calls</li>
+</ol>
+
+<h3 id="service-lost-after-connection">Service Lost After Connection</h3>
+
+<p>This can occur when the device switches networks. Restart the NSD discovery to find the service with its new IP address.</p>
+
+<h3 id="summary">Summary</h3>
+
+<p>The Opit REST application provides an NSD-discoverable service that allows integrators to:</p>
+<ol>
+    <li>Automatically discover the device on the local network</li>
+    <li>Identify the device's IP address</li>
+    <li>Communicate with the REST API server on port 9292</li>
+</ol>
+
+<p>By following the integration steps in this guide, integrators can build robust, discovery-based communication with Opit REST devices without requiring manual IP configuration.</p>
+
