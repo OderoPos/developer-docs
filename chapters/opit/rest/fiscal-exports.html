@@ -1,0 +1,163 @@
+<p>The Fiscal Export endpoint allows integrators to export fiscal data (XML reports or electronic journal) directly from the fiscal device. Unlike standard fiscal command endpoints, this endpoint returns a binary ZIP stream instead of a JSON payload.</p>
+
+<p>
+    Communication with the Fiscal Export API is achieved by sending a structured JSON object via a <strong>POST</strong> request to the dedicated export endpoint.
+</p>
+
+<p><strong>The request model is as follows:</strong></p>
+
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">POST: http://{{deviceIP}}:9292/command/ecr/fiscal/export</span>
+<code><span class="p">{</span><span class="w">
+  </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_unique_identifier"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"fiscalCommand"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"report"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"XMLByDate"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"startDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"113200100326"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"stopDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"112800110326"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span></code></pre></div>
+
+<p><strong>Common Request Parameters:</strong></p>
+<ul>
+    <li><code style="white-space: nowrap">requestId</code> (string, mandatory): A unique client-generated identifier used for tracing and logging. Example: <code style="white-space: nowrap">"rq_101"</code>.</li>
+    <li><code style="white-space: nowrap">fiscalCommand</code> (object, mandatory): Container for the export instruction. It must include either a <code style="white-space: nowrap">report</code> object or a <code style="white-space: nowrap">command</code> object, depending on the export type.</li>
+</ul>
+
+<p><strong>Endpoint Details:</strong></p>
+<ul>
+    <li><code style="white-space: nowrap">URL</code>: <code style="white-space: nowrap">/command/ecr/fiscal/export</code></li>
+    <li><code style="white-space: nowrap">Method</code>: <code style="white-space: nowrap">POST</code></li>
+    <li><code style="white-space: nowrap">Content-Type</code>: <code style="white-space: nowrap">application/json</code></li>
+</ul>
+
+<hr>
+
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Request:</span>
+<code><span class="p">{</span><span class="w">
+  </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_101"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"fiscalCommand"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"report"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"XMLByDate"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"startDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"113200100326"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"stopDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"112800110326"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span></code></pre></div>
+
+<p>Command: <code style="white-space: nowrap">XML Report by Date</code></p>
+<p>Description: Exports a fiscal XML report for a specific date/time range.</p>
+<p>Parameters:</p>
+<ul>
+    <li><code style="white-space: nowrap">type</code> (string, mandatory): Must be <code style="white-space: nowrap">"XMLByDate"</code>.</li>
+    <li><code style="white-space: nowrap">startDate</code> (string, mandatory): Start date/time in format <code style="white-space: nowrap">HHmmDDMMYY</code>. Example: <code style="white-space: nowrap">"113200100326"</code>.</li>
+    <li><code style="white-space: nowrap">stopDate</code> (string, mandatory): End date/time in format <code style="white-space: nowrap">HHmmDDMMYY</code>. Example: <code style="white-space: nowrap">"112800110326"</code>.</li>
+</ul>
+
+<br><br><br>
+
+<hr>
+
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Request:</span>
+<code><span class="p">{</span><span class="w">
+  </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_101"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"fiscalCommand"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"report"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"XML"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"startZ"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"stopZ"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span></code></pre></div>
+
+<p>Command: <code style="white-space: nowrap">XML Report by Z</code></p>
+<p>Description: Exports a fiscal XML report for a Z report interval.</p>
+<p>Parameters:</p>
+<ul>
+    <li><code style="white-space: nowrap">type</code> (string, mandatory): Must be <code style="white-space: nowrap">"XML"</code>.</li>
+    <li><code style="white-space: nowrap">startZ</code> (string, mandatory): First Z report number in the interval.</li>
+    <li><code style="white-space: nowrap">stopZ</code> (string, mandatory): Last Z report number in the interval.</li>
+</ul>
+
+<br><br><br>
+<hr>
+
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Request:</span>
+<code><span class="p">{</span><span class="w">
+  </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_101"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"fiscalCommand"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"command"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"cmdCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"JournalExportByDate"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"startDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"113200100326"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"stopDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"115800110326"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span></code></pre></div>
+
+<p>Command: <code style="white-space: nowrap">Electronic Journal by Date</code></p>
+<p>Description: Exports the electronic journal for a date/time range.</p>
+<p>Parameters:</p>
+<ul>
+    <li><code style="white-space: nowrap">cmdCode</code> (string, mandatory): Must be <code style="white-space: nowrap">"JournalExportByDate"</code>.</li>
+    <li><code style="white-space: nowrap">startDate</code> (string, mandatory): Start date/time in format <code style="white-space: nowrap">HHmmDDMMYY</code>.</li>
+    <li><code style="white-space: nowrap">stopDate</code> (string, mandatory): End date/time in format <code style="white-space: nowrap">HHmmDDMMYY</code>.</li>
+</ul>
+
+<br><br><br>
+<hr>
+
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">Request:</span>
+<code><span class="p">{</span><span class="w">
+  </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_101"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"fiscalCommand"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"command"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"cmdCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"JournalExport"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"param1"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"param2"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span></code></pre></div>
+
+<p>Command: <code style="white-space: nowrap">Electronic Journal by Z</code></p>
+<p>Description: Exports the electronic journal for a Z report interval.</p>
+<p>Parameters:</p>
+<ul>
+    <li><code style="white-space: nowrap">cmdCode</code> (string, mandatory): Must be <code style="white-space: nowrap">"JournalExport"</code>.</li>
+    <li><code style="white-space: nowrap">param1</code> (string, mandatory): First Z report number in the interval.</li>
+    <li><code style="white-space: nowrap">param2</code> (string, mandatory): Last Z report number in the interval.</li>
+</ul>
+
+<br><br><br>
+<hr>
+
+<p><strong>Example cURL Request:</strong></p>
+<div class="highlight"><pre class="highlight shell">
+<code>curl -X POST http://172.30.23.251:9292/command/ecr/fiscal/export \
+  -H "Content-Type: application/json" \
+  -d '{
+    "requestId": "rq_101",
+    "fiscalCommand": {
+      "report": {
+        "type": "XML",
+        "startZ": "1",
+        "stopZ": "2"
+      }
+    }
+  }' \
+  --output /path/to/output/export.zip</code></pre></div>
+
+<p>The following example demonstrates how to export an XML report for Z reports 1 to 2 and save the resulting ZIP file to a local path.</p>
+<p>You can use the following cURL command to test the Fiscal Export endpoint:</p>
+
+<p><strong>Important Notes:</strong></p>
+<ul>
+    <li><code style="white-space: nowrap">requestId</code> is used for tracing and does not influence the export result.</li>
+    <li>Date/time format for <code style="white-space: nowrap">startDate</code> and <code style="white-space: nowrap">stopDate</code> is <code style="white-space: nowrap">HHmmDDMMYY</code> (for example <code style="white-space: nowrap">113200100326</code> means 11:32, 10 March 2026).</li>
+    <li>This endpoint is long-running and does not enforce a short request timeout. The client should use a sufficiently large read timeout.</li>
+    <li>Replace <code style="white-space: nowrap">{{deviceIP}}</code> with the actual IP address of the Android terminal. The API port is always <code style="white-space: nowrap">9292</code>.</li>
+</ul>
