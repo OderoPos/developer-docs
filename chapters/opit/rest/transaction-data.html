@@ -35,23 +35,14 @@
 </ul>
 
 <p><strong>Response Body Structure:</strong></p>
-<p>The response will indicate the success or failure of the request, along with the bank data for the transaction.</p>
+<p>The response indicates whether the request was handled successfully and, when available, returns the transaction data as a JSON-serialized string in the <code>extras</code> field.</p>
 
 <div class="highlight"><pre class="highlight json tab-json">
-    <span><em>Successful response — transaction approved by bank:</em></span>
+    <span><em>Successful response:</em></span>
 <code><span class="p">{</span><span class="w">
-    </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_102"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_103"</span><span class="p">,</span><span class="w">
     </span><span class="nt">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"extras"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{\"wasSuccessful\":true,\"bankResponseCode\":0,\"rrn\":null,\"approvalCode\":\"156\",\"message\":\"OK\"}"</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre></div>
-
-<div class="highlight"><pre class="highlight json tab-json">
-    <span><em>Successful response — transaction declined by bank:</em></span>
-<code><span class="p">{</span><span class="w">
-    </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_102"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"extras"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{\"wasSuccessful\":false,\"bankResponseCode\":null,\"rrn\":null,\"approvalCode\":null,\"message\":null}"</span><span class="w">
+    </span><span class="nt">"extras"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{\"wasSuccessful\":true,\"bankResponseCode\":0,\"rrn\":\"4587473a-9ea3-4343-bd3d-8b1664d01319\",\"approvalCode\":\"123\",\"receiptNumber\":\"3\",\"amount\":\"3.33\",\"message\":\"OK\"}"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 
@@ -78,17 +69,19 @@
     <li><code style="white-space: nowrap">requestId</code> (string): The unique identifier that was sent in the request, used for correlation.</li>
     <li><code style="white-space: nowrap">success</code> (boolean): Indicates whether the HTTP request was processed successfully by the server.
         <ul>
-            <li><code style="white-space: nowrap">true</code>: The request was handled successfully. Note that a <code style="white-space: nowrap">success: true</code> response does <strong>not</strong> necessarily mean the bank approved the transaction — the bank result is contained within <code style="white-space: nowrap">extras</code>.</li>
+            <li><code style="white-space: nowrap">true</code>: The request was handled successfully and the transaction data is returned in <code style="white-space: nowrap">extras</code>.</li>
             <li><code style="white-space: nowrap">false</code>: The request could not be processed due to a communication or internal error (e.g., PGW app not installed, no response from PGW).</li>
         </ul>
     </li>
     <li><code style="white-space: nowrap">extras</code> (string): A JSON-serialized string containing the bank response data for the transaction. On error, this contains a human-readable error message.
         <ul>
-            <li><code style="white-space: nowrap">wasSuccessful</code> (boolean): <code style="white-space: nowrap">true</code> if the bank approved the transaction; <code style="white-space: nowrap">false</code> if it was declined or failed.</li>
-            <li><code style="white-space: nowrap">bankResponseCode</code> (integer or null): The response code returned by the bank. <code style="white-space: nowrap">0</code> indicates success; <code style="white-space: nowrap">1</code> indicates failure. May be <code style="white-space: nowrap">null</code> if the transaction failed before reaching the bank.</li>
-            <li><code style="white-space: nowrap">rrn</code> (string or null): Reference Retrieval Number — the bank's unique reference number for the transaction. May be <code style="white-space: nowrap">null</code>.</li>
-            <li><code style="white-space: nowrap">approvalCode</code> (string or null): The approval code issued by the bank. Present only when the transaction was approved. May be <code style="white-space: nowrap">null</code> if declined.</li>
-            <li><code style="white-space: nowrap">message</code> (string or null): A status message from the bank (e.g., <code style="white-space: nowrap">"OK"</code>). May be <code style="white-space: nowrap">null</code> if the transaction failed.</li>
+            <li><code style="white-space: nowrap">wasSuccessful</code> (boolean): Indicates whether the bank transaction was approved successfully.</li>
+            <li><code style="white-space: nowrap">bankResponseCode</code> (integer): The response code returned by the bank for the transaction. In the example above, <code style="white-space: nowrap">0</code> indicates a successful bank response.</li>
+            <li><code style="white-space: nowrap">rrn</code> (string): Reference Retrieval Number — the unique bank reference associated with the transaction.</li>
+            <li><code style="white-space: nowrap">approvalCode</code> (string): The approval code returned by the bank.</li>
+            <li><code style="white-space: nowrap">receiptNumber</code> (string): The receipt number associated with the retrieved transaction.</li>
+            <li><code style="white-space: nowrap">amount</code> (string): The transaction amount associated with the retrieved bank data.</li>
+            <li><code style="white-space: nowrap">message</code> (string): The message returned by the bank or payment flow for the transaction, for example <code style="white-space: nowrap">"OK"</code>.</li>
         </ul>
     </li>
 </ul>
