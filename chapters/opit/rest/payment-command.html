@@ -20,6 +20,22 @@
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">OR with cashback</span>
+</pre></div>
+
+<div class="highlight"><pre class="highlight json tab-json">
+    <span class="p">POST: http://{{deviceIP}}:9292/command/payment</span>
+<code><span class="p">{</span><span class="w">
+  </span><span class="nt">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rq_101"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"callBack"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">3.5</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"cashback"</span><span class="p">:</span><span class="w"> </span><span class="mf">100</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"shouldPrintReceipts"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"currencyCode"</span><span class="p">:</span><span class="w"> </span><span class="mi">946</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
 <p>Command: <code style="white-space: nowrap">ProcessPayment</code></p>
 <p>Description: Initiates a payment process on the POS terminal for the given amount and currency. The command allows specifying whether receipts should be printed by the terminal.</p>
 <p><strong>Request Parameters:</strong></p>
@@ -27,6 +43,7 @@
     <li><code style="white-space: nowrap">requestId</code> (string, mandatory): A unique client-generated identifier for each request. This can be used to correlate responses with requests. Example: <code style="white-space: nowrap">"rq_101"</code>, <code style="white-space: nowrap">"payment_tx_77234"</code>.</li>
     <li><code style="white-space: nowrap">callBack</code> (string, optional): A URL or another identifier to which the system might send an asynchronous notification regarding the processing of the payment. If no callback is needed, this field can be null or an empty string (<code style="white-space: nowrap">""</code>).</li>
     <li><code style="white-space: nowrap">amount</code> (number, mandatory): The monetary value of the transaction to be processed. This should be a numeric value representing the amount in the specified currency. Example: <code style="white-space: nowrap">3.5</code>, <code style="white-space: nowrap">100.00</code>, <code style="white-space: nowrap">50</code>.</li>
+    <li><code style="white-space: nowrap">cashback</code> (number, optional): The cashback amount to be dispensed to the customer as part of the transaction. This should be a numeric value in the same currency as the transaction. Example: <code style="white-space: nowrap">100</code>, <code style="white-space: nowrap">50.00</code>. If omitted, no cashback will be processed.</li>
     <li><code style="white-space: nowrap">shouldPrintReceipts</code> (boolean, optional): Indicates whether the POS terminal should print the transaction receipts. If omitted, the default value is <code style="white-space: nowrap">false</code>.
         <ul>
             <li><code style="white-space: nowrap">true</code>: The POS terminal will attempt to print the receipts.</li>
