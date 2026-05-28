@@ -1,0 +1,100 @@
+<p>
+    Communication between the ECR and the POS terminal follows the <strong>Hypercom binary
+    protocol</strong>. Every message is a raw byte sequence with a well-defined structure.
+</p>
+
+<p><strong>Frame format:</strong></p>
+<div class="highlight"><pre class="highlight tab-json">
+<code>STX | MessageID (3 bytes) | MessageType (2 bytes) | Separator | Data | ETX | LRC</code></pre></div>
+
+<table>
+    <thead>
+    <tr>
+        <th>Field</th>
+        <th>Size</th>
+        <th>Value / Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><code>STX</code></td>
+        <td>1 byte</td>
+        <td><code>0x02</code> — Start of Text</td>
+    </tr>
+    <tr>
+        <td><code>MessageID</code></td>
+        <td>3 bytes</td>
+        <td>Operation identifier: <code>MOL</code>, <code>VOI</code>, or <code>STL</code></td>
+    </tr>
+    <tr>
+        <td><code>MessageType</code></td>
+        <td>2 bytes</td>
+        <td>Direction/phase code: <code>10</code>, <code>11</code>, <code>12</code>, or <code>13</code></td>
+    </tr>
+    <tr>
+        <td><code>Separator</code></td>
+        <td>1 byte</td>
+        <td><code>0x2E</code> (<code>.</code>)</td>
+    </tr>
+    <tr>
+        <td><code>Data</code></td>
+        <td>Variable</td>
+        <td>Payload — see per-message definitions below</td>
+    </tr>
+    <tr>
+        <td><code>ETX</code></td>
+        <td>1 byte</td>
+        <td><code>0x03</code> — End of Text</td>
+    </tr>
+    <tr>
+        <td><code>LRC</code></td>
+        <td>1 byte</td>
+        <td>Longitudinal Redundancy Check — XOR of all bytes from (exclusive) STX to ETX (inclusive)</td>
+    </tr>
+    </tbody>
+</table>
+
+<p><strong>Control bytes (single-byte messages):</strong></p>
+<ul>
+    <li><code>ACK</code> — <code>0x06</code>: Positive acknowledgment.</li>
+    <li><code>NAK</code> — <code>0x15</code>: Negative acknowledgment.</li>
+</ul>
+
+<p><strong>Message types (phase codes):</strong></p>
+<table>
+    <thead>
+    <tr>
+        <th>Code</th>
+        <th>Direction</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><code>10</code></td>
+        <td>ECR → POS</td>
+        <td>InitTransaction — request to start an operation</td>
+    </tr>
+    <tr>
+        <td><code>11</code></td>
+        <td>POS → ECR</td>
+        <td>InitResponse — acknowledgment of the request</td>
+    </tr>
+    <tr>
+        <td><code>12</code></td>
+        <td>POS → ECR</td>
+        <td>AuthResult — outcome of the operation</td>
+    </tr>
+    <tr>
+        <td><code>13</code></td>
+        <td>ECR → POS</td>
+        <td>AuthResponse — acknowledgment of the result</td>
+    </tr>
+    </tbody>
+</table>
+
+<p><strong>LRC calculation:</strong></p>
+<p>
+    XOR all bytes strictly between <code>STX</code> and <code>ETX</code>, then XOR the result
+    with <code>ETX</code> (i.e., ETX is included in the checksum but STX is not).
+</p>

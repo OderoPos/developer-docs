@@ -1,0 +1,61 @@
+<p>
+    The <strong>Payment</strong> command initiates a card payment on the POS terminal for
+    the amount specified by the ECR. The ECR sends an <code>InitTransaction</code> message with
+    type <code>MOL</code>; the POS executes the payment through the OderoPOS gateway and returns
+    the result via an <code>AuthResult</code> message.
+</p>
+
+<div class="highlight"><pre class="highlight tab-json">
+<code>Format:  STX | MOL | 10 | . | &lt;amount&gt; | ETX | LRC
+
+Example (12.22 RON):
+  STX  M  O  L  1  0  .  0  0  0  0  0  0  0  0  1  2  2  2  a  ETX  LRC
+  02   4D 4F 4C 31 30 2E 30 30 30 30 30 30 30 30 31 32 32 32 61 03   &lt;lrc&gt;</code></pre></div>
+
+<p><strong>Message sequence:</strong></p>
+<ol>
+    <li>ECR sends <code>InitTransaction (MOL / type 10)</code> with the sale amount.</li>
+    <li>POS replies with <code>ACK (0x06)</code>.</li>
+    <li>POS sends <code>InitResponse (MOL / type 11)</code>.</li>
+    <li>POS processes the payment via OderoPOS gateway (card interaction happens on the terminal).</li>
+    <li>POS sends <code>AuthResult (MOL / type 12)</code> with the outcome.</li>
+    <li>ECR replies with <code>AuthResponse (MOL / type 13)</code>.</li>
+    <li>POS sends final <code>ACK (0x06)</code>.</li>
+</ol>
+
+<div class="highlight"><pre class="highlight tab-json">
+<code>Format:  STX | MOL | 12 | . | &lt;responseCode&gt; | &lt;maskedPAN&gt; | FS | &lt;expiry&gt; | &lt;invoiceNo&gt; | &lt;approvalCode&gt; | &lt;date&gt; | &lt;time&gt; | &lt;issuer&gt; | FS | ETX | LRC
+
+Field breakdown:
+  responseCode  2 bytes   "00" = approved, "96" = declined/error
+  maskedPAN    16 bytes   "****************" (always masked)
+  FS            1 byte    0x1C (Field Separator)
+  expiry        4 bytes   "****" (masked)
+  invoiceNo     6 bytes   receipt number or "XXXXXX"
+  approvalCode  6 bytes   bank approval code or "XXXXXX"
+  date          6 bytes   YYMMDD
+  time          6 bytes   HHMMSS
+  issuer        variable  card issuer name
+  FS            1 byte    0x1C</code></pre></div>
+
+<p><strong>InitTransaction frame (ECR → POS):</strong></p>
+
+<p><strong>Amount encoding:</strong></p>
+<ul>
+    <li>The amount field is exactly <strong>12 ASCII digits</strong>, zero-padded on the left.</li>
+    <li>The last 2 digits represent the decimal part (implied 2 decimal places).</li>
+    <li>Example: <code>000000001222</code> = 12.22 RON; <code>000000035000</code> = 350.00 RON.</li>
+</ul>
+
+<p><strong>AuthResult frame (POS → ECR):</strong></p>
+
+<p><strong>Response codes:</strong></p>
+<ul>
+    <li><code>"00"</code> — Transaction approved.</li>
+    <li><code>"96"</code> — Transaction declined or an error occurred.</li>
+</ul>
+
+<p>
+    <strong>Note:</strong> The <code>shouldPrintReceipts</code> flag sent to the gateway is always
+    <code>true</code> for serial-initiated payments — the terminal prints the receipt automatically.
+</p>
