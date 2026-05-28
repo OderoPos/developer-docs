@@ -1,0 +1,40 @@
+<p>
+    The <strong>Void transaction</strong> command cancels a previously processed transaction
+    identified by its receipt number. The ECR sends an <code>InitTransaction</code> message with
+    type <code>VOI</code>; the POS executes the void through the OderoPOS bank module and returns
+    the result.
+</p>
+
+<div class="highlight"><pre class="highlight tab-json">
+<code>Format:  STX | VOI | 10 | . | &lt;transactionId&gt; | ETX | LRC
+
+Example (void transaction #11):
+  STX  V  O  I  1  0  .  0  0  0  0  0  0  0  0  0  0  1  1  |  ETX  LRC
+  02   56 4F 49 31 30 2E 30 30 30 30 30 30 30 30 30 30 31 31 7C 03   &lt;lrc&gt;</code></pre></div>
+
+<p><strong>Message sequence:</strong></p>
+<ol>
+    <li>ECR sends <code>InitTransaction (VOI / type 10)</code> with the transaction ID to void.</li>
+    <li>POS replies with <code>ACK (0x06)</code>.</li>
+    <li>POS sends <code>InitResponse (VOI / type 11)</code>.</li>
+    <li>POS executes the void operation via the OderoPOS bank module.</li>
+    <li>POS sends <code>AuthResult (VOI / type 12)</code> with the outcome.</li>
+    <li>ECR replies with <code>AuthResponse (VOI / type 13)</code>.</li>
+    <li>POS sends final <code>ACK (0x06)</code>.</li>
+</ol>
+
+<p><strong>InitTransaction frame (ECR → POS):</strong></p>
+
+<p><strong>Transaction ID encoding:</strong></p>
+<ul>
+    <li>The transaction ID field is exactly <strong>12 ASCII digits</strong>, zero-padded on the left.</li>
+    <li>Leading zeros are stripped when passing the value to the bank module.</li>
+    <li>Example: <code>000000000011</code> → transaction ID <code>"11"</code>.</li>
+</ul>
+
+<p><strong>AuthResult frame (POS → ECR):</strong></p>
+<p>
+    Same structure as the Sale <code>AuthResult</code> frame, with <code>VOI</code> as the
+    <code>MessageID</code>. Response code <code>"00"</code> indicates the void was successful;
+    <code>"96"</code> indicates failure.
+</p>

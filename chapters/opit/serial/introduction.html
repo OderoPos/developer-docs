@@ -1,0 +1,28 @@
+<p>
+    <strong>OPit Serial</strong> is a background Android service that enables ECR (Electronic Cash
+    Register) devices to communicate with the OderoPOS terminal over a serial (RS-232) connection
+    using the <strong>Hypercom protocol</strong>.
+</p>
+<p>
+    The service runs as a foreground service on the POS device and automatically starts at boot.
+    It connects to the ECR via the Sunmi ECR Connection Bridge SDK, listens for incoming Hypercom
+    messages and translates them into payment and bank operations executed through the OderoPOS
+    payment gateway.
+</p>
+
+<p><strong>Supported operations:</strong></p>
+<ul>
+    <li><strong>Payment</strong> — initiates a card payment for the amount received from the ECR.</li>
+    <li><strong>Void transaction</strong> — cancels a previously processed transaction by receipt number.</li>
+    <li><strong>Settlement</strong> — triggers an end-of-day bank settlement.</li>
+</ul>
+
+<p><strong>Application behaviour:</strong></p>
+<ul>
+    <li>The service starts automatically on device boot via a <code>BootCompleteReceiver</code>.</li>
+    <li>The <code>MainActivity</code> displays the current connection state and version info.</li>
+    <li>All serial communication is handled in the background — no user interaction is required
+        during normal operation.</li>
+    <li>If the cable is disconnected, the service waits 5 seconds and then attempts to reconnect
+        automatically.</li>
+</ul>
