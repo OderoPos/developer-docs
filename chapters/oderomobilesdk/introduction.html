@@ -1,83 +1,82 @@
-<p>The Odero Mobile SDK provides a comprehensive solution for integrating payment processing capabilities into mobile applications.</p>
+<p>The Odero Pay Mobile SDK lets you accept payments inside your mobile app through a prebuilt, drop-in bottom-sheet checkout. You hand the SDK a payment session and it renders the entire pay UI, collects the payment method, runs the transaction, and reports the result back to your app.</p>
 
-<p>Designed for modern mobile development, it offers seamless integration with the Odero ecosystem while maintaining security and performance standards.</p>
+<p>The sheet handles raw card entry, Apple Pay, Google Pay, and 3-D Secure (3DS) bank authentication out of the box. The displayed amount, line items, currency, customer and billing fields, and whether the Apple Pay / Google Pay buttons appear are all driven by the session, so the same integration adapts per transaction without app changes.</p>
 
-<h3 id='overview'>Overview</h3>
-<p>The Odero Mobile SDK enables developers to:</p>
+<h3 id='intro-what-it-does'>What the SDK does</h3>
 <ul>
-    <li>Process card payments securely within mobile applications</li>
-    <li>Process Apple Pay and Google Pay</li>
-    <li>Access Odero's payment infrastructure and services</li>
-    <li>Maintain PCI compliance through secure payment flows</li>
-    <li>Integrate with existing POS systems and merchant accounts</li>
-    <li>Customize the payment experience to match your brand</li>
+    <li><strong>Card payments:</strong> a hosted card-entry form with a saved-cards list and CVV re-entry.</li>
+    <li><strong>Apple Pay &amp; Google Pay:</strong> native wallet buttons, shown only when the session enables the wallet (and, on Android, when the device is ready to pay).</li>
+    <li><strong>3-D Secure:</strong> the bank authentication step is presented automatically when the issuer requires it.</li>
+    <li><strong>Prebuilt checkout UI:</strong> a themeable bottom sheet covering card details, CVV, processing, 3DS, and the success/failure result — no payment screens to build yourself.</li>
+    <li><strong>Status callbacks:</strong> your app is notified of <code>idle</code>, <code>processing</code>, <code>success</code> (with a reference number), and <code>failure</code> (with an error message).</li>
 </ul>
 
-<h3 id='key-features'>Key Features</h3>
-<p>The SDK includes the following capabilities:</p>
+<h3 id='intro-distribution-channels'>Distribution channels</h3>
+<p>The SDK ships through three channels. Pick the one that matches your app; the payment behavior and session contract are identical across all three.</p>
+<table>
+    <tr>
+        <th>Channel</th>
+        <th>Module / package</th>
+        <th>Distribution</th>
+    </tr>
+    <tr>
+        <td>Native iOS</td>
+        <td><code>OderoPaySDKIOS</code></td>
+        <td>CocoaPods pod from the Odero Artifactory podspec</td>
+    </tr>
+    <tr>
+        <td>Native Android</td>
+        <td><code>com.oderopaysdk</code> (<code>Odero.oderopaysdk:oderopaysdkandroid</code>)</td>
+        <td>Gradle/Maven dependency from the Odero Artifactory repo</td>
+    </tr>
+    <tr>
+        <td>React Native (bridge)</td>
+        <td><code>react-native-odero-mobilesdk</code></td>
+        <td>npm package that bridges the native iOS + Android SDKs</td>
+    </tr>
+</table>
+<p>The React Native package is a thin bridge over the two native SDKs, so the native iOS and Android requirements below also apply to a React Native app.</p>
+
+<h3 id='intro-requirements'>Requirements</h3>
+<p>Reconciled minimums per platform:</p>
+<table>
+    <tr>
+        <th>Platform</th>
+        <th>Requirements</th>
+    </tr>
+    <tr>
+        <td>iOS</td>
+        <td>iOS 15.0+, Swift 5+, CocoaPods with <code>use_frameworks!</code> (dynamic frameworks), PassKit for Apple Pay. Apple Pay must be tested on a real device.</td>
+    </tr>
+    <tr>
+        <td>Android</td>
+        <td><code>minSdk</code> 23, <code>compileSdk</code> 35, Java 17 / Kotlin (AGP 8.x). The host Activity must be a <code>ComponentActivity</code> (e.g. <code>AppCompatActivity</code> / <code>FragmentActivity</code>). Google Play services (<code>play-services-wallet</code>) for Google Pay. The SDK contributes the <code>INTERNET</code> permission.</td>
+    </tr>
+    <tr>
+        <td>React Native</td>
+        <td>Bare React Native workflow (not Expo Go); rebuild the app after install. All native iOS and Android requirements above apply. On Android: <code>compileSdk</code> &ge; 37, <code>minSdk</code> 26, Kotlin Gradle Plugin pinned to 2.4.0.</td>
+    </tr>
+</table>
+
+<h3 id='intro-prerequisites'>Prerequisites</h3>
+<p>Before integrating, make sure you have:</p>
 <ul>
-    <li><strong>Cross-platform Support:</strong> Compatible with both Android and iOS platforms</li>
-    <li><strong>Secure Transactions:</strong> End-to-end encryption and tokenization</li>
-    <li><strong>Easy Integration:</strong> Simple APIs and comprehensive documentation</li>
-    <li><strong>Real-time Processing:</strong> Fast and reliable payment processing</li>
-    <li><strong>Flexible Configuration:</strong> Customizable to meet specific business needs</li>
+    <li>An <strong>Odero merchant account</strong>, which gives you a <code>merchantId</code> and a <code>merchantApiToken</code>.</li>
+    <li>Access to the <strong>Odero Artifactory repository</strong> to resolve the SDK artifacts (the iOS podspec source, the Android Maven repo, or both for React Native).</li>
+    <li>A <strong>merchant backend</strong> able to create payment sessions with Odero and return a <code>sessionId</code> to your app.</li>
 </ul>
 
-<h3 id='supported-platforms'>Supported Platforms</h3>
-<p>The Odero Mobile SDK supports the following platforms and versions:</p>
-<ul>
-    <li>Android: API Level 26+ (Android 8.0+)</li>
-    <li>iOS: iOS 18.1+</li>
-    <li>React Native: 0.60+</li>
-</ul>
+<h3 id='intro-session-contract'>The shared session contract</h3>
+<p>All three channels follow the same model: the payment <strong>session is created on your merchant backend</strong>, never in the app. Using your <code>merchantId</code> and <code>merchantApiToken</code>, the backend asks Odero for a session and returns only the resulting <code>sessionId</code> (a string) to the app. The app then passes that <code>sessionId</code> to the SDK to show the sheet.</p>
+<blockquote><p>The amount, line items, currency, customer/billing visibility, and wallet (Apple Pay / Google Pay) availability all come from the session — they are not parameters you pass when showing the sheet. The amount is expressed in minor units (cents); the sheet displays it divided by 100.</p></blockquote>
+<p><strong>Never ship your <code>merchantApiToken</code> in the app.</strong> It belongs only on the backend that mints sessions. The dev artifacts and dev configuration point at Odero's test environment and wallet TEST mode; do not ship them to production.</p>
 
-<h3 id='prerequisites'>Prerequisites</h3>
-<p>Before integrating the Odero Mobile SDK, ensure you have:</p>
-<ul>
-    <li>A valid Odero merchant account</li>
-    <li>API credentials (provided by Odero)</li>
-    <li>Development environment set up for your target platform</li>
-    <li>Basic understanding of mobile app development</li>
-</ul>
-
-<h3 id='getting-started'>Getting Started</h3>
-<p>To begin integration with the Odero Mobile SDK:</p>
+<h3 id='intro-getting-started'>Getting started</h3>
 <ol>
-    <li>Review the platform-specific setup guides</li>
-    <li>Install the SDK</li>
-    <li>Configure your API credentials</li>
-    <li>Implement the payment flow in your application</li>
-    <li>Test the integration in sandbox environment</li>
+    <li>Provision an Odero merchant account and obtain your <code>merchantId</code> and <code>merchantApiToken</code>.</li>
+    <li>Add a backend endpoint that creates a session and returns the <code>sessionId</code>.</li>
+    <li>Install the SDK for your platform from the Odero Artifactory repo.</li>
+    <li>Show the payment sheet with the <code>sessionId</code> and observe the payment status callbacks.</li>
+    <li>Optionally theme the sheet and enable Apple Pay / Google Pay.</li>
 </ol>
-
-<h3 id='screens'>Screens</h3>
-<p>The Odero Mobile SDK includes the following screens:</p>
-
-<div style="width: 50%; margin: 20px 0; background-color: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 20px; box-sizing: border-box;">
-    <div style="text-align: center; margin-bottom: 15px;">
-        <div style="background-color: #6f42c1; color: white; padding: 12px; border-radius: 6px; margin-bottom: 8px;">
-            <strong>1. Saved Cards Screen</strong><br>
-            <span style="font-size: 13px;">Display saved payment methods</span>
-        </div>
-        <div style="background-color: #007bff; color: white; padding: 12px; border-radius: 6px; margin-bottom: 8px;">
-            <strong>2. Payment Details Screen</strong><br>
-            <span style="font-size: 13px;">Enter card information</span>
-        </div>
-        <div style="background-color: #fd7e14; color: white; padding: 12px; border-radius: 6px; margin-bottom: 8px;">
-            <strong>3. Enter CVC Page Screen</strong><br>
-            <span style="font-size: 13px;">Security verification</span>
-        </div>
-        <div style="background-color: #20c997; color: white; padding: 12px; border-radius: 6px; margin-bottom: 8px;">
-            <strong>4. Payment Processing Screen</strong><br>
-            <span style="font-size: 13px;">Transaction in progress</span>
-        </div>
-        <div style="background-color: #dc3545; color: white; padding: 12px; border-radius: 6px; margin-bottom: 8px;">
-            <strong>5. 3DS Authentication</strong><br>
-            <span style="font-size: 13px;">Bank verification (if required)</span>
-        </div>
-        <div style="background-color: #28a745; color: white; padding: 12px; border-radius: 6px;">
-            <strong>6. Payment Result Screen</strong><br>
-            <span style="font-size: 13px;">Success or failure status</span>
-        </div>
-    </div>
-</div>
+<p>Continue with the platform-specific Quick Start guide for native iOS, native Android, or React Native.</p>

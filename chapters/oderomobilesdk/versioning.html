@@ -1,41 +1,90 @@
-<p>Version history and changelog for the Odero Mobile SDK.</p>
+<p>This page lists the current published artifact versions of the Odero Mobile SDK for each platform, the OS/toolchain compatibility for those versions, and how the development and production artifacts differ.</p>
 
-<h3 id='versioning-current'>Current Version: 1.0.0</h3>
-<p>Released: December 2023</p>
-
-<h3 id='versioning-changelog'>Changelog</h3>
-
-<h4>Version 1.0.0 (December 2023)</h4>
-<ul>
-    <li>🎉 Initial release of Odero Mobile SDK</li>
-    <li>✅ Support for iOS, Android, and React Native</li>
-    <li>✅ Payment processing capabilities</li>
-    <li>✅ Sandbox and production environments</li>
-    <li>✅ Comprehensive error handling</li>
-</ul>
-
-<h3 id='versioning-compatibility'>Version Compatibility</h3>
+<h3 id='versioning-current'>Current artifact versions</h3>
+<p>The SDK is published as three independent platform artifacts. They are versioned separately — there is no single unified version number across platforms.</p>
 <table>
     <tr>
-        <th>SDK Version</th>
-        <th>iOS Support</th>
-        <th>Android Support</th>
-        <th>React Native Support</th>
+        <th>Platform</th>
+        <th>Artifact</th>
+        <th>Current version</th>
     </tr>
     <tr>
-        <td>1.0.0</td>
-        <td>iOS 12.0+</td>
-        <td>API 21+</td>
-        <td>0.60+</td>
+        <td>iOS</td>
+        <td><code>OderoPaySDKIOS</code> (CocoaPods)</td>
+        <td>0.0.1</td>
+    </tr>
+    <tr>
+        <td>iOS (transitive)</td>
+        <td><code>shared.xcframework</code> (required dependency of <code>OderoPaySDKIOS</code>)</td>
+        <td>0.1.4</td>
+    </tr>
+    <tr>
+        <td>Android</td>
+        <td><code>Odero.oderopaysdk:oderopaysdkandroid</code> (Gradle/Maven)</td>
+        <td>1.0.0 (production) / 1.0.0-dev (development)</td>
+    </tr>
+    <tr>
+        <td>React Native</td>
+        <td><code>react-native-odero-mobilesdk</code> (npm)</td>
+        <td>0.1.1</td>
+    </tr>
+</table>
+<blockquote><p>The React Native package bridges the native iOS and Android SDKs. The native artifacts it pulls in (the iOS pod and the Android AAR) follow their own versions above.</p></blockquote>
+
+<h3 id='versioning-compatibility'>Compatibility</h3>
+<p>The OS and toolchain requirements below apply to the current artifact versions.</p>
+<table>
+    <tr>
+        <th>Platform</th>
+        <th>Minimum / required</th>
+    </tr>
+    <tr>
+        <td>iOS</td>
+        <td>iOS 15.0+, Swift 5+, <code>use_frameworks!</code> (dynamic frameworks), CocoaPods</td>
+    </tr>
+    <tr>
+        <td>Android</td>
+        <td>minSdk 23, compileSdk 35, Java 17 / Kotlin (AGP 8.x); host must be a <code>ComponentActivity</code></td>
+    </tr>
+    <tr>
+        <td>React Native</td>
+        <td>Bare React Native workflow (not Expo Go). iOS host: same as native iOS. Android host: compileSdk &gt;= 37, minSdk 26, Kotlin Gradle Plugin pinned to 2.4.0</td>
     </tr>
 </table>
 
-<h3 id='versioning-migration'>Migration Guide</h3>
-<p>Future migration guides will be provided here when new versions are released.</p>
-
-<h3 id='versioning-roadmap'>Roadmap</h3>
+<h3 id='versioning-dev-vs-prod'>How versions map: development vs production</h3>
+<p>Each platform exposes a development variant that targets the Odero DEV environment (<code>api-dev.pay.odero.ro</code>) and wallet TEST mode, and a production variant that targets the live environment. The mechanism differs per platform.</p>
 <ul>
-    <li>🔄 Version 1.1.0: Enhanced security features</li>
-    <li>🔄 Version 1.2.0: Recurring payment support</li>
-    <li>🔄 Version 2.0.0: Flutter support</li>
-</ul> 
+    <li><strong>iOS</strong> — the same pod version is used for both. The environment is selected at runtime by an <code>sdk.plist</code> in the app target: key <code>ENV</code> = <code>DEV</code> for development, or <code>PROD</code> (or omit the key) for production.</li>
+    <li><strong>Android</strong> — the environment is baked into the artifact: use <code>oderopaysdkandroid:1.0.0-dev</code> for the development build (Google Pay TEST) or <code>oderopaysdkandroid:1.0.0</code> for production. There is no runtime toggle.</li>
+    <li><strong>React Native</strong> — selected at build time by the <code>Oderomobilesdk_environment</code> environment variable: <code>DEV</code> resolves the <code>-dev</code> Android artifact, anything else resolves the production artifact.</li>
+</ul>
+<blockquote><p>Development artifacts and the DEV <code>sdk.plist</code> point at <code>api-dev.pay.odero.ro</code> and use wallet TEST mode. Do not ship them to production.</p></blockquote>
+
+<h3 id='versioning-changelog'>Changelog</h3>
+<p>The table below records the current published versions. Detailed per-release notes will be added here as new versions are published.</p>
+<table>
+    <tr>
+        <th>Artifact</th>
+        <th>Version</th>
+        <th>Notes</th>
+    </tr>
+    <tr>
+        <td><code>OderoPaySDKIOS</code></td>
+        <td>0.0.1</td>
+        <td>Current iOS release. Depends on <code>shared.xcframework</code> 0.1.4.</td>
+    </tr>
+    <tr>
+        <td><code>oderopaysdkandroid</code></td>
+        <td>1.0.0 / 1.0.0-dev</td>
+        <td>Current Android release. <code>-dev</code> targets the DEV environment and Google Pay TEST.</td>
+    </tr>
+    <tr>
+        <td><code>react-native-odero-mobilesdk</code></td>
+        <td>0.1.1</td>
+        <td>Current React Native release; bridges the native iOS and Android SDKs.</td>
+    </tr>
+</table>
+
+<h3 id='versioning-migration'>Migration notes</h3>
+<p>Migration guidance will be added here when a release introduces breaking changes. There are currently no migration steps to document.</p>

@@ -1,29 +1,100 @@
-<p>Testing guidelines and tools for the Odero Mobile SDK integration.</p>
-
-<h3 id='testing-sandbox'>Sandbox Environment</h3>
-<p>Use the sandbox environment for all development and testing:</p>
-
-<h3 id='testing-cards'>Test Credit Cards</h3>
-
-<h4 id='testing-ios-apple-pay'>iOS - Apple Pay Testing</h4>
-<p>For testing Apple Pay integration on iOS, use the official Apple Pay sandbox testing cards. Apple provides comprehensive test card data including different card types, decline scenarios, and authentication flows.</p>
-
-<p><strong>Apple Pay Test Cards:</strong> <a href="https://developer.apple.com/apple-pay/sandbox-testing/" target="_blank">https://developer.apple.com/apple-pay/sandbox-testing/</a></p>
-
-<h4 id='testing-android-google-pay'>Android - Google Pay Testing</h4>
-<p>For testing Google Pay integration on Android, use Google's official test card suite which includes various card networks and payment scenarios.</p>
-
-<p><strong>Google Pay Test Cards:</strong> <a href="https://developers.google.com/pay/api/android/guides/resources/test-card-suite" target="_blank">https://developers.google.com/pay/api/android/guides/resources/test-card-suite</a></p>
-
-<h4 id='testing-direct-card-payment'>Direct Card Payment Testing</h4>
-<p>For direct card payment testing (manual card entry), use these test credit card numbers in sandbox:</p>
-<ul>
-    <li><strong>Visa:</strong> 4111 1111 1111 1111</li>
-    <li><strong>MasterCard:</strong> 5555 5555 5555 4444</li>
-    <li><strong>American Express:</strong> 3782 822463 10005</li>
-    <li><strong>Declined Card:</strong> 4000 0000 0000 0002</li>
-</ul>
+<p>Test your integration end-to-end against Odero's DEV/sandbox environment before going live. Sandbox builds point at <code>api-dev.pay.odero.ro</code> and exercise the wallet (Apple Pay / Google Pay) <strong>TEST</strong> networks, so no real money moves and no production data is touched.</p>
 
 <blockquote>
-<p><strong>Important:</strong> Use any future expiry date (MM/YY format) and any 3-4 digit CVV for testing. These cards will work in sandbox environment only.</p>
-</blockquote> 
+<p><strong>Never test with production credentials or production artifacts.</strong> Use the DEV/sandbox setup throughout development and QA, and switch to PROD only when you build a release. See <a href="#testing-go-live">Switching to production</a>.</p>
+</blockquote>
+
+<h3 id='testing-enable-sandbox'>Enable the sandbox (DEV) environment</h3>
+<p>The environment is selected per platform at build time — there is no runtime toggle. Pick the DEV option that matches how you ship.</p>
+
+<h4 id='testing-sandbox-ios'>iOS</h4>
+<p>Add an <code>sdk.plist</code> to your app target with the <code>ENV</code> key set to <code>DEV</code>. This points the native iOS SDK at the DEV gateway and the Apple Pay TEST network.</p>
+<div class="highlight"><pre class="highlight xml tab-xml"><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;plist version="1.0"&gt;
+&lt;dict&gt;
+    &lt;key&gt;ENV&lt;/key&gt;
+    &lt;string&gt;DEV&lt;/string&gt;
+&lt;/dict&gt;
+&lt;/plist&gt;
+</code></pre></div>
+
+<h4 id='testing-sandbox-android'>Android</h4>
+<p>Depend on the <code>-dev</code> artifact. The DEV build resolves the Odero DEV gateway and runs Google Pay in <strong>TEST</strong> mode automatically.</p>
+<div class="highlight"><pre class="highlight gradle tab-gradle"><code>implementation 'Odero.oderopaysdk:oderopaysdkandroid:1.0.0-dev'
+</code></pre></div>
+
+<h4 id='testing-sandbox-rn'>React Native</h4>
+<p>Set the <code>Oderomobilesdk_environment</code> environment variable to <code>DEV</code> before/at build time. <code>DEV</code> pulls the <code>-dev</code> native artifacts (iOS DEV pod + Android <code>-dev</code> AAR); any other value builds for PROD. Rebuild the native app after changing it.</p>
+<div class="highlight"><pre class="highlight bash tab-bash"><code>export Oderomobilesdk_environment=DEV
+</code></pre></div>
+
+<h3 id='testing-sandbox-credentials'>Get sandbox credentials and create DEV sessions</h3>
+<p>Request a set of <strong>sandbox</strong> merchant credentials (<code>merchantId</code> + <code>merchantApiToken</code>) from Odero. These are separate from your production credentials.</p>
+<p>As in production, the payment session is created <strong>on your merchant backend</strong> (server-side) — never in the app. For sandbox, your backend calls the Odero <strong>DEV</strong> base URL <code>https://api-dev.pay.odero.ro/</code> with your sandbox credentials, and returns only the resulting <code>sessionId</code> (a <code>String</code>) to the app. The app passes that <code>sessionId</code> to <code>showPaymentSheet</code>.</p>
+<blockquote>
+<p><strong>Backend step (not the app):</strong> Never embed <code>merchantApiToken</code> — sandbox or production — in the mobile app. Keep it server-side.</p>
+</blockquote>
+<ol>
+    <li>Backend: <code>POST util/merchant-signature-header-json</code> with header <code>X-Requested-With: XMLHttpRequest</code> and body <code>{merchantId, merchantApiToken, payload}</code> → returns <code>{merchant_signature}</code>.</li>
+    <li>Backend: <code>POST api/payments/session</code> with header <code>X-MERCHANT-SIGNATURE</code> → returns <code>{sessionId}</code>.</li>
+    <li>Backend returns only the <code>sessionId</code> to the app; the app calls <code>showPaymentSheet</code> with it.</li>
+</ol>
+<p>The amount, products, currency, customer/billing visibility, and Apple Pay / Google Pay visibility all come from the session you create on DEV — they are not passed to <code>showPaymentSheet</code>.</p>
+
+<h3 id='testing-direct-card'>Direct card testing</h3>
+<p>For manual card entry in the sandbox payment sheet, use the standard sandbox PANs below. Use <strong>any future expiry</strong> in <code>MM/YY</code> format and <strong>any 3–4 digit CVV</strong>.</p>
+<table>
+    <tr><th>Card</th><th>Number</th><th>Result</th></tr>
+    <tr><td>Visa</td><td>4111 1111 1111 1111</td><td>Approved</td></tr>
+    <tr><td>Mastercard</td><td>5555 5555 5555 4444</td><td>Approved</td></tr>
+    <tr><td>Declined card</td><td>4000 0000 0000 0002</td><td>Declined</td></tr>
+</table>
+<blockquote>
+<p>These cards work in the sandbox/DEV environment only. The declined card is the easiest way to verify your failure handling (the <code>failure</code> status and <code>errorMessage</code> you receive from the payment event listener).</p>
+</blockquote>
+
+<h4 id='testing-3ds'>3DS challenge flows</h4>
+<p>3-D Secure (3DS) challenge flows are exercised in DEV. When a sandbox card triggers a challenge, the SDK presents the 3DS screen; complete it to confirm your app handles the success and failure outcomes correctly. On Android, if you intercept Activity results, remember to forward the <code>SCREEN_3DS_REQUEST_CODE</code> result to <code>handle3DSScreenActivityResult(resultCode, intent)</code>.</p>
+
+<h3 id='testing-apple-pay'>Apple Pay sandbox testing</h3>
+<p>Apple Pay can only be tested on a <strong>real device</strong> (not the iOS Simulator), and the Apple Pay button appears only when the session enables it.</p>
+<ol>
+    <li>Sign in to the device with an <strong>Apple sandbox tester</strong> account (created in App Store Connect → Users and Access → Sandbox).</li>
+    <li>Add one of <strong>Apple's sandbox test cards</strong> to Wallet on that device.</li>
+    <li>Pass your <code>applePayMerchantId</code> to <code>showPaymentSheet</code> and complete the flow.</li>
+</ol>
+<p>Apple's sandbox tester accounts and test card numbers: <a href="https://developer.apple.com/apple-pay/sandbox-testing/" target="_blank">https://developer.apple.com/apple-pay/sandbox-testing/</a></p>
+<blockquote>
+<p>Make sure the In-App Payments entitlement lists your merchant id and that an Apple Pay Payment Processing certificate (gateway name <code>oderopay</code>) is attached to that Merchant ID, otherwise the button will not work even in sandbox.</p>
+</blockquote>
+
+<h3 id='testing-google-pay'>Google Pay sandbox testing</h3>
+<p>With the <code>-dev</code> (TEST) artifact, the Android SDK runs Google Pay in the Google <strong>TEST</strong> environment automatically — gateway <code>oderopay</code>, networks Mastercard/Visa. The Google Pay button appears only when the session enables it and the device reports <em>IsReadyToPay</em>.</p>
+<ol>
+    <li>Use a device or emulator that has <strong>Google Play services</strong> and is signed in to a Google account.</li>
+    <li>Build with the <code>-dev</code> artifact so Google Pay resolves to <strong>TEST</strong>.</li>
+    <li>Use cards from Google's test card suite to exercise the wallet flow.</li>
+</ol>
+<p>Google Pay test card suite: <a href="https://developers.google.com/pay/api/android/guides/resources/test-card-suite" target="_blank">https://developers.google.com/pay/api/android/guides/resources/test-card-suite</a></p>
+
+<h3 id='testing-verify-results'>Verifying results during testing</h3>
+<p>Payment outcomes arrive asynchronously through the platform's event mechanism — there is no return value or promise from <code>showPaymentSheet</code>. While testing, confirm you receive each status (<code>idle</code> / <code>processing</code> / <code>success</code> / <code>failure</code>), the <code>referenceNumber</code> on success, and the <code>errorMessage</code> on failure.</p>
+<ul>
+    <li><strong>iOS:</strong> observe <code>NSNotification.Name.paymentStatusUpdated</code>.</li>
+    <li><strong>Android:</strong> set <code>sdk.onPaymentStatusChanged</code>.</li>
+    <li><strong>React Native:</strong> register <code>addPaymentEventListener</code> (and remove it in cleanup).</li>
+</ul>
+<p>Native DEBUG builds also emit SDK logs you can stream while testing — see the Logging chapter for how to view them on each platform.</p>
+
+<h3 id='testing-go-live'>Switching to production</h3>
+<p>When you are ready to release, swap every sandbox setting for its production counterpart and re-test with production credentials in a controlled rollout:</p>
+<table>
+    <tr><th>Platform</th><th>DEV / sandbox</th><th>PROD / release</th></tr>
+    <tr><td>iOS</td><td><code>sdk.plist</code> <code>ENV = DEV</code></td><td><code>ENV = PROD</code> (or omit the key)</td></tr>
+    <tr><td>Android</td><td><code>:1.0.0-dev</code> artifact</td><td><code>:1.0.0</code> release artifact</td></tr>
+    <tr><td>React Native</td><td><code>Oderomobilesdk_environment=DEV</code></td><td>any other value (PROD)</td></tr>
+    <tr><td>Backend</td><td>sandbox credentials + <code>https://api-dev.pay.odero.ro/</code></td><td>production credentials + <code>https://pay.odero.ro/</code></td></tr>
+</table>
+<blockquote>
+<p><strong>Do not ship the DEV artifacts, the <code>ENV=DEV</code> plist, the <code>DEV</code> env var, or sandbox credentials to production.</strong> They target <code>api-dev.pay.odero.ro</code> and the wallet TEST networks and will not process real payments.</p>
+</blockquote>

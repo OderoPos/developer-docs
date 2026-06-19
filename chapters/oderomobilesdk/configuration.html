@@ -1,26 +1,214 @@
-<p>Advanced configuration options for customizing the Odero Mobile SDK behavior.</p>
+<p>This chapter covers the configuration you need before showing the payment sheet: selecting the runtime environment, the merchant-backend session contract, and the wallet (Apple Pay / Google Pay) setup per platform.</p>
 
-<h3 id='config-merchant-id'>Merchant ID Configuration</h3>
-<p>You need to create a merchant ID on your developer account for both iOS and Android platforms:</p>
+<blockquote>
+    <p>Throughout this chapter, steps are clearly marked as either <strong>MERCHANT BACKEND</strong> (server-side, never in the app) or <strong>APP</strong> (in your mobile project).</p>
+</blockquote>
 
-<h4 id='config-ios-merchant'>iOS (Apple Pay)</h4>
-<p>For iOS Apple Pay integration, you need to:</p>
+<h3 id='config-environment'>Environment Selection</h3>
+<p>Every platform targets one of two environments. The DEV environment talks to <code>api-dev.pay.odero.ro</code> and runs wallets (Apple Pay / Google Pay) in <strong>TEST</strong> mode. The PROD environment talks to <code>pay.odero.ro</code> with live wallets.</p>
+
+<blockquote>
+    <p><strong>Important:</strong> DEV artifacts, the DEV <code>sdk.plist</code> value, and the DEV environment variable all point at <code>api-dev.pay.odero.ro</code> and use wallet TEST mode. Never ship them to production.</p>
+</blockquote>
+
+<h4 id='config-env-ios'>iOS — sdk.plist ENV key</h4>
+<p>iOS selects the environment at runtime from a property list file. Add an <code>sdk.plist</code> file to your app target and set the <code>ENV</code> key:</p>
+
+<table>
+    <tr><th>ENV value</th><th>Environment</th><th>Base URL</th><th>Wallet</th></tr>
+    <tr><td><code>DEV</code></td><td>Development</td><td>api-dev.pay.odero.ro</td><td>TEST</td></tr>
+    <tr><td><code>PROD</code> (or key omitted)</td><td>Production</td><td>pay.odero.ro</td><td>Live</td></tr>
+</table>
+
+<blockquote>
+    <p>sdk.plist — development</p>
+</blockquote>
+<div class="highlight"><pre class="highlight xml tab-xml"><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
+&lt;plist version="1.0"&gt;
+&lt;dict&gt;
+    &lt;key&gt;ENV&lt;/key&gt;
+    &lt;string&gt;DEV&lt;/string&gt;
+&lt;/dict&gt;
+&lt;/plist&gt;
+</code></pre></div>
+
+<p>For production, set <code>ENV</code> to <code>PROD</code> or remove the key entirely.</p>
+
+<h4 id='config-env-android'>Android — the -dev vs release artifact</h4>
+<p>Android has <strong>no runtime toggle</strong>. The environment is baked into the dependency you resolve: the <code>-dev</code> artifact is DEV (Google Pay TEST), and the plain release artifact is PROD.</p>
+
+<blockquote>
+    <p>app-level build.gradle — development (DEV / Google Pay TEST)</p>
+</blockquote>
+<div class="highlight"><pre class="highlight gradle tab-gradle"><code>dependencies {
+    implementation 'Odero.oderopaysdk:oderopaysdkandroid:1.0.0-dev'
+}
+</code></pre></div>
+
+<blockquote>
+    <p>app-level build.gradle — production</p>
+</blockquote>
+<div class="highlight"><pre class="highlight gradle tab-gradle"><code>dependencies {
+    implementation 'Odero.oderopaysdk:oderopaysdkandroid:1.0.0'
+}
+</code></pre></div>
+
+<h4 id='config-env-rn'>React Native — the Oderomobilesdk_environment env var</h4>
+<p>React Native chooses the environment at build time from the <code>Oderomobilesdk_environment</code> environment variable. Setting it to <code>DEV</code> selects the <code>-dev</code> native artifacts on both platforms; any other value (or unset) builds against PROD.</p>
+
+<blockquote>
+    <p>Set the variable before building the app</p>
+</blockquote>
+<div class="highlight"><pre class="highlight bash tab-bash"><code># Development build (api-dev.pay.odero.ro, wallet TEST)
+export Oderomobilesdk_environment=DEV
+
+# Production build — set to PROD or leave unset
+export Oderomobilesdk_environment=PROD
+</code></pre></div>
+
+<blockquote>
+    <p>You must rebuild the native app after changing this value — it is resolved during the native build, not at JS runtime.</p>
+</blockquote>
+
+<h3 id='config-session-contract'>Session-Creation Contract (Merchant Backend)</h3>
+<p>The payment <strong>session</strong> is always created on your <strong>merchant backend</strong>, never in the app. Your backend authenticates to Odero with your <code>merchantId</code> and <code>merchantApiToken</code>, creates a session, and returns <strong>only the resulting <code>sessionId</code> (a String)</strong> to the app. The app then passes that <code>sessionId</code> to <code>showPaymentSheet</code>.</p>
+
+<blockquote>
+    <p><strong>Never ship <code>merchantApiToken</code> in the app.</strong> It is a server-side secret. The app receives nothing but the <code>sessionId</code>.</p>
+</blockquote>
+
+<h4 id='config-session-base-urls'>Odero base URLs</h4>
+<table>
+    <tr><th>Environment</th><th>Base URL</th></tr>
+    <tr><td>DEV</td><td>https://api-dev.pay.odero.ro/</td></tr>
+    <tr><td>PROD</td><td>https://pay.odero.ro/</td></tr>
+</table>
+
+<h4 id='config-session-step1'>Step 1 (MERCHANT BACKEND) — obtain the merchant signature</h4>
+<p>Your backend signs the session payload by calling the signature-header endpoint. This is where <code>merchantApiToken</code> is used.</p>
+
+<blockquote>
+    <p>POST util/merchant-signature-header-json — header <code>X-Requested-With: XMLHttpRequest</code></p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code>{
+  "merchantId": "&lt;your merchant id&gt;",
+  "merchantApiToken": "&lt;your server-side api token&gt;",
+  "payload": { "...": "session request payload" }
+}
+</code></pre></div>
+
+<p>The response contains the signature your backend forwards to the next call:</p>
+<div class="highlight"><pre class="highlight json tab-json"><code>{ "merchant_signature": "&lt;signature string&gt;" }
+</code></pre></div>
+
+<h4 id='config-session-step2'>Step 2 (MERCHANT BACKEND) — create the session</h4>
+<p>Your backend creates the session, passing the signature in the <code>X-MERCHANT-SIGNATURE</code> header.</p>
+
+<blockquote>
+    <p>POST api/payments/session — header <code>X-MERCHANT-SIGNATURE: &lt;merchant_signature&gt;</code></p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code>{ "sessionId": "&lt;session id string&gt;" }
+</code></pre></div>
+
+<p>Your backend returns <strong>only</strong> this <code>sessionId</code> string to the app.</p>
+
+<h4 id='config-session-amount'>Amount and session-driven values</h4>
+<ul>
+    <li><strong>amount is in MINOR UNITS</strong> (cents). The payment sheet displays <code>amount / 100</code>.</li>
+    <li><code>amount</code>, <code>products</code>, <code>currency</code>, customer / billing visibility, and wallet (Apple Pay / Google Pay) visibility <strong>all come from the session</strong>.</li>
+    <li>None of those are passed to <code>showPaymentSheet</code> — the app passes only the <code>sessionId</code> (plus optional appearance, saved cards, and on iOS the Apple Pay merchant id).</li>
+</ul>
+
+<blockquote>
+    <p>The app's only call is <code>showPaymentSheet(sessionId, ...)</code>. Everything shown in the sheet is determined server-side by the session.</p>
+</blockquote>
+
+<h3 id='config-apple-pay'>Apple Pay Setup (iOS &amp; the RN iOS host)</h3>
+<p>Apple Pay setup is identical for native iOS and for the iOS host of a React Native app. The Apple Pay button appears in the sheet <strong>only if the session enables Apple Pay</strong>.</p>
+
+<h4 id='config-apple-pay-steps'>Configuration steps</h4>
 <ol>
-    <li>Create certificates and merchant ID in your Apple Developer account</li>
-    <li>Add signing and capabilities to your app in Xcode</li>
-    <li>Configure Apple Pay in your app's capabilities settings</li>
+    <li><strong>Create an Apple Pay Merchant ID</strong> in your Apple Developer account (for example <code>merchant.token.applepay</code>).</li>
+    <li><strong>Add the In-App Payments entitlement</strong> <code>com.apple.developer.in-app-payments</code> to your app target and list that exact Merchant ID.</li>
+    <li><strong>Generate and attach an Apple Pay Payment Processing certificate</strong> created for the Odero gateway, and attach it to your Merchant ID.</li>
+    <li><strong>Pass the same Merchant ID</strong> to the SDK as <code>applePayMerchantId</code> when showing the sheet.</li>
+    <li><strong>Test on a real device</strong> — Apple Pay is not available in the iOS Simulator.</li>
 </ol>
-<p>Follow the Apple Pay setup guide to create your merchant ID and certificates:</p>
-<p><a href="https://developer.apple.com/documentation/passkit/setting-up-apple-pay" target="_blank">https://developer.apple.com/documentation/passkit/setting-up-apple-pay</a></p>
 
-<h4 id='config-android-merchant'>Android (Google Pay)</h4>
-<p>Follow the Google Pay setup guide to create your merchant ID:</p>
-<p><a href="https://developers.google.com/pay/api/web/guides/tutorial" target="_blank">https://developers.google.com/pay/api/web/guides/tutorial</a></p>
+<blockquote>
+    <p>com.apple.developer.in-app-payments entitlement — list your exact Merchant ID</p>
+</blockquote>
+<div class="highlight"><pre class="highlight xml tab-xml"><code>&lt;key&gt;com.apple.developer.in-app-payments&lt;/key&gt;
+&lt;array&gt;
+    &lt;string&gt;merchant.token.applepay&lt;/string&gt;
+&lt;/array&gt;
+</code></pre></div>
 
-<h4 id='config-upload-merchant'>Upload Merchant ID</h4>
-<p>After creating your merchant ID, you need to upload it to our token platform:</p>
-<p><a href="https://docs.adyen.com/payment-methods/apple-pay/ios-component/" target="_blank">https://docs.adyen.com/payment-methods/apple-pay/ios-component/</a></p>
-<p><strong>Important:</strong> These steps are required for the token Odero environment to respect your merchant ID.</p>
+<blockquote>
+    <p>Native iOS — pass the same id as applePayMerchantId</p>
+</blockquote>
+<div class="highlight"><pre class="highlight swift tab-swift"><code>let sdk = OderoPaySDK()
+// iOS has no parameterless init / .default(): pass the seven default page objects.
+let appearance = OderoPaymentBottomSheetAppearance(
+    oderoPaymentDetailsPageAppearance: OderoPaymentDetailsPageAppearance(),
+    oderoPaymentProcessingPageAppearance: OderoPaymentProcessingPageAppearance(),
+    oderoPaymentResultSuccessPageAppearance: OderoPaymentResultSuccessPageAppearance(),
+    oderoPaymentResultFailurePageAppearance: OderoPaymentResultFailurePageAppearance(),
+    oderoPaymentSummaryPageAppearance: OderoPaymentSummaryPageAppearance(),
+    oderoPayWithAnotherCardPageAppearance: OderoPayWithAnotherCardPageAppearance(),
+    oderoEnterCVCPageAppearance: OderoEnterCVCPageAppearance()
+)
+sdk.showPaymentSheet(
+    sessionId: sessionId,
+    appearance: appearance,
+    applePayMerchantId: "merchant.token.applepay",
+    savedCards: []
+)
+</code></pre></div>
 
-<h4 id='config-payment-systems'>About Apple Pay and Google Pay</h4>
-<p>Apple Pay and Google Pay are the world's leading mobile payment services that enable users to make secure, contactless payments using their smartphones or smartwatches. Both platforms utilize Near Field Communication (NFC) technology, allowing customers to simply tap their device at payment terminals instead of using physical cards or cash. These digital wallets employ advanced security measures including tokenization, which replaces actual card numbers with encrypted virtual tokens, and biometric authentication through Face ID, Touch ID, or fingerprint recognition. Apple Pay is exclusive to Apple devices (iPhone, iPad, Apple Watch, Mac) and is available in over 80 countries, while Google Pay works primarily on Android devices and offers broader device compatibility. Both services are widely accepted by merchants globally, with over 85% of retailers supporting contactless payments. Our Odero Mobile SDK library provides comprehensive support for both Apple Pay and Google Pay payment systems, as well as direct card payment processing, ensuring your customers can choose their preferred payment method for a seamless checkout experience.</p> 
+<blockquote>
+    <p>React Native — pass it through showPaymentSheet options</p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code>import { showPaymentSheet } from 'react-native-odero-mobilesdk';
+
+showPaymentSheet(sessionId, {
+  applePayMerchantId: 'merchant.token.applepay',
+});
+</code></pre></div>
+
+<h4 id='config-apple-pay-cert'>Apple Pay Payment Processing certificate</h4>
+<p>The Payment Processing certificate is generated <strong>against the Odero gateway</strong> (gateway name <code>oderopay</code>), not Apple's default processing. Generate the certificate for the Odero token platform and attach it to your Apple Pay Merchant ID so the token Odero environment routes and decrypts your Apple Pay transactions correctly.</p>
+
+<blockquote>
+    <p>These steps are required for the token Odero environment to respect your Merchant ID. The certificate is generated for Odero's <code>oderopay</code> gateway — do not use a generic / third-party processing certificate.</p>
+</blockquote>
+
+<h3 id='config-google-pay'>Google Pay Setup (Android &amp; the RN Android host)</h3>
+<p>Google Pay is handled automatically by the native Android SDK. The gateway (<code>oderopay</code>), the merchant routing, the accepted networks (Mastercard / Visa), and the TEST-vs-PRODUCTION environment are all driven by the SDK plus the session. The Google Pay button appears in the sheet <strong>only if the session enables it and the device returns <code>IsReadyToPay</code></strong>.</p>
+
+<h4 id='config-google-pay-steps'>Configuration steps</h4>
+<ol>
+    <li><strong>Add the Google Pay wallet dependency</strong> <code>com.google.android.gms:play-services-wallet:20.0.0</code>.</li>
+    <li><strong>Ensure the host Activity is a <code>ComponentActivity</code></strong> (an <code>AppCompatActivity</code> or <code>FragmentActivity</code> satisfies this).</li>
+</ol>
+
+<blockquote>
+    <p>app-level build.gradle — add the wallet dependency</p>
+</blockquote>
+<div class="highlight"><pre class="highlight gradle tab-gradle"><code>dependencies {
+    implementation 'com.google.android.gms:play-services-wallet:20.0.0'
+}
+</code></pre></div>
+
+<blockquote>
+    <p>No JS parameter, manifest entry, or runtime gateway configuration is needed. The <code>-dev</code> artifact uses Google Pay <strong>TEST</strong>; the release artifact uses <strong>PRODUCTION</strong>. Routing to the <code>oderopay</code> gateway and the merchant id come from the session.</p>
+</blockquote>
+
+<p>For React Native, the same two requirements apply to the Android host project — add <code>play-services-wallet</code> and make sure the host Activity is a <code>ComponentActivity</code>. There is <strong>no JS parameter</strong> for Google Pay.</p>
+
+<h4 id='config-google-pay-notes'>Notes</h4>
+<ul>
+    <li>The gateway / merchant routing and TEST/PROD selection are handled by the SDK and the session — you do not configure them in code or the manifest.</li>
+    <li>The button is shown only when the session enables Google Pay <em>and</em> Google Play services reports the device is ready to pay.</li>
+</ul>

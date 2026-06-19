@@ -1,36 +1,124 @@
-<p>The Odero Mobile SDK provides extensive customization options for all UI components. You can change the colors, fonts, and sizes of the user interface elements to match your brand and application design.</p>
+<p>The payment sheet's look and feel is fully <strong>data-driven</strong>. You describe the appearance with a tree of plain configuration objects and pass it to <code>showPaymentSheet</code> alongside the <code>sessionId</code>. There is no separate theming API to call and no global state to set — the appearance you pass to a given call styles that presentation of the sheet.</p>
 
-<h3 id='customization-overview'>UI Customization</h3>
-<p>Every screen in the payment flow can be fully customized using appearance configuration objects. This allows you to maintain consistent branding throughout the payment experience while ensuring optimal user experience.</p>
+<p>The object names are the <strong>same on iOS and Android</strong>. On React Native you provide the matching keys via the <code>OderoAppearance</code> object passed as <code>options.appearance</code>.</p>
 
-<h3 id='customization-appearances'>Available Appearance Classes</h3>
+<h3 id='custom-data-driven'>Everything is optional</h3>
+<p>Every field on every appearance object is <strong>optional and defaulted</strong>. To get the stock Odero theme, pass default-constructed page objects (iOS/Android) or an empty object / omit <code>appearance</code> entirely (React Native). Override only the handful of fields you care about and leave the rest untouched — the defaults fill in the rest.</p>
 
-<h4 id='odero-payment-details-page-appearance'>OderoPaymentDetailsPageAppearance</h4>
-<p>Customize the main payment details screen where users enter their card information, including input fields, labels, buttons, and background styling.</p>
+<blockquote><p>Which <strong>sections</strong> appear in the sheet — billing fields, the Apple Pay / Google Pay button, the saved-cards list — is controlled by the <strong>payment SESSION</strong> created on your backend, not by appearance. Appearance only styles whatever the session decides to show; it cannot turn a section on or off.</p></blockquote>
 
-<h4 id='odero-pay-with-another-card-page-appearance'>OderoPayWithAnotherCardPageAppearance</h4>
-<p>Configure the appearance of the screen that allows users to add a new payment method when they have saved cards available.</p>
+<h3 id='custom-value-types'>Value types</h3>
+<p>All appearance values are passed as <strong>strings</strong> (plus a few booleans), which keeps the contract identical across native and React Native:</p>
+<table>
+<tr><th>What you are setting</th><th>Value format</th><th>Example</th></tr>
+<tr><td>Colors</td><td>Hex color string</td><td><code>"#5A31F4"</code></td></tr>
+<tr><td>Sizes, corner radii, border widths</td><td>Numeric string</td><td><code>"16"</code></td></tr>
+<tr><td>Icons</td><td>Base64-encoded PNG string</td><td><code>"iVBORw0KGgo..."</code></td></tr>
+<tr><td>Fonts</td><td>Font-name string</td><td><code>"DMSans-Bold"</code></td></tr>
+<tr><td>Text / titles / placeholders</td><td>Plain string</td><td><code>"Pay now"</code></td></tr>
+<tr><td>Enabled / secure toggles</td><td>Boolean</td><td><code>true</code></td></tr>
+</table>
 
-<h4 id='odero-enter-cvc-page-appearance'>OderoEnterCVCPageAppearance</h4>
-<p>Style the CVC entry screen for saved cards, including security code input fields and verification instructions.</p>
+<h3 id='custom-root'>The appearance tree</h3>
+<p><code>OderoPaymentBottomSheetAppearance</code> is the root object. It is composed of <strong>seven per-page appearance objects</strong>, one for each screen the sheet can present:</p>
 
-<h4 id='odero-payment-summary-page-appearance'>OderoPaymentSummaryPageAppearance</h4>
-<p>Customize the payment summary screen that displays transaction details before final confirmation.</p>
+<table>
+<tr><th>Page object</th><th>Screen it styles</th></tr>
+<tr><td><code>oderoPaymentDetailsPageAppearance</code></td><td>The main entry screen (largest — see below)</td></tr>
+<tr><td><code>oderoPaymentProcessingPageAppearance</code></td><td>The loading screen shown while the payment is processed</td></tr>
+<tr><td><code>oderoPaymentResultSuccessPageAppearance</code></td><td>The success result screen</td></tr>
+<tr><td><code>oderoPaymentResultFailurePageAppearance</code></td><td>The failure result screen</td></tr>
+<tr><td><code>oderoPaymentSummaryPageAppearance</code></td><td>The order/summary screen</td></tr>
+<tr><td><code>oderoPayWithAnotherCardPageAppearance</code></td><td>The "pay with another card" screen shown when saved cards exist</td></tr>
+<tr><td><code>oderoEnterCVCPageAppearance</code></td><td>The CVC-entry screen for a saved card</td></tr>
+</table>
 
-<h4 id='odero-payment-processing-page-appearance'>OderoPaymentProcessingPageAppearance</h4>
-<p>Configure the loading screen appearance while payment transactions are being processed.</p>
+<p>Each page object is itself all-defaulted: <code>OderoPaymentDetailsPageAppearance()</code>, <code>OderoPaymentProcessingPageAppearance()</code>, and so on (or the matching key under <code>OderoAppearance</code> on React Native).</p>
 
-<h4 id='odero-payment-result-success-page-appearance'>OderoPaymentResultSuccessPageAppearance</h4>
-<p>Style the success screen shown after a successful payment, including success messages, icons, and action buttons.</p>
+<h4 id='custom-details-page'>The Details page is the largest</h4>
+<p><code>oderoPaymentDetailsPageAppearance</code> covers far more surface than the other pages because it is where the customer actually enters payment information. Its fields style:</p>
+<ul>
+<li>The <strong>payment-method selector</strong> at the top of the sheet</li>
+<li>The <strong>saved-cards list</strong> (when the session provides saved cards)</li>
+<li>The <strong>card fields</strong> — number, expiry, CVC — including their placeholder text and field icons</li>
+<li>The <strong>billing fields</strong> (when the session enables billing)</li>
+<li>The <strong>save-card checkbox</strong></li>
+<li>The <strong>bottom action buttons</strong></li>
+</ul>
+<p>The remaining six pages are small by comparison — typically a title, body text, an icon, background and button styling.</p>
 
-<h4 id='odero-payment-result-failure-page-appearance'>OderoPaymentResultFailurePageAppearance</h4>
-<p>Customize the failure screen displayed when a payment fails, including error messages and retry options.</p>
+<h3 id='custom-examples'>Examples</h3>
+<p>Each example below constructs the root appearance with stock pages and overrides only a couple of fields (a brand color and a title). Build it once and pass it on every <code>showPaymentSheet</code> call.</p>
 
-<h3 id='customization-documentation'>Complete Documentation</h3>
-<p>You can find all parameters and detailed customization options for these appearance classes across iOS, Android, and JavaScript platforms in our comprehensive documentation:</p>
+<h4 id='custom-example-ios'>iOS (Swift)</h4>
+<div class="highlight"><pre class="highlight swift tab-swift"><code>import OderoPaySDKIOS
 
-<blockquote>
-    <p><strong>Customization Reference:</strong> <a href="https://docs.odero.com/mobile-sdk/customization" target="_blank">https://docs.odero.com/mobile-sdk/customization</a></p>
-</blockquote>
+let appearance = OderoPaymentBottomSheetAppearance(
+    oderoPaymentDetailsPageAppearance: OderoPaymentDetailsPageAppearance(
+        payButtonBackgroundColor: "#5A31F4",   // brand color
+        title: "Checkout"
+    ),
+    oderoPaymentProcessingPageAppearance: OderoPaymentProcessingPageAppearance(),
+    oderoPaymentResultSuccessPageAppearance: OderoPaymentResultSuccessPageAppearance(),
+    oderoPaymentResultFailurePageAppearance: OderoPaymentResultFailurePageAppearance(),
+    oderoPaymentSummaryPageAppearance: OderoPaymentSummaryPageAppearance(),
+    oderoPayWithAnotherCardPageAppearance: OderoPayWithAnotherCardPageAppearance(),
+    oderoEnterCVCPageAppearance: OderoEnterCVCPageAppearance()
+)
 
-<p>This documentation includes complete parameter lists, code examples, and best practices for implementing custom appearances across all supported platforms.</p> 
+let sdk = OderoPaySDK()
+sdk.showPaymentSheet(
+    sessionId: sessionId,
+    appearance: appearance,
+    applePayMerchantId: "merchant.token.applepay",
+    savedCards: []
+)
+</code></pre></div>
+
+<h4 id='custom-example-android'>Android (Kotlin)</h4>
+<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code>import com.oderopaysdk.OderoPaymentBottomSheetAppearance
+import com.oderopaysdk.OderoPaymentDetailsPageAppearance
+
+val appearance = OderoPaymentBottomSheetAppearance(
+    oderoPaymentDetailsPageAppearance = OderoPaymentDetailsPageAppearance(
+        payButtonBackgroundColor = "#5A31F4",   // brand color
+        title = "Checkout"
+    ),
+    oderoPaymentProcessingPageAppearance = OderoPaymentProcessingPageAppearance(),
+    oderoPaymentResultSuccessPageAppearance = OderoPaymentResultSuccessPageAppearance(),
+    oderoPaymentResultFailurePageAppearance = OderoPaymentResultFailurePageAppearance(),
+    oderoPaymentSummaryPageAppearance = OderoPaymentSummaryPageAppearance(),
+    oderoPayWithAnotherCardPageAppearance = OderoPayWithAnotherCardPageAppearance(),
+    oderoEnterCVCPageAppearance = OderoEnterCVCPageAppearance()
+)
+
+// Or start from the stock theme and tweak: OderoPaymentBottomSheetAppearance.default()
+
+sdk.showPaymentSheet(
+    sessionId = sessionId,
+    appearance = appearance,
+    savedCards = emptyList()
+)
+</code></pre></div>
+
+<h4 id='custom-example-rn'>React Native (TypeScript)</h4>
+<div class="highlight"><pre class="highlight typescript tab-typescript"><code>import { showPaymentSheet, OderoAppearance } from 'react-native-odero-mobilesdk';
+
+const appearance: OderoAppearance = {
+  oderoPaymentDetailsPageAppearance: {
+    payButtonBackgroundColor: '#5A31F4',   // brand color
+    title: 'Checkout',
+  },
+  // omit the other six pages to keep their stock look
+};
+
+showPaymentSheet(sessionId, {
+  appearance,
+  applePayMerchantId: 'merchant.token.applepay',
+});
+
+// Pass {} or omit `appearance` entirely for the fully default theme.
+</code></pre></div>
+
+<h3 id='custom-example-apps'>Full theme examples to copy</h3>
+<p>The example apps shipped with each SDK include <strong>complete custom themes</strong> that override colors, fonts, icons and titles across all seven pages. They are the fastest way to see every available field in context — copy one and adapt it to your brand rather than building an appearance tree from scratch.</p>

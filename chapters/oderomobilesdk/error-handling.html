@@ -1,93 +1,130 @@
-<p>Comprehensive error handling strategies for the Odero Mobile SDK.</p>
+<p>The Odero Mobile SDK does not throw or return errors from <code>showPaymentSheet</code>. Every outcome — success, failure, and the in-between processing states — arrives asynchronously through a single result channel per platform. Your job is to subscribe to that channel, branch on a small set of statuses, and read <code>referenceNumber</code> on success or <code>errorMessage</code> on failure. This chapter documents that channel and gives a reference table of the <code>errorMessage</code> values you may encounter.</p>
 
-<h3 id='odero-api-errors'>Odero API Error Codes</h3>
-<p>The SDK uses the following error codes for various failure scenarios:</p>
+<h3 id='eh-result-channel'>How results are delivered</h3>
+<p>There is exactly one place to listen on each platform. Register the listener before (or right when) you call <code>showPaymentSheet</code>, and keep it for the lifetime of the screen.</p>
 
+<table>
+<tr><th>Platform</th><th>Result channel</th><th>Status values</th></tr>
+<tr><td>React Native</td><td><code>addPaymentEventListener(e =&gt; …)</code></td><td><code>idle</code> / <code>processing</code> / <code>success</code> / <code>failure</code></td></tr>
+<tr><td>iOS (native)</td><td><code>NotificationCenter</code> name <code>.paymentStatusUpdated</code></td><td><code>payment_idle</code> / <code>payment_processing</code> / <code>payment_success</code> / <code>payment_failure</code></td></tr>
+<tr><td>Android (native)</td><td><code>sdk.onPaymentStatusChanged = { … }</code></td><td><code>payment_idle</code> / <code>payment_processing</code> / <code>payment_success</code> / <code>payment_failure</code></td></tr>
+</table>
+
+<p>The payload always carries a status. On <code>success</code> it additionally carries a <code>referenceNumber</code> (the Odero transaction reference — store it, show it on your receipt). On <code>failure</code> it carries an <code>errorMessage</code> (one of the identifiers in the reference table below).</p>
+
+<blockquote><p>React Native — this is the only way results come back. There is no promise and no return value from <code>showPaymentSheet</code>.</p></blockquote>
+
+<div class="highlight"><pre class="highlight typescript tab-typescript"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">showPaymentSheet</span><span class="p">,</span> <span class="nx">addPaymentEventListener</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">react-native-odero-mobilesdk</span><span class="dl">'</span><span class="p">;</span>
+
+<span class="kd">const</span> <span class="nx">sub</span> <span class="o">=</span> <span class="nx">addPaymentEventListener</span><span class="p">((</span><span class="nx">e</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">switch</span> <span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">status</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="dl">'</span><span class="s1">processing</span><span class="dl">'</span><span class="p">:</span>
+      <span class="c1">// show a spinner; do not navigate away</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="dl">'</span><span class="s1">success</span><span class="dl">'</span><span class="p">:</span>
+      <span class="nx">onPaid</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">referenceNumber</span><span class="p">);</span> <span class="c1">// reference for your receipt</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="dl">'</span><span class="s1">failure</span><span class="dl">'</span><span class="p">:</span>
+      <span class="nx">showError</span><span class="p">(</span><span class="nx">mapError</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">errorMessage</span><span class="p">));</span> <span class="c1">// map to your own copy</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="dl">'</span><span class="s1">idle</span><span class="dl">'</span><span class="p">:</span>
+    <span class="k">default</span><span class="p">:</span>
+      <span class="k">break</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="nx">showPaymentSheet</span><span class="p">(</span><span class="nx">sessionId</span><span class="p">);</span>
+
+<span class="c1">// always release on unmount</span>
+<span class="c1">// sub.remove();</span>
+</code></pre></div>
+
+<blockquote><p>iOS (native) — observe the notification on the main queue.</p></blockquote>
+
+<div class="highlight"><pre class="highlight swift tab-swift"><code><span class="nc">NotificationCenter</span><span class="o">.</span><span class="k">default</span><span class="o">.</span><span class="n">addObserver</span><span class="p">(</span>
+  <span class="n">forName</span><span class="p">:</span> <span class="o">.</span><span class="n">paymentStatusUpdated</span><span class="p">,</span> <span class="nv">object</span><span class="p">:</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">queue</span><span class="p">:</span> <span class="o">.</span><span class="n">main</span>
+<span class="p">)</span> <span class="p">{</span> <span class="n">note</span> <span class="k">in</span>
+  <span class="k">guard</span> <span class="k">let</span> <span class="nv">status</span> <span class="o">=</span> <span class="n">note</span><span class="o">.</span><span class="n">userInfo</span><span class="p">?[</span><span class="s">"status"</span><span class="p">]</span> <span class="k">as?</span> <span class="kt">String</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="p">}</span>
+  <span class="k">switch</span> <span class="n">status</span> <span class="p">{</span>
+  <span class="k">case</span> <span class="s">"payment_success"</span><span class="p">:</span>
+    <span class="k">let</span> <span class="nv">ref</span> <span class="o">=</span> <span class="n">note</span><span class="o">.</span><span class="n">userInfo</span><span class="p">?[</span><span class="s">"referenceNumber"</span><span class="p">]</span> <span class="k">as?</span> <span class="kt">String</span>
+    <span class="c1">// settle UI with ref</span>
+  <span class="k">case</span> <span class="s">"payment_failure"</span><span class="p">:</span>
+    <span class="k">let</span> <span class="nv">msg</span> <span class="o">=</span> <span class="n">note</span><span class="o">.</span><span class="n">userInfo</span><span class="p">?[</span><span class="s">"errorMessage"</span><span class="p">]</span> <span class="k">as?</span> <span class="kt">String</span>
+    <span class="c1">// map msg to your copy</span>
+  <span class="k">default</span><span class="p">:</span> <span class="k">break</span> <span class="c1">// payment_idle, payment_processing</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<blockquote><p>Android (native) — assign the callback before showing the sheet.</p></blockquote>
+
+<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code><span class="n">sdk</span><span class="p">.</span><span class="n">onPaymentStatusChanged</span> <span class="p">=</span> <span class="p">{</span> <span class="n">status</span><span class="p">,</span> <span class="n">referenceNumber</span><span class="p">,</span> <span class="n">errorMessage</span> <span class="p">-&gt;</span>
+  <span class="k">when</span> <span class="p">(</span><span class="n">status</span><span class="p">)</span> <span class="p">{</span>
+    <span class="s">"payment_success"</span> <span class="p">-&gt;</span> <span class="n">onPaid</span><span class="p">(</span><span class="n">referenceNumber</span><span class="p">)</span>   <span class="c1">// reference for your receipt</span>
+    <span class="s">"payment_failure"</span> <span class="p">-&gt;</span> <span class="n">showError</span><span class="p">(</span><span class="n">mapError</span><span class="p">(</span><span class="n">errorMessage</span><span class="p">))</span>
+    <span class="k">else</span> <span class="p">-&gt;</span> <span class="p">{</span> <span class="p">}</span> <span class="c1">// payment_idle, payment_processing</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id='eh-cancellation'>Cancellation is not a separate event</h3>
+<p>There is no dedicated "cancelled" status. When the user dismisses the sheet themselves, the SDK simply closes it — in most cases you receive nothing further, so treat the absence of a terminal result as "the user backed out" and leave your screen in its pre-payment state.</p>
+<p>Some cancellations that happen mid-flow (during a wallet sheet or a 3DS challenge) instead surface as a <code>failure</code> whose <code>errorMessage</code> is a human-readable cancellation string, for example <code>Payment cancelled by user</code>, <code>Google Pay cancelled</code>, or <code>3DS authentication cancelled</code>. Match these defensively and route them to a neutral "you didn't complete the payment" message rather than a hard error.</p>
+
+<h3 id='eh-error-reference'>errorMessage reference</h3>
+<p>The value you receive in <code>errorMessage</code> (RN/Android) or <code>userInfo["errorMessage"]</code> (iOS) comes from one of two sources: a payment-status string returned by the gateway/issuer for a declined transaction, or an SDK error identifier for a problem the SDK itself detected (connectivity, session, 3DS, wallet). Map the ones you care about to your own localized copy; fall back to a generic message for the rest.</p>
+
+<h4 id='eh-decline-statuses'>Gateway / issuer decline statuses</h4>
+<p>These mean the card was reached but the transaction was not approved. They are not retryable with the same card unless the cause is transient.</p>
+
+<table>
+<tr><th>Value</th><th>Meaning</th><th>Suggested user copy</th></tr>
+<tr><td><code>INSUFFICIENT_FUNDS</code></td><td>Not enough balance on the card</td><td>Insufficient funds — try another card</td></tr>
+<tr><td><code>EXPIRED_CARD</code></td><td>Card past its expiry date</td><td>This card has expired</td></tr>
+<tr><td><code>WRONG_CARD_EXPIRATION_DATE</code></td><td>Expiry entered does not match the card</td><td>Check the expiry date</td></tr>
+<tr><td><code>CVV_MISMATCH</code></td><td>Security code incorrect</td><td>Check the card security code</td></tr>
+<tr><td><code>DO_NOT_HONOR</code></td><td>Generic issuer decline</td><td>Your bank declined the payment</td></tr>
+<tr><td><code>ISSUER_DECLINED</code> / <code>DECLINE_ISSUING_BANK</code></td><td>Issuing bank refused</td><td>Your bank declined the payment</td></tr>
+<tr><td><code>TRANSACTION_DECLINED</code></td><td>Declined, no specific reason given</td><td>Payment was declined</td></tr>
+<tr><td><code>AUTHENTICATION_FAILED_3DS2</code></td><td>3DS2 authentication failed</td><td>Card verification failed</td></tr>
+<tr><td><code>INCORRECT_PIN</code> / <code>ALLOWABLE_NUMBER_OF_PIN_TRIES_EXCEEDED</code></td><td>PIN problem</td><td>Card verification failed</td></tr>
+<tr><td><code>RESTRICTED_CARD</code> / <code>INACTIVE_CARD</code> / <code>INVALID_CARD</code></td><td>Card not usable for this payment</td><td>This card cannot be used</td></tr>
+<tr><td><code>CARD_LOST_OR_STOLEN</code> / <code>SUSPECTED_FRAUD</code></td><td>Card flagged by the issuer</td><td>Payment could not be completed</td></tr>
+<tr><td><code>TRANSACTION_LIMIT_EXCEEDED</code> / <code>EXCEEDS_WITHDRAWAL_AMOUNT_LIMIT</code></td><td>Over a card/account limit</td><td>This amount exceeds your card limit</td></tr>
+<tr><td><code>INVALID_AMOUNT</code> / <code>INVALID_CARD_NUMBER</code> / <code>INVALID_TRANSACTION</code> / <code>INVALID_INPUT</code></td><td>Validation rejected by the gateway</td><td>Payment details were invalid</td></tr>
+<tr><td><code>DUPLICATE_TRANSACTION</code> / <code>REENTER_TRANSACTION</code></td><td>Retry or duplicate condition</td><td>Please try again</td></tr>
+<tr><td><code>TIMEOUT</code> / <code>SYSTEM_ERROR</code> / <code>UNHANDLED</code></td><td>Transient gateway/issuer problem</td><td>Something went wrong — try again</td></tr>
+</table>
+
+<blockquote><p>The full list of gateway statuses is long (e.g. <code>NO_ACTION_TAKEN</code>, <code>ALREADY_REVERSED</code>, <code>TRANSACTION_COULD_NOT_BE_ROUTED</code>, <code>INVALID_MERCHANT</code>, <code>ORDER_NOT_FOUND</code>, <code>INSTALMENT_CARD_NOT_VALID</code>, <code>COMPLETED_PARTIALLY</code>, <code>VALIDATION_ERROR</code>, <code>PAYMENT_RETRY_ERROR</code>). Do not branch on every one — map the common ones above and treat the rest with a generic decline message.</p></blockquote>
+
+<h4 id='eh-sdk-errors'>SDK error identifiers</h4>
+<p>These come from the SDK rather than the issuer. They typically point at configuration, connectivity, or a cancelled secondary flow. Each shows a canonical name and the raw string you may see on the wire.</p>
+
+<table>
+<tr><th>Identifier</th><th>Raw value</th><th>Cause &amp; what to do</th></tr>
+<tr><td><code>SESSION_NOT_FOUND</code></td><td><code>create_payment_session_not_found</code></td><td>The <code>sessionId</code> is unknown or expired. Re-create the session on your backend and call <code>showPaymentSheet</code> with a fresh id.</td></tr>
+<tr><td><code>NO_INTERNET</code></td><td><code>no_internet</code></td><td>No connectivity. Ask the user to check their connection and retry.</td></tr>
+<tr><td><code>CONNECTION_TIMEOUT</code></td><td><code>connection_timeout</code></td><td>Network reached but timed out. Safe to retry.</td></tr>
+<tr><td><code>API_CONNECTION_ERROR</code></td><td><code>api_connection_error</code></td><td>Could not reach the Odero API. Retry; if persistent, check environment/network.</td></tr>
+<tr><td><code>ERROR_3DS</code></td><td><code>3ds_error</code></td><td>3DS challenge failed to complete. Let the user retry the payment.</td></tr>
+<tr><td><code>ERROR_3DS_CLOSED</code></td><td><code>3ds_closed</code></td><td>User dismissed the 3DS screen — treat as a cancellation, not a hard error.</td></tr>
+<tr><td><code>GOOGLE_PAY_NOT_AVAILABLE</code></td><td><code>google_pay_not_available</code></td><td>(Android) Device/account cannot use Google Pay. The button is normally hidden; no action needed beyond offering card entry.</td></tr>
+<tr><td><code>GOOGLE_PAY_ERROR</code></td><td><code>google_pay_error</code></td><td>(Android) Google Pay flow failed or was cancelled. Fall back to card entry.</td></tr>
+<tr><td><code>APPLE_PAY_NOT_AVAILABLE</code></td><td><code>apple_pay_not_available</code></td><td>(iOS) Apple Pay unavailable on this device/session. Offer card entry.</td></tr>
+<tr><td><code>APPLE_PAY_ERROR</code></td><td><code>apple_pay_error</code></td><td>(iOS) Apple Pay flow failed or was cancelled. Fall back to card entry.</td></tr>
+<tr><td><code>PAYMENT_METHOD_INVALID</code></td><td><code>create_payment_payment_method_invalid</code></td><td>The chosen method is not valid for this session. Re-check the session configuration.</td></tr>
+<tr><td><code>UNEXPECTED_ERROR</code></td><td><code>unexpected_error</code></td><td>Unclassified failure. Show a generic error and allow retry.</td></tr>
+</table>
+
+<p>Card-field validation errors (<code>create_payment_card_expired</code>, <code>create_payment_card_number_invalid</code>, <code>create_payment_month_invalid</code>, <code>create_payment_year_invalid</code>, <code>create_payment_cvv_invalid</code>) are handled inline by the payment sheet UI; you generally will not need to act on them.</p>
+
+<h3 id='eh-guidance'>Recommended approach</h3>
 <ul>
-    <li><code>UNEXPECTED_ERROR</code> - unexpected_error</li>
-    <li><code>API_CONNECTION_ERROR</code> - api_connection_error</li>
-    <li><code>API_FIELD_VALIDATION_ERROR</code> - api_field_validation_error</li>
-    <li><code>SESSION_NOT_FOUND</code> - create_payment_session_not_found</li>
-    <li><code>PAYMENT_METHOD_INVALID</code> - create_payment_payment_method_invalid</li>
-    <li><code>CARD_EXPIRED</code> - create_payment_card_expired</li>
-    <li><code>CARD_NUMBER_INVALID</code> - create_payment_card_number_invalid</li>
-    <li><code>MONTH_INVALID</code> - create_payment_month_invalid</li>
-    <li><code>YEAR_INVALID</code> - create_payment_year_invalid</li>
-    <li><code>CVV_INVALID</code> - create_payment_cvv_invalid</li>
-    <li><code>ERROR_3DS</code> - 3ds_error</li>
-    <li><code>ERROR_3DS_CLOSED</code> - 3ds_closed</li>
-    <li><code>CONNECTION_TIMEOUT</code> - connection_timeout</li>
-    <li><code>GOOGLE_PAY_NOT_AVAILABLE</code> - google_pay_not_available</li>
-    <li><code>APPLE_PAY_NOT_AVAILABLE</code> - apple_pay_not_available</li>
-    <li><code>APPLE_PAY_ERROR</code> - apple_pay_error</li>
-    <li><code>GOOGLE_PAY_ERROR</code> - google_pay_error</li>
-    <li><code>NO_INTERNET</code> - no_internet</li>
+<li>Branch only on the four statuses. Everything else is detail you read off the same event: <code>referenceNumber</code> on success, <code>errorMessage</code> on failure.</li>
+<li>Maintain a small map from the known <code>errorMessage</code> values you care about to your own localized copy, with a single generic fallback for everything else. Do not try to enumerate the whole gateway list.</li>
+<li>Treat <code>ERROR_3DS_CLOSED</code> and the <code>*cancelled*</code> strings as cancellations (neutral copy), not failures.</li>
+<li><code>SESSION_NOT_FOUND</code> almost always means a stale or wrong session — your recovery is to mint a fresh session on the backend, never to retry the same id.</li>
+<li>When a message is opaque, read the detailed triplet (status, reference, message) from the SDK logs: tag <code>OderoSDK-Payment</code> on Android (<code>adb logcat -s OderoSDK-Payment</code>) and subsystem <code>com.odero.pay.sdk</code> on iOS (Console.app, or <code>log stream --predicate 'subsystem == "com.odero.pay.sdk"'</code>). Logs are emitted in DEBUG builds only.</li>
 </ul>
-
-<h3 id='payment-sheet-errors'>Payment Sheet Error Codes</h3>
-<p>Errors specific to the payment sheet UI component:</p>
-
-<ul>
-    <li><code>USER_CLOSED_PAYMENT_SHEET</code> - user_closed_payment_sheet</li>
-</ul>
-
-<h3 id='odero-api-status'>Odero API Status Codes</h3>
-<p>Status codes indicating different phases of the payment process:</p>
-
-<ul>
-    <li><code>LOADING_SESSION_START</code> - loading_session_start</li>
-    <li><code>LOADING_SESSION_END</code> - loading_session_end</li>
-    <li><code>SENDING_PAYMENT_START</code> - sending_payment_start</li>
-    <li><code>SENDING_PAYMENT_END</code> - sending_payment_end</li>
-    <li><code>HANDLING_3DS</code> - handling_3ds</li>
-    <li><code>CHECKING_PAYMENT_STATUS_START</code> - checking_payment_status_start</li>
-    <li><code>CHECKING_PAYMENT_STATUS_END</code> - checking_payment_status_end</li>
-    <li><code>INFINITE_LOOP</code> - INFINITE_LOOP</li>
-</ul>
-
-<h3 id='payment-status'>Payment Status Codes</h3>
-<p>Final payment transaction statuses:</p>
-
-<ul>
-    <li><code>INITIALIZED</code> - INITIALIZED</li>
-    <li><code>REQUEST_IN_PROGRESS</code> - REQUEST_IN_PROGRESS</li>
-    <li><code>SUCCESS</code> - SUCCESS</li>
-    <li><code>TRANSACTION_DECLINED</code> - TRANSACTION_DECLINED</li>
-    <li><code>CANCELLED</code> - CANCELLED</li>
-    <li><code>COMPLETED_PARTIALLY</code> - COMPLETED_PARTIALLY</li>
-    <li><code>INVALID_MERCHANT</code> - INVALID_MERCHANT</li>
-    <li><code>INVALID_INPUT</code> - INVALID_INPUT</li>
-    <li><code>INVALID_AMOUNT</code> - INVALID_AMOUNT</li>
-    <li><code>INVALID_CARD_NUMBER</code> - INVALID_CARD_NUMBER</li>
-    <li><code>WRONG_CARD_EXPIRATION_DATE</code> - WRONG_CARD_EXPIRATION_DATE</li>
-    <li><code>EXPIRED_CARD</code> - EXPIRED_CARD</li>
-    <li><code>CVV_MISMATCH</code> - CVV_MISMATCH</li>
-    <li><code>INCORRECT_PIN</code> - INCORRECT_PIN</li>
-    <li><code>ALLOWABLE_NUMBER_OF_PIN_TRIES_EXCEEDED</code> - ALLOWABLE_NUMBER_OF_PIN_TRIES_EXCEEDED</li>
-    <li><code>RESTRICTED_CARD</code> - RESTRICTED_CARD</li>
-    <li><code>INACTIVE_CARD</code> - INACTIVE_CARD</li>
-    <li><code>INVALID_CARD</code> - INVALID_CARD</li>
-    <li><code>INVALID_TRANSACTION</code> - INVALID_TRANSACTION</li>
-    <li><code>TRANSACTION_COULD_NOT_BE_ROUTED</code> - TRANSACTION_COULD_NOT_BE_ROUTED</li>
-    <li><code>TRANSACTION_LIMIT_EXCEEDED</code> - TRANSACTION_LIMIT_EXCEEDED</li>
-    <li><code>DUPLICATE_TRANSACTION</code> - DUPLICATE_TRANSACTION</li>
-    <li><code>REENTER_TRANSACTION</code> - REENTER_TRANSACTION</li>
-    <li><code>INSUFFICIENT_FUNDS</code> - INSUFFICIENT_FUNDS</li>
-    <li><code>EXCEEDS_WITHDRAWAL_AMOUNT_LIMIT</code> - EXCEEDS_WITHDRAWAL_AMOUNT_LIMIT</li>
-    <li><code>NO_ACTION_TAKEN</code> - NO_ACTION_TAKEN</li>
-    <li><code>ACTION_NOT_ALLOWED_FOR_PAYMENT</code> - ACTION_NOT_ALLOWED_FOR_PAYMENT</li>
-    <li><code>ALREADY_REVERSED</code> - ALREADY_REVERSED</li>
-    <li><code>CARD_LOST_OR_STOLEN</code> - CARD_LOST_OR_STOLEN</li>
-    <li><code>SUSPECTED_FRAUD</code> - SUSPECTED_FRAUD</li>
-    <li><code>ISSUER_DECLINED</code> - ISSUER_DECLINED</li>
-    <li><code>SYSTEM_ERROR</code> - SYSTEM_ERROR</li>
-    <li><code>DO_NOT_HONOR</code> - DO_NOT_HONOR</li>
-    <li><code>AUTHENTICATION_FAILED_3DS2</code> - AUTHENTICATION_FAILED_3DS2</li>
-    <li><code>UNHANDLED</code> - UNHANDLED</li>
-    <li><code>TIMEOUT</code> - TIMEOUT</li>
-    <li><code>INSTALMENT_CARD_NOT_VALID</code> - INSTALMENT_CARD_NOT_VALID</li>
-    <li><code>PAYMENT_RETRY_ERROR</code> - PAYMENT_RETRY_ERROR</li>
-    <li><code>VALIDATION_ERROR</code> - VALIDATION_ERROR</li>
-    <li><code>DECLINE_ISSUING_BANK</code> - DECLINE_ISSUING_BANK</li>
-    <li><code>ORDER_NOT_FOUND</code> - ORDER_NOT_FOUND</li>
-</ul> 

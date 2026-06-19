@@ -1,182 +1,293 @@
-<p>The Odero Mobile SDK can be integrated into your mobile applications across multiple platforms.</p>
+<p>This chapter walks through installing the Odero Pay SDK on each supported platform. All three SDKs resolve their binaries from Odero's <strong>Artifactory</strong> repository.</p>
 
-<p>The SDK provides a unified interface for payment processing while handling platform-specific implementations internally.</p>
+<p>Each platform section is self-contained: pick the one you are integrating, follow it end to end, then continue to the configuration and quick-start chapters.</p>
 
-<h3 id='installation-requirements'>System Requirements</h3>
+<blockquote>
+    <p><strong>Backend vs. app.</strong> The payment <em>session</em> is always created on your <strong>merchant backend</strong> (server-side) using your <code>merchantId</code> + <code>merchantApiToken</code>. The app only ever receives a <code>sessionId</code> (a <code>String</code>) and passes it to the payment sheet. Never ship <code>merchantApiToken</code> inside the mobile app. See the Configuration chapter for the session contract.</p>
+</blockquote>
+
+<h3 id='install-requirements-matrix'>Requirements at a glance</h3>
+<table>
+    <tr><th>Platform</th><th>Minimum versions</th><th>Package source</th></tr>
+    <tr><td>iOS</td><td>iOS 15.0+, Swift 5+, CocoaPods, <code>use_frameworks!</code></td><td>Artifactory (CocoaPods / XCFramework)</td></tr>
+    <tr><td>Android</td><td>minSdk 23, compileSdk 35, Java 17 / Kotlin, AGP 8.x</td><td>Artifactory (Maven / AAR)</td></tr>
+    <tr><td>React Native</td><td>Bare RN (not Expo Go), iOS 15+, compileSdk 37+, minSdk 26, Kotlin 2.4.0</td><td>npm + native Artifactory sources</td></tr>
+</table>
+
+<h3 id='install-ios'>iOS installation (CocoaPods)</h3>
+
+<p>The iOS SDK ships as the <code>OderoPaySDKIOS</code> module and is delivered as an XCFramework via CocoaPods. It depends on a second, shared XCFramework that the podspec pulls in transitively.</p>
+
+<h4 id='install-ios-requirements'>Requirements</h4>
 <ul>
-    <li><strong>iOS:</strong> iOS 18.1+ / Xcode 12.0+</li>
-    <li><strong>Android:</strong> API Level 26+ (Android 8.0+) / Android Studio 4.0+</li>
-    <li><strong>React Native:</strong> React Native 0.60+</li>
+    <li>iOS <strong>15.0+</strong>, Swift 5+, Xcode with CocoaPods installed.</li>
+    <li><code>use_frameworks!</code> (the SDK is distributed as <strong>dynamic</strong> frameworks).</li>
+    <li><code>PassKit</code> (for Apple Pay) is linked automatically by the SDK.</li>
+    <li>The SDK bundles DM Sans fonts; register them at launch (covered in Configuration).</li>
 </ul>
 
-<h3 id='installation-prerequisites'>Prerequisites</h3>
-<p>Before you begin, ensure you have:</p>
-<ul>
-    <li>Valid Odero merchant account</li>
-    <li>API credentials (API Key and Secret)</li>
-    <li>Development environment configured for your target platform</li>
-</ul>
-
-
-<blockquote>
-    <p>Production Environment - Podfile</p>
-</blockquote>
-<div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="c"># Add to Podfile for production</span>
-<span class="n">pod</span> <span class="s1">'OderoPaySDKIOS'</span><span class="p">,</span> <span class="ss">:podspec</span> <span class="o">=></span> <span class="s1">'https://raw.githubusercontent.com/OderoPos/react-odero-mobilesdk/main/OderoPaySDKIOS/0.0.1/OderoPaySDKIOS.podspec'</span></code></pre></div>
-
-<blockquote>
-    <p>Development Environment - Podfile</p>
-</blockquote>
-<div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="c"># Add to Podfile for development</span>
-<span class="n">pod</span> <span class="s1">'OderoPaySDKIOS'</span><span class="p">,</span> <span class="ss">:podspec</span> <span class="o">=></span> <span class="s1">'https://raw.githubusercontent.com/OderoPos/react-odero-mobilesdk/main/OderoPaySDKIOS/0.0.1-dev/OderoPaySDKIOS.podspec'</span></code></pre></div>
-
-<blockquote>
-    <p>Install dependencies</p>
-</blockquote>
-<div class="highlight"><pre class="highlight bash tab-bash"><code><span class="c"># Install dependencies</span>
-<span class="nv">$ </span><span class="nb">cd</span> /path/to/project
-<span class="nv">$ </span>pod install</code></pre></div>
-
-<blockquote>
-    <p>Import in Swift files</p>
-</blockquote>
-<div class="highlight"><pre class="highlight swift tab-swift"><code><span class="c1">// Import in Swift files</span>
-<span class="kd">import</span> <span class="kt">OderoPaySDKIOS</span></code></pre></div>
-
-
-<h3 id='installation-ios'>iOS Installation</h3>
-<p>Currently, the Odero Mobile SDK for iOS is only available via CocoaPods installation.</p>
-<p>CocoaPods is a dependency manager for iOS projects that simplifies the process of integrating third-party libraries.</p>
-
-<p>The installation process involves:</p>
+<h4 id='install-ios-pods'>Two pods from Artifactory</h4>
+<p>Installation pulls two artifacts:</p>
 <ol>
-    <li>Your Podfile references the OderoPaySDKIOS.podspec file</li>
-    <li>The podspec downloads the XCFramework</li>
-    <li>The XCFramework is hosted in Odero's Artifactory repository</li>
+    <li>The main pod <code>OderoPaySDKIOS</code> <strong>v0.0.1</strong> — XCFramework zip:<br><code>https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/Odero/oderopaysdk/oderopaysdkios/0.0.1/oderopaysdkios-0.0.1.xcframework.zip</code></li>
+    <li>The transitive shared core <code>shared.xcframework</code> <strong>v0.1.4</strong> — XCFramework zip:<br><code>https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/Odero/oderopaysdk/oderopaysdkshared/shared.xcframework/0.1.4/shared.xcframework-0.1.4.zip</code></li>
 </ol>
+<p>You declare a single pod; the podspec wires up the dependency on <code>shared.xcframework</code> for you. Downloads from Artifactory require the <code>Accept: application/octet-stream</code> header (CocoaPods sends this automatically when fetching the binary).</p>
 
-<p>Choose the appropriate version based on your environment:</p>
+<h4 id='install-ios-podfile'>Podfile</h4>
+<blockquote>
+    <p>Podfile — declare the platform, enable dynamic frameworks, add the pod</p>
+</blockquote>
+<div class="highlight"><pre class="highlight ruby tab-ruby"><code>platform :ios, '15.0'
+use_frameworks!
 
+target 'YourApp' do
+  # Pull OderoPaySDKIOS from the Odero-provided podspec.
+  # The podspec resolves the OderoPaySDKIOS XCFramework (0.0.1) and its
+  # transitive shared.xcframework (0.1.4) from Odero Artifactory.
+  pod 'OderoPaySDKIOS', :podspec => '&lt;odero-provided-podspec-url&gt;'
+end
+</code></pre></div>
+
+<blockquote>
+    <p><strong>Note.</strong> Replace <code>&lt;odero-provided-podspec-url&gt;</code> with the podspec URL Odero provides for your account. Do not point your Podfile directly at the raw zip URLs above — those are the artifacts the podspec downloads for you.</p>
+</blockquote>
+
+<h4 id='install-ios-pod-install'>Install</h4>
+<div class="highlight"><pre class="highlight bash tab-bash"><code>pod install
+# open the generated .xcworkspace (not the .xcodeproj) afterwards
+</code></pre></div>
+
+<h4 id='install-ios-env-plist'>Select the environment (sdk.plist)</h4>
+<p>The SDK reads its target environment from a property list named <code>sdk.plist</code> added to your <strong>app target</strong>. Set the <code>ENV</code> key to <code>DEV</code> for the development gateway, or use <code>PROD</code> (or omit the key entirely) for production.</p>
+
+<blockquote>
+    <p>sdk.plist — development</p>
+</blockquote>
+<div class="highlight"><pre class="highlight xml tab-xml"><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
+&lt;plist version="1.0"&gt;
+&lt;dict&gt;
+    &lt;key&gt;ENV&lt;/key&gt;
+    &lt;string&gt;DEV&lt;/string&gt;
+&lt;/dict&gt;
+&lt;/plist&gt;
+</code></pre></div>
+
+<blockquote>
+    <p>sdk.plist — production (or simply omit the ENV key)</p>
+</blockquote>
+<div class="highlight"><pre class="highlight xml tab-xml"><code>&lt;key&gt;ENV&lt;/key&gt;
+&lt;string&gt;PROD&lt;/string&gt;
+</code></pre></div>
+
+<blockquote>
+    <p><strong>Do not ship DEV to production.</strong> <code>ENV = DEV</code> points the SDK at the development gateway and enables Apple Pay <em>test</em> behavior. Ship <code>PROD</code> (or no <code>ENV</code> key) in your App Store builds.</p>
+</blockquote>
+
+<h4 id='install-ios-import'>Import</h4>
+<div class="highlight"><pre class="highlight swift tab-swift"><code>import OderoPaySDKIOS
+</code></pre></div>
+
+<h3 id='install-android'>Android installation (Gradle / Maven)</h3>
+
+<p>The Android SDK ships as an AAR in the <code>com.oderopaysdk</code> package, resolved from Odero's Artifactory Maven repository. Google Pay support requires the Google Play services Wallet dependency.</p>
+
+<h4 id='install-android-requirements'>Requirements</h4>
+<ul>
+    <li><strong>minSdk 23</strong>, <strong>compileSdk 35</strong>.</li>
+    <li><strong>Java 17</strong> / Kotlin, AGP <strong>8.x</strong>.</li>
+    <li>The host <code>Activity</code> that launches the sheet <strong>must be a <code>ComponentActivity</code></strong> (e.g. <code>AppCompatActivity</code> or <code>FragmentActivity</code>).</li>
+    <li>Google Play services on the device for Google Pay.</li>
+    <li>The <code>INTERNET</code> permission is contributed by the SDK manifest — you do not need to add it yourself.</li>
+</ul>
+
+<h4 id='install-android-repo'>Add the Artifactory repository</h4>
+<p>Add the Odero Artifactory Maven URL to <code>dependencyResolutionManagement</code> in <code>settings.gradle</code>. The transitive shared core (<code>Odero.oderopaysdk.oderopaysdkshared:shared-android</code>) resolves from the same repository.</p>
 
 <blockquote>
     <p>settings.gradle</p>
 </blockquote>
-<div class="highlight"><pre class="highlight gradle tab-gradle"><code><span class="c">// Add the Odero repository to your settings.gradle:</span>
-<span class="n">dependencyResolutionManagement</span> <span class="o">{</span>
-    <span class="k">repositories</span> <span class="o">{</span>
-        <span class="n">maven</span> <span class="o">{</span>
-            <span class="n">url</span> <span class="o">=</span> <span class="n">uri</span><span class="o">(</span><span class="s1">"https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/"</span><span class="o">)</span>
-        <span class="o">}</span>
-        <span class="n">google</span><span class="o">()</span>
-        <span class="n">mavenCentral</span><span class="o">()</span>
-    <span class="o">}</span>
-<span class="o">}</span></code></pre></div>
-
-
-<blockquote>
-    <p>Production Environment - build.gradle</p>
-</blockquote>
-<div class="highlight"><pre class="highlight gradle tab-gradle"><code><span class="c">// Add the library dependency to your app-level build.gradle for production:</span>
-<span class="k">dependencies</span> <span class="o">{</span>
-    <span class="n">implementation</span> <span class="s1">"Odero.oderopaysdk:oderopaysdkandroid:0.0.1"</span>
-<span class="o">}</span></code></pre></div>
+<div class="highlight"><pre class="highlight gradle tab-gradle"><code>dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven {
+            url 'https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/'
+            // If your Artifactory instance is private, supply credentials:
+            // credentials {
+            //     username = providers.gradleProperty('oderoArtifactoryUser').get()
+            //     password = providers.gradleProperty('oderoArtifactoryPassword').get()
+            // }
+        }
+    }
+}
+</code></pre></div>
 
 <blockquote>
-    <p>Development Environment - build.gradle</p>
+    <p><strong>Private repo?</strong> If access to <code>PublicLibraries</code> is restricted for your account, store the username/token in <code>~/.gradle/gradle.properties</code> (never in version control) and wire them through the commented <code>credentials</code> block above.</p>
 </blockquote>
-<div class="highlight"><pre class="highlight gradle tab-gradle"><code><span class="c">// Add the library dependency to your app-level build.gradle for development:</span>
-<span class="k">dependencies</span> <span class="o">{</span>
-    <span class="n">implementation</span> <span class="s1">"Odero.oderopaysdk:oderopaysdkandroid:0.0.1-dev"</span>
-<span class="o">}</span></code></pre></div>
 
+<h4 id='install-android-dependency'>Add the dependencies</h4>
+<p>Add the SDK and the Wallet dependency to your <strong>app-level</strong> <code>build.gradle</code>. Use the <code>:1.0.0</code> coordinate for production; the <code>:1.0.0-dev</code> coordinate builds against the DEV gateway and Google Pay <strong>TEST</strong> environment. The environment is fixed by the artifact you choose — there is no runtime toggle.</p>
 
 <blockquote>
-    <p>Gradle build command</p>
+    <p>app/build.gradle — production</p>
 </blockquote>
-<div class="highlight"><pre class="highlight bash tab-bash"><code><span class="c"># Build the project with refreshed dependencies:</span>
-./gradlew build --refresh-dependencies</code></pre></div>
-
+<div class="highlight"><pre class="highlight gradle tab-gradle"><code>dependencies {
+    implementation 'Odero.oderopaysdk:oderopaysdkandroid:1.0.0'
+    implementation 'com.google.android.gms:play-services-wallet:20.0.0'
+}
+</code></pre></div>
 
 <blockquote>
-    <p>AndroidManifest.xml</p>
+    <p>app/build.gradle — development (DEV gateway + Google Pay TEST)</p>
 </blockquote>
-<div class="highlight"><pre class="highlight xml tab-xml"><code><span class="c">&lt;!-- Add these permissions to your AndroidManifest.xml: --&gt;</span>
-<span class="nt">&lt;uses-permission</span> <span class="na">android:name=</span><span class="s">"android.permission.INTERNET"</span> <span class="nt">/&gt;</span></code></pre></div>
-
+<div class="highlight"><pre class="highlight gradle tab-gradle"><code>dependencies {
+    implementation 'Odero.oderopaysdk:oderopaysdkandroid:1.0.0-dev'
+    implementation 'com.google.android.gms:play-services-wallet:20.0.0'
+}
+</code></pre></div>
 
 <blockquote>
-    <p>proguard-rules.pro</p>
+    <p>app/build.gradle — compile/min SDK and Java 17</p>
 </blockquote>
-<div class="highlight"><pre class="highlight proguard tab-proguard"><code># Add these rules to your proguard-rules.pro:
--keep class com.odero.sdk.** { *; }
--keepclassmembers class com.odero.sdk.** { *; }</code></pre></div>
+<div class="highlight"><pre class="highlight gradle tab-gradle"><code>android {
+    compileSdk 35
 
-<h3 id='installation-android'>Android Installation</h3>
-<p>The Odero Mobile SDK for Android is available via Gradle dependency management using Odero's Artifactory repository.</p>
-<p>Gradle is the build system for Android projects that handles dependency resolution and library integration automatically.</p>
+    defaultConfig {
+        minSdk 23
+    }
 
-<p>The installation process involves:</p>
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+}
+</code></pre></div>
+
+<h4 id='install-android-sync'>Sync</h4>
+<div class="highlight"><pre class="highlight bash tab-bash"><code>./gradlew :app:dependencies --refresh-dependencies
+</code></pre></div>
+
+<blockquote>
+    <p><strong>ProGuard / R8.</strong> The AAR ships its own consumer rules; no extra keep rules are normally required.</p>
+</blockquote>
+
+<h3 id='install-react-native'>React Native installation</h3>
+
+<p>The React Native package is <code>react-native-odero-mobilesdk</code> (v0.1.1). It bridges the native iOS and Android SDKs, so the native setup steps above still apply to each platform underneath.</p>
+
+<blockquote>
+    <p><strong>Package name correction.</strong> Older docs referenced <code>@odero/react-native-sdk</code>. That package does not exist — the real, published package is <code>react-native-odero-mobilesdk</code>.</p>
+</blockquote>
+
+<h4 id='install-rn-requirements'>Requirements</h4>
+<ul>
+    <li><strong>Bare React Native</strong> — Expo Go is not supported (the SDK contains native code). A prebuilt/bare workflow is required, and you must rebuild the app after installing.</li>
+    <li>iOS: 15.0+, CocoaPods.</li>
+    <li>Android: <strong>compileSdk &gt;= 37</strong>, <strong>minSdk 26</strong>, Kotlin Gradle Plugin pinned to <strong>2.4.0</strong>.</li>
+</ul>
+
+<h4 id='install-rn-add'>Add the package</h4>
+<div class="highlight"><pre class="highlight bash tab-bash"><code># npm
+npm install react-native-odero-mobilesdk
+
+# or yarn
+yarn add react-native-odero-mobilesdk
+</code></pre></div>
+
+<blockquote>
+    <p>package.json</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code>{
+  "dependencies": {
+    "react-native-odero-mobilesdk": "0.1.1"
+  }
+}
+</code></pre></div>
+
+<h4 id='install-rn-env'>Select the environment</h4>
+<p>The native build picks its gateway from the <code>Oderomobilesdk_environment</code> environment variable: set it to <code>DEV</code> to build against the DEV artifacts (development gateway + wallet TEST); any other value (or unset) builds for <strong>PROD</strong>.</p>
+<div class="highlight"><pre class="highlight bash tab-bash"><code># Development build (DEV gateway, wallet TEST)
+export Oderomobilesdk_environment=DEV
+
+# Production build — leave unset, or:
+export Oderomobilesdk_environment=PROD
+</code></pre></div>
+
+<h4 id='install-rn-ios'>iOS native setup</h4>
+<p>From the project root, install pods. The podspec pulls <code>OderoPaySDKIOS</code> from the Odero podspec source (the same Artifactory-backed XCFrameworks described in the iOS section).</p>
+<div class="highlight"><pre class="highlight bash tab-bash"><code>cd ios &amp;&amp; pod install
+</code></pre></div>
+
+<p>Two iOS gotchas on recent Xcode toolchains:</p>
 <ol>
-    <li>Your settings.gradle configures the Artifactory repository</li>
-    <li>Your build.gradle references the Odero Pay SDK dependency</li>
-    <li>Gradle downloads the AAR library directly from Odero's Artifactory</li>
+    <li><strong>Nested framework re-sign.</strong> CocoaPods embeds <code>OderoPaySDKIOS</code>, which itself contains a nested <code>shared.framework</code>. Add a <strong>re-sign build phase</strong> that code-signs the nested framework after CocoaPods' "Embed Frameworks" phase, otherwise the app fails to launch/upload with a signing error.</li>
+    <li><strong>fmt / consteval patch.</strong> On recent Xcode, add an <code>fmt</code> consteval patch in your <code>Podfile</code> <code>post_install</code> hook to fix a compile error in the <code>fmt</code> transitive dependency.</li>
 </ol>
 
-
-<h3 id='installation-react-native'>React Native Installation</h3>
-<p>The Odero Mobile SDK for React Native is available via NPM package management.</p>
-<p>The installation process involves adding the package URL directly to your package.json dependencies.</p>
-
 <blockquote>
-    <p>Production Environment - package.json</p>
+    <p>Podfile post_install — pointer for the fmt patch (apply Odero's provided snippet)</p>
 </blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="c1">// Add the following dependency to your package.json for production:</span>
-<span class="p">{</span>
-  <span class="s2">"dependencies"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s2">"react-native-odero-mobilesdk"</span><span class="p">:</span> <span class="s2">"Odero.oderopaysdk:oderopaysdkract:0.0.1"</span>
-  <span class="p">}</span>
-<span class="p">}</span></code></pre></div>
+<div class="highlight"><pre class="highlight ruby tab-ruby"><code>post_install do |installer|
+  react_native_post_install(installer)
+  # Apply the Odero-provided fmt consteval patch here on recent Xcode,
+  # and add a build phase that re-signs the nested shared.framework.
+end
+</code></pre></div>
+
+<h4 id='install-rn-android'>Android native setup</h4>
+<p>Add the Odero Artifactory Maven repository (so <code>Odero.oderopaysdk:oderopaysdkandroid</code> resolves), bump <code>compileSdk</code> to 37+, keep <code>minSdk</code> at 26, and pin the Kotlin Gradle Plugin to <code>2.4.0</code>.</p>
 
 <blockquote>
-    <p>Development Environment - package.json</p>
+    <p>android/build.gradle — pin Kotlin and add the repository</p>
 </blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="c1">// Add the following dependency to your package.json for development:</span>
-<span class="p">{</span>
-  <span class="s2">"dependencies"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s2">"react-native-odero-mobilesdk"</span><span class="p">:</span> <span class="s2">"Odero.oderopaysdk:oderopaysdkract:0.0.1-dev"</span>
-  <span class="p">}</span>
-<span class="p">}</span></code></pre></div>
+<div class="highlight"><pre class="highlight gradle tab-gradle"><code>buildscript {
+    ext {
+        compileSdkVersion = 37
+        minSdkVersion = 26
+        kotlinVersion = '2.4.0'
+    }
+}
 
-<p>Install the package using NPM or Yarn:</p>
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven {
+            url 'https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/'
+        }
+    }
+}
+</code></pre></div>
 
+<p>Autolinking wires the native module in for you; no manual linking is required.</p>
+
+<h4 id='install-rn-permissions'>INTERNET permission</h4>
 <blockquote>
-    <p>NPM Installation</p>
+    <p>android/app/src/main/AndroidManifest.xml</p>
 </blockquote>
-<div class="highlight"><pre class="highlight bash tab-bash"><code><span class="c"># NPM Installation</span>
-npm install</code></pre></div>
+<div class="highlight"><pre class="highlight xml tab-xml"><code>&lt;uses-permission android:name="android.permission.INTERNET" /&gt;
+</code></pre></div>
+
+<h4 id='install-rn-import'>Import</h4>
+<div class="highlight"><pre class="highlight typescript tab-typescript"><code>import {
+  showPaymentSheet,
+  closePaymentSheet,
+  addPaymentEventListener,
+} from 'react-native-odero-mobilesdk';
+</code></pre></div>
 
 <blockquote>
-    <p>Yarn Installation</p>
+    <p><strong>Rebuild after installing.</strong> Because the package ships native code, run a fresh native build (<code>npx react-native run-ios</code> / <code>run-android</code>) after adding it — a Metro reload is not enough.</p>
 </blockquote>
-<div class="highlight"><pre class="highlight bash tab-bash"><code><span class="c"># Yarn Installation</span>
-yarn install</code></pre></div>
-
-<p>For iOS projects, install the required pods:</p>
 
 <blockquote>
-    <p>iOS Setup</p>
-</blockquote>
-<div class="highlight"><pre class="highlight bash tab-bash"><code><span class="c"># Navigate to ios folder and install pods:</span>
-<span class="nb">cd </span>ios <span class="o">&amp;&amp;</span> pod install</code></pre></div>
-
-<p>Android setup is automatic with React Native 0.60+ autolinking.</p>
-
-<blockquote>
-    <p>Import and Usage</p>
-</blockquote>
-<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="c1">// Import and Usage</span>
-<span class="k">import</span> <span class="p">{</span> <span class="nx">OderoSDK</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">@odero/react-native-sdk</span><span class="dl">'</span><span class="p">;</span></code></pre></div>
-
-<blockquote>
-    <p><strong>Note:</strong> Make sure to follow the platform-specific installation guide that matches your development environment.</p>
+    <p><strong>Next:</strong> continue to the Configuration chapter for the merchant-backend session contract, environment selection, and Apple Pay / Google Pay setup, then to the platform Quick Start to present your first payment sheet.</p>
 </blockquote>

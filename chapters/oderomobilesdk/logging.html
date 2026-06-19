@@ -1,0 +1,123 @@
+<p>The Odero Mobile SDK emits structured diagnostic logs on each native platform to help you trace the payment flow (session loading, network calls, UI lifecycle and payment status) while integrating. This chapter explains how a third-party integrator views and captures these logs on iOS, Android and React Native.</p>
+
+<blockquote><p>Logs are emitted in DEBUG builds ONLY. Release builds are silent so that no diagnostic data — including anything that could resemble PII — is written to the device log. There is no runtime verbosity flag to toggle: log level is fixed and controlled entirely by the build configuration.</p></blockquote>
+
+<h3 id='logging-categories'>Log categories</h3>
+<p>On every platform the SDK groups its log lines into four functional categories so you can filter to just the area you care about:</p>
+
+<table>
+<tr><th>Category</th><th>What it covers</th></tr>
+<tr><td><code>general</code></td><td>SDK lifecycle, initialization and high-level flow events.</td></tr>
+<tr><td><code>network</code></td><td>Outbound requests to the Odero backend and their responses.</td></tr>
+<tr><td><code>ui</code></td><td>Payment sheet presentation, navigation and dismissal.</td></tr>
+<tr><td><code>payment</code></td><td>Payment status transitions, 3DS handling and final results.</td></tr>
+</table>
+
+<h3 id='logging-ios'>iOS</h3>
+<p>On iOS the SDK logs through Apple's unified logging system (<code>os_log</code>) under the subsystem <code>com.odero.pay.sdk</code>, with the four categories above (<code>general</code>, <code>network</code>, <code>ui</code>, <code>payment</code>).</p>
+
+<h4 id='logging-ios-console-app'>Viewing logs in Console.app</h4>
+<ol>
+<li>Connect your device (or use the Simulator) and open <strong>Console.app</strong> on your Mac.</li>
+<li>Select your device in the sidebar and press <strong>Start</strong> to begin streaming.</li>
+<li>In the search field, filter by subsystem: type <code>subsystem:com.odero.pay.sdk</code>.</li>
+<li>Optionally narrow further by category, e.g. <code>category:payment</code>.</li>
+</ol>
+
+<h4 id='logging-ios-log-stream'>Viewing logs from the terminal</h4>
+<p>You can stream the same logs from a terminal with the <code>log</code> command:</p>
+<div class="highlight"><pre class="highlight bash tab-bash"><code>log stream --predicate 'subsystem == "com.odero.pay.sdk"'
+</code></pre></div>
+
+<p>To restrict the stream to a single category:</p>
+<div class="highlight"><pre class="highlight bash tab-bash"><code>log stream --predicate 'subsystem == "com.odero.pay.sdk" &amp;&amp; category == "payment"'
+</code></pre></div>
+
+<h4 id='logging-ios-in-app'>Capturing logs in-app</h4>
+<p>In addition to <code>os_log</code>, the SDK posts each log line as a <code>NotificationCenter</code> notification named <code>"OderoLogger"</code>, with the formatted text under <code>userInfo["message"]</code>. Observe it to surface logs inside your own debug UI or forward them to your own logging pipeline:</p>
+<div class="highlight"><pre class="highlight swift tab-swift"><code>NotificationCenter.default.addObserver(
+    forName: Notification.Name("OderoLogger"),
+    object: nil,
+    queue: .main
+) { notification in
+    if let message = notification.userInfo?["message"] as? String {
+        print("[Odero] \(message)")
+    }
+}
+</code></pre></div>
+
+<h4 id='logging-ios-verify'>Verifying logging works</h4>
+<p>Call the helper below from a DEBUG build to emit one line of each level so you can confirm your filter or observer is wired up correctly:</p>
+<div class="highlight"><pre class="highlight swift tab-swift"><code>OderoLogger.testLogging()
+</code></pre></div>
+
+<blockquote><p>If you see no output: confirm you are running a DEBUG build (Release emits nothing) and that your Console.app / predicate filter matches the subsystem <code>com.odero.pay.sdk</code> exactly.</p></blockquote>
+
+<h3 id='logging-android'>Android</h3>
+<p>On Android the SDK writes to Logcat using <code>android.util.Log</code> under four tags, one per category:</p>
+
+<table>
+<tr><th>Category</th><th>Logcat tag</th></tr>
+<tr><td>general</td><td><code>OderoSDK-General</code></td></tr>
+<tr><td>network</td><td><code>OderoSDK-Network</code></td></tr>
+<tr><td>ui</td><td><code>OderoSDK-UI</code></td></tr>
+<tr><td>payment</td><td><code>OderoSDK-Payment</code></td></tr>
+</table>
+
+<h4 id='logging-android-logcat'>Viewing logs with adb</h4>
+<p>Filter Logcat to just the Odero tags:</p>
+<div class="highlight"><pre class="highlight bash tab-bash"><code>adb logcat -s OderoSDK-Payment OderoSDK-Network OderoSDK-UI OderoSDK-General
+</code></pre></div>
+
+<p>Or grep across all output to catch every Odero line at once:</p>
+<div class="highlight"><pre class="highlight bash tab-bash"><code>adb logcat | grep OderoSDK
+</code></pre></div>
+
+<h4 id='logging-android-in-app'>Capturing logs in-app</h4>
+<p>To capture log lines inside your app (for example, to mirror them into your own crash reporter during development), set an optional context in <code>Application.onCreate</code> and register a callback. The callback receives the category type, the message and source metadata (file, function, line and timestamp):</p>
+<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code>class MyApp : Application() {
+    override fun onCreate() {
+        super.onCreate()
+
+        OderoLogger.appContext = this
+
+        OderoLogger.logCallback = { type, msg, file, fn, line, date -&gt;
+            Log.d("MyApp-Odero", "[$type] $msg ($file:$line)")
+        }
+    }
+}
+</code></pre></div>
+
+<blockquote><p>Both <code>OderoLogger.appContext</code> and <code>OderoLogger.logCallback</code> are optional. Logcat output works without either; the callback only adds an in-process hook for DEBUG builds.</p></blockquote>
+
+<h3 id='logging-react-native'>React Native</h3>
+<p>The React Native package bridges the native iOS and Android loggers. You can subscribe to log lines from JavaScript with <code>addLogListener</code>, which returns an <code>EmitterSubscription</code>. The listener receives an object with a single <code>message</code> field:</p>
+<div class="highlight"><pre class="highlight typescript tab-typescript"><code>import { useEffect } from 'react';
+import { addLogListener } from 'react-native-odero-mobilesdk';
+
+useEffect(() =&gt; {
+  const logSub = addLogListener((e) =&gt; {
+    console.log('[Odero]', e.message);
+  });
+
+  return () =&gt; {
+    logSub.remove();
+  };
+}, []);
+</code></pre></div>
+
+<blockquote><p>Always call <code>.remove()</code> on the subscription in your cleanup function to avoid leaks and duplicate listeners across re-renders.</p></blockquote>
+
+<p>As on the native platforms, <code>addLogListener</code> only delivers events in DEBUG native builds. Release builds emit nothing. The underlying native logs remain viewable through the platform tools while developing:</p>
+<ul>
+<li><strong>Android</strong>: <code>adb logcat | grep OderoSDK</code> (or the tag-filtered form above).</li>
+<li><strong>iOS</strong>: Console.app filtered to <code>subsystem:com.odero.pay.sdk</code>, or the <code>log stream</code> predicate shown above.</li>
+</ul>
+
+<h3 id='logging-production'>Production behaviour</h3>
+<p>To summarize the privacy guarantee for going live:</p>
+<ul>
+<li>Logging is active in <strong>DEBUG native builds only</strong>. Release builds produce no SDK log output on any platform.</li>
+<li>There is <strong>no runtime flag</strong> to enable, raise or lower verbosity — behaviour is determined solely by the build configuration.</li>
+<li>Because Release is silent, no diagnostic data or potential PII is written to device logs in production. You do not need to strip or guard any logging code before shipping.</li>
+</ul>
