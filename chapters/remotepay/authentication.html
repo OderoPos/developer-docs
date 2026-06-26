@@ -1,0 +1,28 @@
+<p>
+    Every Remote Pay API call must be authenticated. Remote Pay uses the OAuth 2.0
+    client credentials flow: your backend exchanges a client id and secret for a
+    short-lived access token, then sends that token on every request.
+</p>
+
+<p>We provide you, per integrator:</p>
+<ul>
+    <li>A dedicated client id and client secret.</li>
+    <li>The token URL.</li>
+    <li>The scope(s) your client may use, with separate credentials for the dev and prod environments.</li>
+    <li>A pre-configured Postman collection wired to these values, including the token request.</li>
+</ul>
+
+<p>
+    Request an access token from the token URL with grant type
+    <code style="white-space: nowrap">client_credentials</code> and your scope,
+    then send the returned token in the
+    <code style="white-space: nowrap">Authorization</code> header on every call.
+    The exact token request is in your Postman collection.
+</p>
+
+<p><strong>Notes:</strong></p>
+<ul>
+    <li>Tokens are short-lived (about 1 hour). Cache and refresh before expiry, and request a new one on a <code style="white-space: nowrap">401</code>.</li>
+    <li>Each method is restricted to a scope. A fiscal-scope token cannot call payment endpoints, and the reverse. Use the credentials that match the operation.</li>
+    <li>Keep the client secret on your server only. Never put it in a browser, a mobile app, or a shared Postman collection. Store it as a Postman secret variable.</li>
+</ul>

@@ -1,0 +1,29 @@
+<p>
+    The payment command triggers a card payment on the device. It is available on
+    both x30 and p2se, and works identically on both: same request, same callback
+    result.
+</p>
+
+<p>Make an authenticated POST request to the
+    <code style="white-space: nowrap">pay</code> endpoint for the target device.
+    Only the device-family segment of the path differs:</p>
+<ul>
+    <li>x30: <code style="white-space: nowrap">POST https://{{baseUrl}}/x30tr/{deviceId}/pay</code></li>
+    <li>p2se: <code style="white-space: nowrap">POST https://{{baseUrl}}/p2se/{deviceId}/pay</code></li>
+</ul>
+
+<p><strong>Key fields:</strong></p>
+<ul>
+    <li><code style="white-space: nowrap">deviceId</code> (path): the target device id. x30 ids start with <code style="white-space: nowrap">AV</code>, p2se ids start with <code style="white-space: nowrap">TJ</code>.</li>
+    <li><code style="white-space: nowrap">order_id</code>: your own reference for the sale, echoed back on the callback so you can correlate it.</li>
+    <li><code style="white-space: nowrap">amount</code>: the amount to charge.</li>
+    <li><code style="white-space: nowrap">currency_code</code>: the numeric ISO 4217 currency code, for example <code style="white-space: nowrap">946</code> for RON.</li>
+</ul>
+
+<p>
+    The API responds immediately with a payment id to confirm the command was
+    accepted and delivered. The bank result is delivered later to your callback URL,
+    for both x30 and p2se. See <a href="#remote-pay-callbacks">Callbacks</a>.
+</p>
+
+<p>The full request and response are in your Postman collection.</p>

@@ -1,0 +1,47 @@
+<p>
+    Fiscal commands are an x30 capability. They run on the device fiscal core and
+    produce a fiscal result, for example a sale receipt, a daily report, or device
+    status.
+</p>
+
+<p>
+    The command bodies are identical to OPIT REST fiscal commands; Remote Pay
+    relays them to the device. Use the same payloads documented under
+    <a href="#opit-rest-fiscal-commands">OPIT REST, Fiscal commands</a>.
+</p>
+
+<p>Make an authenticated POST request, where the last path segment is the fiscal
+    command name:</p>
+<p><code style="white-space: nowrap">POST https://{{baseUrl}}/x30tr/{deviceId}/{fiscalCommand}</code></p>
+
+<p>
+    Supported commands include <code style="white-space: nowrap">saleRequest</code>,
+    <code style="white-space: nowrap">getStatus</code>,
+    <code style="white-space: nowrap">getDailyTotals</code>,
+    <code style="white-space: nowrap">xReport</code>,
+    <code style="white-space: nowrap">zReport</code>,
+    <code style="white-space: nowrap">periodicReportByDate</code>,
+    <code style="white-space: nowrap">periodicReportByZ</code>,
+    <code style="white-space: nowrap">getCompanyData</code>,
+    <code style="white-space: nowrap">setCompanyData</code>,
+    <code style="white-space: nowrap">getVATRates</code>,
+    <code style="white-space: nowrap">setVATRates</code>,
+    <code style="white-space: nowrap">setDateTime</code>,
+    <code style="white-space: nowrap">nonFiscalReceipt</code>,
+    <code style="white-space: nowrap">cashOperation</code>,
+    <code style="white-space: nowrap">getSoftwareVersion</code>, and the journal
+    and report commands. An unsupported command name returns
+    <code style="white-space: nowrap">404</code>.
+</p>
+
+<p>
+    The API responds immediately with a request id. The fiscal core result is
+    delivered later to your callback URL, correlated by that request id. The full
+    request and response are in your Postman collection.
+</p>
+
+<p>
+    Numeric formats (comma decimal separator) and field names follow the Romanian
+    fiscal specification, the same as OPIT REST. For a card sale, the payment
+    amount must match the receipt total exactly.
+</p>
