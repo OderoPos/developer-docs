@@ -1,0 +1,29 @@
+<p>
+    Remote Pay is the remote, over-the-internet version of
+    <a href="https://developer.pos.odero.ro/#opit-rest">OPIT REST</a> for Token
+    terminals. It supports both the x30 and p2se device families. Instead of
+    calling a terminal directly on your local network, your backend calls a secure
+    Token cloud API. The command is delivered to the device over an encrypted
+    channel, the device runs it, and the result is delivered back to you
+    asynchronously.
+</p>
+
+<p>
+    In short: OPIT REST talks to a device on the same network; Remote Pay talks to
+    a device anywhere with an internet connection, through us, for both x30 and
+    p2se.
+</p>
+
+<p><strong>Capabilities:</strong></p>
+<ul>
+    <li>Card payments on both x30 and p2se.</li>
+    <li>Fiscal commands on x30, using the same payloads as OPIT REST.</li>
+    <li>Asynchronous results, delivered to your callback URL and correlated by a request id.</li>
+    <li>Per-device routing, with one default callback URL or a different URL per device.</li>
+</ul>
+
+<p>
+    Onboarding, authentication, and the card-payment flow are identical for both
+    device families. The only difference is fiscal commands, which are x30 only.
+    See <a href="#remote-pay-supported-devices">Supported devices</a>.
+</p>

@@ -1,0 +1,37 @@
+<p>
+    Remote Pay is asynchronous: the API call only confirms that a command was
+    accepted and delivered to the device. The actual transaction result, the bank
+    outcome of a payment or the fiscal core response of a fiscal command, is
+    delivered later as an HTTP POST to a callback URL that you provide to us.
+</p>
+
+<p>
+    Callbacks apply to card payments on both x30 and p2se, and to fiscal results on
+    x30. The delivery model is the same in all cases.
+</p>
+
+<h3>Registering your callback URL</h3>
+<ul>
+    <li>You provide your callback URL(s) to Token during onboarding.</li>
+    <li>You can set one default URL for all of your devices, or a different URL per
+        device. Per-device URLs are useful when each store or location receives
+        results on its own endpoint.</li>
+    <li>The URL must be a publicly reachable HTTPS endpoint that accepts a POST with
+        a JSON body.</li>
+</ul>
+
+<h3>What you receive</h3>
+<p>The callback body is the result object for the command. Use the id fields to
+    correlate it with the request you made:</p>
+<ul>
+    <li>Payment results (x30 and p2se) carry <code style="white-space: nowrap">payment_id</code> and your <code style="white-space: nowrap">order_id</code>. See <a href="#remote-pay-payment">Payment command</a>.</li>
+    <li>Fiscal results (x30) carry <code style="white-space: nowrap">requestId</code>. See <a href="#remote-pay-fiscal">Fiscal commands</a>.</li>
+</ul>
+<p>The full callback payloads are in your Postman collection.</p>
+
+<h3>Handling callbacks</h3>
+<ul>
+    <li>Respond quickly with a <code style="white-space: nowrap">2xx</code> status to acknowledge receipt.</li>
+    <li>Treat delivery as at-least-once: deduplicate on <code style="white-space: nowrap">payment_id</code> or <code style="white-space: nowrap">requestId</code> in case a callback is delivered more than once.</li>
+    <li>Correlate every callback with the id from the synchronous API response. Do not assume results arrive in the same order you sent the commands.</li>
+</ul>

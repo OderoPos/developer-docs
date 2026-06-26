@@ -1,0 +1,57 @@
+<p>
+    Remote Pay works with two Token device families. Onboarding is the same for
+    both (see <a href="#remote-pay-how-it-works">How it works</a>), and card
+    payments work identically on both: same request, same callback result. The one
+    difference is fiscal commands, which are available on x30 only.
+</p>
+
+<h3>x30</h3>
+<ul>
+    <li>Card payments and fiscal commands.</li>
+    <li>Results are delivered to your own callback URL.</li>
+</ul>
+
+<h3>p2se</h3>
+<ul>
+    <li>Card payments.</li>
+    <li>Results are delivered to your own callback URL, the same way as x30.</li>
+</ul>
+
+<p><strong>At a glance:</strong></p>
+<table>
+    <thead>
+        <tr>
+            <th>Capability</th>
+            <th>x30</th>
+            <th>p2se</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Card payments</td>
+            <td>Yes</td>
+            <td>Yes</td>
+        </tr>
+        <tr>
+            <td>Fiscal commands</td>
+            <td>Yes</td>
+            <td>No</td>
+        </tr>
+        <tr>
+            <td>Result delivery</td>
+            <td>Your callback URL</td>
+            <td>Your callback URL</td>
+        </tr>
+        <tr>
+            <td>Per-device callback URL</td>
+            <td>Yes</td>
+            <td>Yes</td>
+        </tr>
+    </tbody>
+</table>
+
+<p>
+    In short: payments are identical across x30 and p2se; fiscal commands are x30
+    only. The <a href="#remote-pay-payment">Payment command</a> section covers both
+    families; <a href="#remote-pay-fiscal">Fiscal commands</a> applies to x30.
+</p>

@@ -1,0 +1,93 @@
+<svg viewBox="0 0 760 132" width="100%" style="max-width:760px;height:auto;margin:10px 0;font-family:inherit" role="img" aria-label="Remote Pay flow: authenticate, automatic device setup, send payment, receive result">
+    <defs>
+        <marker id="rp-arrow" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 Z" fill="#9aa0a6"></path>
+        </marker>
+    </defs>
+    <g>
+        <rect x="8" y="34" width="168" height="64" rx="8" fill="#eef2f6" stroke="#c9d2db"></rect>
+        <text x="92" y="62" text-anchor="middle" font-size="14" fill="#1f2d3d">1. Authenticate</text>
+        <text x="92" y="80" text-anchor="middle" font-size="11" fill="#5b6b7b">sign in on the device</text>
+    </g>
+    <line x1="176" y1="66" x2="194" y2="66" stroke="#9aa0a6" stroke-width="2" marker-end="url(#rp-arrow)"></line>
+    <g>
+        <rect x="198" y="34" width="168" height="64" rx="8" fill="#eef2f6" stroke="#c9d2db"></rect>
+        <text x="282" y="62" text-anchor="middle" font-size="14" fill="#1f2d3d">2. Device setup</text>
+        <text x="282" y="80" text-anchor="middle" font-size="11" fill="#5b6b7b">automatic, one time</text>
+    </g>
+    <line x1="366" y1="66" x2="384" y2="66" stroke="#9aa0a6" stroke-width="2" marker-end="url(#rp-arrow)"></line>
+    <g>
+        <rect x="388" y="34" width="168" height="64" rx="8" fill="#eef2f6" stroke="#c9d2db"></rect>
+        <text x="472" y="62" text-anchor="middle" font-size="14" fill="#1f2d3d">3. Send payment</text>
+        <text x="472" y="80" text-anchor="middle" font-size="11" fill="#5b6b7b">POST /{deviceId}/pay</text>
+    </g>
+    <line x1="556" y1="66" x2="574" y2="66" stroke="#9aa0a6" stroke-width="2" marker-end="url(#rp-arrow)"></line>
+    <g>
+        <rect x="578" y="34" width="168" height="64" rx="8" fill="#eef2f6" stroke="#c9d2db"></rect>
+        <text x="662" y="62" text-anchor="middle" font-size="14" fill="#1f2d3d">4. Receive result</text>
+        <text x="662" y="80" text-anchor="middle" font-size="11" fill="#5b6b7b">to your callback URL</text>
+    </g>
+</svg>
+
+<p>
+    Integrating with Remote Pay has two stages: a one-time device onboarding, and
+    then sending commands. Both stages are the same for x30 and p2se devices.
+</p>
+
+<h3>1. Device onboarding (one-time, per device)</h3>
+
+<ol>
+    <li>
+        <p><strong>Get credentials from us.</strong> For each device, Token
+            provides you a set of sign-in credentials, issued per device.</p>
+    </li>
+    <li>
+        <p><strong>Sign in on the device.</strong> Open the Remote Pay app on the
+            device (x30 or p2se) and log in with the credentials we provided for
+            that device.</p>
+    </li>
+    <li>
+        <p><strong>The device configures itself.</strong> After sign-in, the
+            device configures itself in the Token environment automatically. No
+            further setup is required on your side.</p>
+    </li>
+</ol>
+
+<p>Once onboarding is complete, the device is online and ready to receive your
+    commands.</p>
+
+<h3>2. Sending commands</h3>
+
+<p>Before you can send commands, two things are arranged with us:</p>
+
+<ul>
+    <li>
+        <p><strong>We assign you authentication credentials.</strong> Remote Pay
+            is protected by OAuth 2.0. We issue you a dedicated client and the
+            scopes you need. See <a href="#remote-pay-authentication">Authentication</a>.</p>
+    </li>
+    <li>
+        <p><strong>You provide your callback URL(s).</strong> Command results are
+            delivered to your callback URL: one default URL, or a different URL per
+            device. This is the same for x30 and p2se. See
+            <a href="#remote-pay-callbacks">Callbacks</a>.</p>
+    </li>
+</ul>
+
+<p>
+    Then request your Postman collection from us. It is pre-filled with the
+    endpoints and your environment so you can start immediately.
+</p>
+
+<p><strong>The flow of a single command:</strong></p>
+<ol>
+    <li>Your backend obtains an access token and calls the Remote Pay API for a specific device.</li>
+    <li>Token securely delivers the command to that device.</li>
+    <li>The device runs it: a card payment (x30 and p2se) or a fiscal command (x30).</li>
+    <li>The result is delivered to your callback URL, the same for x30 and p2se.</li>
+</ol>
+
+<p>
+    The API call returns immediately to acknowledge that the command was accepted
+    and delivered. The transaction result arrives later on your callback URL.
+</p>
