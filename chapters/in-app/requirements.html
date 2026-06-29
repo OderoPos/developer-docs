@@ -1,0 +1,53 @@
+<p>
+    Minimum platform and toolchain versions for each SDK. All three SDKs are
+    released under the <strong>same version number</strong>; replace
+    <code style="white-space: nowrap">1.0.0</code> in the snippets throughout these
+    docs with the version Odero gave you.
+</p>
+
+<h3>iOS</h3>
+<table>
+    <thead><tr><th>Requirement</th><th>Value</th></tr></thead>
+    <tbody>
+        <tr><td>Deployment target</td><td>iOS 15.0+</td></tr>
+        <tr><td>Swift</td><td>5.0</td></tr>
+        <tr><td>Distribution</td><td>CocoaPods (binary xcframework)</td></tr>
+        <tr><td>Links</td><td><code style="white-space: nowrap">PassKit</code> (Apple&nbsp;Pay), C++ standard library (handled by the pod)</td></tr>
+        <tr><td>Apple&nbsp;Pay testing</td><td>A real device (the simulator cannot authorize)</td></tr>
+    </tbody>
+</table>
+
+<h3>Android</h3>
+<table>
+    <thead><tr><th>Requirement</th><th>Value</th></tr></thead>
+    <tbody>
+        <tr><td><code style="white-space: nowrap">minSdk</code></td><td>23</td></tr>
+        <tr><td><code style="white-space: nowrap">compileSdk</code> / <code style="white-space: nowrap">targetSdk</code></td><td>35</td></tr>
+        <tr><td>JDK</td><td>17</td></tr>
+        <tr><td>Android Gradle Plugin</td><td>8.7.3+</td></tr>
+        <tr><td>Kotlin</td><td>2.1.20 (don't force a newer stdlib)</td></tr>
+        <tr><td>UI</td><td>Jetpack Compose (pulled in transitively; you don't need Compose yourself)</td></tr>
+        <tr><td>Host Activity</td><td>Must be a <code style="white-space: nowrap">ComponentActivity</code> (e.g. <code style="white-space: nowrap">AppCompatActivity</code>), required for Google&nbsp;Pay</td></tr>
+        <tr><td>Google&nbsp;Pay</td><td><code style="white-space: nowrap">com.google.android.gms:play-services-wallet:20.0.0</code></td></tr>
+    </tbody>
+</table>
+
+<h3>React Native</h3>
+<table>
+    <thead><tr><th>Requirement</th><th>Value</th></tr></thead>
+    <tbody>
+        <tr><td>React Native</td><td>Any modern RN (built and tested on 0.81)</td></tr>
+        <tr><td>React</td><td>Any (tested on 19.x)</td></tr>
+        <tr><td>Peer dependency</td><td><code style="white-space: nowrap">react-native-webview &gt;= 13.0.0</code> (required, for 3-D&nbsp;Secure)</td></tr>
+        <tr><td>Node</td><td>&gt;= 20</td></tr>
+        <tr><td>iOS (native side)</td><td>iOS 12.0+ pod, <code style="white-space: nowrap">PassKit</code>; build on a real device for Apple&nbsp;Pay</td></tr>
+        <tr><td>Android (native side)</td><td><code style="white-space: nowrap">minSdk</code> 24, JDK 17, <code style="white-space: nowrap">play-services-wallet</code></td></tr>
+    </tbody>
+</table>
+
+<p>
+    The card-only flow on React Native is pure JavaScript plus
+    <code style="white-space: nowrap">react-native-webview</code>. Apple&nbsp;Pay /
+    Google&nbsp;Pay add an optional native wallet module. See
+    <a href="#in-app-react-native">React Native</a>.
+</p>
