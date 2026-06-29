@@ -1,0 +1,132 @@
+<p>
+    The Android SDK is <code style="white-space: nowrap">oderopaysdkandroid</code>, a
+    Maven (AAR) library. You instantiate
+    <code style="white-space: nowrap">OderoPaySdk</code>, call
+    <code style="white-space: nowrap">showPaymentSheet</code> with a
+    <code style="white-space: nowrap">sessionId</code>, and read the result from the
+    <code style="white-space: nowrap">onPaymentStatusChanged</code> callback.
+</p>
+
+<h3>Install</h3>
+<p><strong>1. Add the Odero Artifactory repository</strong> to
+    <code style="white-space: nowrap">settings.gradle</code> (it’s public, no credentials needed):</p>
+<blockquote><p>settings.gradle</p></blockquote>
+<div class="highlight"><pre class="highlight gradle tab-gradle"><code><span class="n">dependencyResolutionManagement</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="n">repositories</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="n">google</span><span class="o">()</span>
+<span class="w">        </span><span class="n">mavenCentral</span><span class="o">()</span>
+<span class="w">        </span><span class="n">maven</span><span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">uri</span><span class="o">(</span><span class="s2">&quot;https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/&quot;</span><span class="o">)</span><span class="w"> </span><span class="o">}</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="o">}</span></code></pre></div>
+
+<p><strong>2. Add the dependency.</strong> DEV and PROD are <em>separate
+    artifacts</em>: the <code style="white-space: nowrap">-dev</code> build talks to
+    the DEV API and Google&nbsp;Pay TEST; the plain build talks to PROD.</p>
+<blockquote><p>app/build.gradle</p></blockquote>
+<div class="highlight"><pre class="highlight gradle tab-gradle"><code><span class="n">dependencies</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="c1">// DEV (test Google Pay):</span>
+<span class="w">    </span><span class="n">implementation</span><span class="w"> </span><span class="s1">&#39;Odero.oderopaysdk:oderopaysdkandroid:1.0.0-dev&#39;</span>
+<span class="w">    </span><span class="c1">// PROD: implementation &#39;Odero.oderopaysdk:oderopaysdkandroid:1.0.0&#39;</span>
+
+<span class="w">    </span><span class="n">implementation</span><span class="w"> </span><span class="s1">&#39;com.google.android.gms:play-services-wallet:20.0.0&#39;</span>
+<span class="o">}</span></code></pre></div>
+<p>The shared core
+    (<code style="white-space: nowrap">oderopaysdkshared:shared-android</code>) is
+    pulled in transitively from the same repository.</p>
+
+<h3>Project setup</h3>
+<p><strong>Mirror the environment in your app's
+    <code style="white-space: nowrap">BuildConfig</code>.</strong> The SDK reads
+    <code style="white-space: nowrap">BuildConfig.ENVIRONMENT</code>; set it to
+    <code style="white-space: nowrap">"DEV"</code> in debug and
+    <code style="white-space: nowrap">"PROD"</code> in release, and keep it in sync
+    with the artifact you depend on.</p>
+<blockquote><p>app/build.gradle</p></blockquote>
+<div class="highlight"><pre class="highlight gradle tab-gradle"><code><span class="n">android</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="n">buildFeatures</span><span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="n">buildConfig</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="o">}</span>
+<span class="w">    </span><span class="n">defaultConfig</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="n">buildConfigField</span><span class="w"> </span><span class="s2">&quot;String&quot;</span><span class="o">,</span><span class="w"> </span><span class="s2">&quot;ENVIRONMENT&quot;</span><span class="o">,</span><span class="w"> </span><span class="s2">&quot;\&quot;DEV\&quot;&quot;</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="w">    </span><span class="n">buildTypes</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="n">debug</span><span class="w">   </span><span class="o">{</span><span class="w"> </span><span class="n">buildConfigField</span><span class="w"> </span><span class="s2">&quot;String&quot;</span><span class="o">,</span><span class="w"> </span><span class="s2">&quot;ENVIRONMENT&quot;</span><span class="o">,</span><span class="w"> </span><span class="s2">&quot;\&quot;DEV\&quot;&quot;</span><span class="w"> </span><span class="o">}</span>
+<span class="w">        </span><span class="n">release</span><span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="n">buildConfigField</span><span class="w"> </span><span class="s2">&quot;String&quot;</span><span class="o">,</span><span class="w"> </span><span class="s2">&quot;ENVIRONMENT&quot;</span><span class="o">,</span><span class="w"> </span><span class="s2">&quot;\&quot;PROD\&quot;&quot;</span><span class="w"> </span><span class="o">}</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="o">}</span></code></pre></div>
+<p>The <code style="white-space: nowrap">INTERNET</code> permission, the
+    Google&nbsp;Pay meta-data and the 3-D&nbsp;Secure web-view activity ship inside
+    the AAR and merge in automatically. DM&nbsp;Sans fonts are bundled too.</p>
+
+<h3>API</h3>
+<ul>
+    <li><code style="white-space: nowrap">OderoPaySdk(activity, loadPaymentDataRequestCode, screen3dsRequestCode)</code>: the host <code style="white-space: nowrap">activity</code> must be a <code style="white-space: nowrap">ComponentActivity</code> (e.g. <code style="white-space: nowrap">AppCompatActivity</code>); the two ints are request codes you choose.</li>
+    <li><code style="white-space: nowrap">showPaymentSheet(sessionId, appearance, savedCards)</code>: fetches the session and renders the sheet as a full-screen overlay.</li>
+    <li><code style="white-space: nowrap">closePaymentSheet()</code>: remove the overlay.</li>
+    <li><code style="white-space: nowrap">var onPaymentStatusChanged: ((status, referenceNumber, errorMessage) -&gt; Unit)?</code>: set it before <code style="white-space: nowrap">showPaymentSheet</code>.</li>
+</ul>
+<p>Saved cards use
+    <code style="white-space: nowrap">SavedCardItem(cardToken, cvv, lastFourDigits, expirationMonth, expirationYear)</code>.</p>
+
+<h3>Receiving the result</h3>
+<p>The <code style="white-space: nowrap">onPaymentStatusChanged</code> callback fires
+    on the main thread with a <code style="white-space: nowrap">status</code> of
+    <code style="white-space: nowrap">payment_processing</code>,
+    <code style="white-space: nowrap">payment_success</code>
+    (<code style="white-space: nowrap">referenceNumber</code> non-null) or
+    <code style="white-space: nowrap">payment_failure</code>
+    (<code style="white-space: nowrap">errorMessage</code> non-null). The sheet also
+    shows its own success/failure pages, so the callback is optional for UI but
+    recommended for your own bookkeeping.</p>
+
+<h3>Full example</h3>
+<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code><span class="k">import</span><span class="w"> </span><span class="nn">com.oderopaysdk.OderoPaySdk</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">com.oderopaysdk.oderoui.models.SavedCardItem</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">com.oderopaysdk.oderoui.paymentappearance.oderopaymentbottomsheetappearance.OderoPaymentBottomSheetAppearance</span>
+<span class="k">import</span><span class="w"> </span><span class="nn">com.oderopaysdk.oderoui.paymentappearance.oderopaymentdetailsappearance.OderoPaymentDetailsPageAppearance</span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nc">CheckoutActivity</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">AppCompatActivity</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">        </span><span class="c1">// must be a ComponentActivity</span>
+
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">var</span><span class="w"> </span><span class="nv">sdk</span><span class="p">:</span><span class="w"> </span><span class="n">OderoPaySdk? </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span>
+
+<span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onCreate</span><span class="p">(</span><span class="n">savedInstanceState</span><span class="p">:</span><span class="w"> </span><span class="n">Bundle?)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">super</span><span class="p">.</span><span class="na">onCreate</span><span class="p">(</span><span class="n">savedInstanceState</span><span class="p">)</span>
+<span class="w">        </span><span class="n">sdk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OderoPaySdk</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="m">1001</span><span class="p">,</span><span class="w"> </span><span class="m">1002</span><span class="p">)</span><span class="w">           </span><span class="c1">// (activity, googlePayCode, 3dsCode)</span>
+
+<span class="w">        </span><span class="n">sdk</span><span class="o">?.</span><span class="na">onPaymentStatusChanged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="n">referenceNumber</span><span class="p">,</span><span class="w"> </span><span class="n">errorMessage</span><span class="w"> </span><span class="o">-&gt;</span>
+<span class="w">            </span><span class="k">when</span><span class="w"> </span><span class="p">(</span><span class="n">status</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="s">&quot;payment_success&quot;</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Log</span><span class="p">.</span><span class="na">i</span><span class="p">(</span><span class="s">&quot;Pay&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;OK ref=</span><span class="si">$</span><span class="n">referenceNumber</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="w">                </span><span class="s">&quot;payment_failure&quot;</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Log</span><span class="p">.</span><span class="na">e</span><span class="p">(</span><span class="s">&quot;Pay&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;FAIL </span><span class="si">$</span><span class="n">errorMessage</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// sessionId comes from YOUR backend.</span>
+<span class="w">    </span><span class="kd">fun</span><span class="w"> </span><span class="nf">pay</span><span class="p">(</span><span class="n">sessionId</span><span class="p">:</span><span class="w"> </span><span class="kt">String</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">appearance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OderoPaymentBottomSheetAppearance</span><span class="p">.</span><span class="na">default</span><span class="p">().</span><span class="na">copy</span><span class="p">(</span>
+<span class="w">            </span><span class="n">oderoPaymentDetailsPageAppearance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OderoPaymentDetailsPageAppearance</span><span class="p">(</span>
+<span class="w">                </span><span class="n">pageTitle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Pay securely&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="n">pageTitleColorHex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;#101828&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="n">bottomButtons_positiveButtonBgHex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;#199719&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="n">bottomButtons_rightButtonLabel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Pay now&quot;</span>
+<span class="w">            </span><span class="p">)</span>
+<span class="w">        </span><span class="p">)</span>
+
+<span class="w">        </span><span class="kd">val</span><span class="w"> </span><span class="nv">savedCards</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">listOf</span><span class="p">(</span>
+<span class="w">            </span><span class="n">SavedCardItem</span><span class="p">(</span>
+<span class="w">                </span><span class="n">cardToken</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;tok_…&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">cvv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="n">lastFourDigits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;8901&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="n">expirationMonth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;06&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">expirationYear</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;27&quot;</span>
+<span class="w">            </span><span class="p">)</span>
+<span class="w">        </span><span class="p">)</span>
+
+<span class="w">        </span><span class="n">sdk</span><span class="o">?.</span><span class="na">showPaymentSheet</span><span class="p">(</span><span class="n">sessionId</span><span class="p">,</span><span class="w"> </span><span class="n">appearance</span><span class="p">,</span><span class="w"> </span><span class="n">savedCards</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kd">fun</span><span class="w"> </span><span class="nf">dismiss</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">sdk</span><span class="o">?.</span><span class="na">closePaymentSheet</span><span class="p">()</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span></code></pre></div>
+
+<aside class="notice">
+    Use <code style="white-space: nowrap">OderoPaymentBottomSheetAppearance.default()</code>
+    for the default theme and <code style="white-space: nowrap">.copy(...)</code> to
+    override just the pages you care about. Don't force a Kotlin stdlib newer than
+    2.1.20 in your app. See <a href="#in-app-customization">Customizing the sheet</a>.
+</aside>

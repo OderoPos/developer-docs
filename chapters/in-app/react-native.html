@@ -1,0 +1,126 @@
+<p>
+    The React Native SDK is <code style="white-space: nowrap">react-native-oderopay</code>,
+    a pure-RN package. You wrap your app in
+    <code style="white-space: nowrap">&lt;OderoPayProvider&gt;</code>, call
+    <code style="white-space: nowrap">showPaymentSheet</code> from the
+    <code style="white-space: nowrap">useOderoPay()</code> hook, and read the result
+    from the same hook (or an event listener). The card flow is pure JavaScript plus
+    <code style="white-space: nowrap">react-native-webview</code>; Apple&nbsp;Pay /
+    Google&nbsp;Pay add an optional native wallet module.
+</p>
+
+<h3>Install</h3>
+<p>Add the package from Odero's Artifactory tarball, plus the
+    <code style="white-space: nowrap">react-native-webview</code> peer dependency:</p>
+<blockquote><p>package.json</p></blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;dependencies&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;react-native-oderopay&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://ro-artifactory.devtokeninc.com/artifactory/PublicLibraries/Odero/oderopaysdk/react-native-oderopay/1.0.0/react-native-oderopay-1.0.0.tgz&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;react-native-webview&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&gt;=13.0.0&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span></code></pre></div>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>yarn<span class="w"> </span>install
+<span class="nb">cd</span><span class="w"> </span>ios<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>pod<span class="w"> </span>install</code></pre></div>
+<p>Both native modules autolink, so there's no manual linking step. (If Odero serves the package
+    from an npm registry instead, install it by name:
+    <code style="white-space: nowrap">yarn add react-native-oderopay react-native-webview</code>.)</p>
+
+<h3>Project setup</h3>
+<p>The card flow needs no native configuration. For wallets:</p>
+<ul>
+    <li><strong>Apple&nbsp;Pay:</strong> add the Apple&nbsp;Pay capability + merchant id in Xcode, and upload your merchant certificate to Odero (see <a href="#in-app-merchant-setup">Merchant setup</a>). Pass the id as <code style="white-space: nowrap">applePayMerchantId</code>. Test on a real device.</li>
+    <li><strong>Google&nbsp;Pay:</strong> nothing to add manually. <code style="white-space: nowrap">play-services-wallet</code> and the wallet meta-data ship with the library, so just rebuild.</li>
+</ul>
+<p>The environment is chosen in JS via the
+    <code style="white-space: nowrap">environment</code> prop (default
+    <code style="white-space: nowrap">PROD</code>). When you enable wallets, build a
+    wallet adapter with the matching environment.</p>
+
+<h3>API</h3>
+<ul>
+    <li><code style="white-space: nowrap">&lt;OderoPayProvider environment defaultAppearance walletAdapter onPaymentEvent debug&gt;</code>: mount once near your app root.</li>
+    <li><code style="white-space: nowrap">useOderoPay()</code> &#8594; <code style="white-space: nowrap">{ showPaymentSheet, closePaymentSheet, status, referenceNumber, errorMessage, isPresented }</code>.</li>
+    <li><code style="white-space: nowrap">showPaymentSheet(sessionId, options?)</code> where <code style="white-space: nowrap">options</code> = <code style="white-space: nowrap">{ appearance?, savedCards?, applePayMerchantId?, environment?, onEvent? }</code>.</li>
+    <li><code style="white-space: nowrap">createNativeWalletAdapter({ environment })</code>: pass as <code style="white-space: nowrap">walletAdapter</code> to enable Apple&nbsp;Pay / Google&nbsp;Pay; without it the wallet buttons stay hidden.</li>
+</ul>
+
+<h3>Receiving the result</h3>
+<p>Outcomes are
+    <code style="white-space: nowrap">OderoPaymentEvent</code> objects:
+    <code style="white-space: nowrap">{ status, referenceNumber?, errorMessage? }</code>
+    with <code style="white-space: nowrap">status</code> one of
+    <code style="white-space: nowrap">idle</code> /
+    <code style="white-space: nowrap">processing</code> /
+    <code style="white-space: nowrap">success</code> /
+    <code style="white-space: nowrap">failure</code>. Read it from the
+    <code style="white-space: nowrap">useOderoPay()</code> hook (re-renders on
+    change), the provider's <code style="white-space: nowrap">onPaymentEvent</code>, or
+    a per-call <code style="white-space: nowrap">onEvent</code>.</p>
+
+<h3>Full example</h3>
+<blockquote><p>App.tsx: mount the provider once</p></blockquote>
+<div class="highlight"><pre class="highlight tsx tab-tsx"><code><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">OderoPayProvider</span><span class="p">,</span><span class="w"> </span><span class="nx">createNativeWalletAdapter</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;react-native-oderopay&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">CheckoutScreen</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;./CheckoutScreen&#39;</span><span class="p">;</span>
+
+<span class="c1">// Keep the wallet env in sync with the provider env (DEV =&gt; Google Pay TEST).</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">walletAdapter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">createNativeWalletAdapter</span><span class="p">({</span><span class="w"> </span><span class="nx">environment</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;DEV&#39;</span><span class="w"> </span><span class="p">});</span>
+
+<span class="c1">// environment: &#39;DEV&#39; or &#39;PROD&#39; (default). walletAdapter is optional - omit for card-only.</span>
+<span class="k">export</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">App</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="p">&lt;</span><span class="nt">OderoPayProvider</span>
+<span class="w">      </span><span class="na">environment</span><span class="o">=</span><span class="s">&quot;DEV&quot;</span>
+<span class="w">      </span><span class="na">walletAdapter</span><span class="o">=</span><span class="p">{</span><span class="nx">walletAdapter</span><span class="p">}</span>
+<span class="w">      </span><span class="na">onPaymentEvent</span><span class="o">=</span><span class="p">{(</span><span class="nx">e</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;[odero]&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">e</span><span class="p">.</span><span class="nx">status</span><span class="p">)}</span>
+<span class="w">    </span><span class="p">&gt;</span>
+<span class="w">      </span><span class="p">&lt;</span><span class="nt">CheckoutScreen</span><span class="w"> </span><span class="p">/&gt;</span>
+<span class="w">    </span><span class="p">&lt;/</span><span class="nt">OderoPayProvider</span><span class="p">&gt;</span>
+<span class="w">  </span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+
+<blockquote><p>CheckoutScreen.tsx: present the sheet for a server-created session</p></blockquote>
+<div class="highlight"><pre class="highlight tsx tab-tsx"><code><span class="k">import</span><span class="w"> </span><span class="nx">React</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">useEffect</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;react&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Alert</span><span class="p">,</span><span class="w"> </span><span class="nx">Button</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;react-native&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">useOderoPay</span><span class="p">,</span><span class="w"> </span><span class="kr">type</span><span class="w"> </span><span class="nx">OderoSavedCard</span><span class="p">,</span><span class="w"> </span><span class="kr">type</span><span class="w"> </span><span class="nx">OderoAppearance</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;react-native-oderopay&#39;</span><span class="p">;</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">savedCards</span><span class="o">:</span><span class="w"> </span><span class="kt">OderoSavedCard</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nx">cardToken</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;tok_…&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">cvv</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">lastFourDigits</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;8901&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">expirationMonth</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;06&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">expirationYear</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;2027&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="p">];</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">appearance</span><span class="o">:</span><span class="w"> </span><span class="kt">OderoAppearance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">oderoPaymentDetailsPageAppearance</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">pageTitle</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Checkout&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">bottomButtons_positiveButtonBgHex</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;#199719&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">bottomButtons_rightButtonLabel</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Continue&#39;</span><span class="p">,</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nx">oderoPaymentResultSuccessPageAppearance</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">successText</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;All done!&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="p">};</span>
+
+<span class="k">export</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">CheckoutScreen</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">showPaymentSheet</span><span class="p">,</span><span class="w"> </span><span class="nx">status</span><span class="p">,</span><span class="w"> </span><span class="nx">referenceNumber</span><span class="p">,</span><span class="w"> </span><span class="nx">errorMessage</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">useOderoPay</span><span class="p">();</span>
+
+<span class="w">  </span><span class="nx">useEffect</span><span class="p">(()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">status</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s1">&#39;success&#39;</span><span class="p">)</span><span class="w"> </span><span class="nx">Alert</span><span class="p">.</span><span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;Payment successful&#39;</span><span class="p">,</span><span class="w"> </span><span class="sb">`Ref: </span><span class="si">${</span><span class="nx">referenceNumber</span><span class="w"> </span><span class="o">??</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">status</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s1">&#39;failure&#39;</span><span class="p">)</span><span class="w"> </span><span class="nx">Alert</span><span class="p">.</span><span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;Payment error&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">errorMessage</span><span class="w"> </span><span class="o">??</span><span class="w"> </span><span class="s1">&#39;Payment failed&#39;</span><span class="p">);</span>
+<span class="w">  </span><span class="p">},</span><span class="w"> </span><span class="p">[</span><span class="nx">status</span><span class="p">]);</span>
+
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">pay</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">sessionId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">myBackend</span><span class="p">.</span><span class="nx">createCheckoutSession</span><span class="p">(</span><span class="cm">/* amount, products… */</span><span class="p">);</span>
+<span class="w">    </span><span class="nx">showPaymentSheet</span><span class="p">(</span><span class="nx">sessionId</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">appearance</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">savedCards</span><span class="p">,</span><span class="w">                                  </span><span class="c1">// optional one-tap cards</span>
+<span class="w">      </span><span class="nx">applePayMerchantId</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;merchant.com.yourapp&#39;</span><span class="p">,</span><span class="w">  </span><span class="c1">// optional (Apple Pay)</span>
+<span class="w">    </span><span class="p">});</span>
+<span class="w">  </span><span class="p">};</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">&lt;</span><span class="nt">Button</span><span class="w"> </span><span class="na">title</span><span class="o">=</span><span class="s">&quot;Pay&quot;</span><span class="w"> </span><span class="na">onPress</span><span class="o">=</span><span class="p">{</span><span class="nx">pay</span><span class="p">}</span><span class="w"> </span><span class="p">/&gt;;</span>
+<span class="p">}</span></code></pre></div>
+
+<aside class="notice">
+    There is also an imperative API
+    (<code style="white-space: nowrap">showPaymentSheet</code>,
+    <code style="white-space: nowrap">closePaymentSheet</code>,
+    <code style="white-space: nowrap">addPaymentEventListener</code>) exported from the
+    package root, drop-in compatible with the older native bridge, handy when you
+    pay from outside a React component.
+</aside>

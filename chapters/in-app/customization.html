@@ -1,0 +1,108 @@
+<p>
+    The payment sheet is fully themeable on all three platforms through the same
+    model: a <strong>bottom-sheet appearance</strong> made of one appearance object
+    <strong>per page</strong>. You override only the values you care about;
+    everything else falls back to the Odero default theme. The default palette is
+    led by Odero green (<code style="white-space: nowrap">#199719</code>) on white,
+    with DM&nbsp;Sans typography.
+</p>
+
+<h3>The seven pages</h3>
+<table>
+    <thead><tr><th>Appearance object</th><th>Page it themes</th></tr></thead>
+    <tbody>
+        <tr><td><code style="white-space: nowrap">oderoPaymentDetailsPageAppearance</code></td><td>The main card-entry page (largest surface)</td></tr>
+        <tr><td><code style="white-space: nowrap">oderoPaymentSummaryPageAppearance</code></td><td>Order summary before paying</td></tr>
+        <tr><td><code style="white-space: nowrap">oderoEnterCVCPageAppearance</code></td><td>CVC step for a selected saved card</td></tr>
+        <tr><td><code style="white-space: nowrap">oderoPayWithAnotherCardPageAppearance</code></td><td>New-card form when saved cards are shown</td></tr>
+        <tr><td><code style="white-space: nowrap">oderoPaymentProcessingPageAppearance</code></td><td>Processing / loading screen</td></tr>
+        <tr><td><code style="white-space: nowrap">oderoPaymentResultSuccessPageAppearance</code></td><td>Success result page</td></tr>
+        <tr><td><code style="white-space: nowrap">oderoPaymentResultFailurePageAppearance</code></td><td>Failure result page</td></tr>
+    </tbody>
+</table>
+
+<h3>Value conventions</h3>
+<p>Every styling value is a simple, serializable type, identical across iOS,
+    Android and React Native:</p>
+<ul>
+    <li><strong>Colours</strong>: hex strings, e.g. <code style="white-space: nowrap">"#199719"</code> (fields ending <code style="white-space: nowrap">ColorHex</code> / <code style="white-space: nowrap">Color</code> / <code style="white-space: nowrap">BgHex</code>).</li>
+    <li><strong>Fonts</strong>: a font-family name string. Built-in: <code style="white-space: nowrap">"DMSans-Regular"</code>, <code style="white-space: nowrap">"DMSans-Medium"</code>, <code style="white-space: nowrap">"DMSans-SemiBold"</code> (fields ending <code style="white-space: nowrap">FontName</code>).</li>
+    <li><strong>Sizes &amp; widths</strong>: numeric strings, e.g. <code style="white-space: nowrap">"18"</code> (fields ending <code style="white-space: nowrap">FontSize</code> / <code style="white-space: nowrap">Width</code>).</li>
+    <li><strong>Labels &amp; placeholders</strong>: plain strings (e.g. <code style="white-space: nowrap">pageTitle</code>, <code style="white-space: nowrap">bottomButtons_rightButtonLabel</code>).</li>
+    <li><strong>Toggles</strong>: booleans (e.g. <code style="white-space: nowrap">..._isEnabled</code>, <code style="white-space: nowrap">..._isSecureTextEntry</code>).</li>
+    <li><strong>Icons</strong>: base64-encoded image strings (fields ending <code style="white-space: nowrap">IconBase64</code> / <code style="white-space: nowrap">leftIcon</code> / <code style="white-space: nowrap">rightIcon</code>; empty = none).</li>
+</ul>
+
+<h3>What you can theme on the details page</h3>
+<p>The details page exposes the deepest set of knobs, grouped by section
+    (the same names appear on every platform):</p>
+<ul>
+    <li><strong>Page</strong>: <code style="white-space: nowrap">pageTitle</code>, <code style="white-space: nowrap">pageTitleFontName/FontSize/ColorHex</code>, <code style="white-space: nowrap">pageBackgroundColorHex</code>.</li>
+    <li><strong>Payment-method selector</strong>: <code style="white-space: nowrap">paymentMethodOrText</code>, <code style="white-space: nowrap">paymentMethodItem*</code> (border / background / text / selected states).</li>
+    <li><strong>Saved cards</strong>: <code style="white-space: nowrap">savedCardsTitleText</code>, card-item colours, show-more/less labels, <code style="white-space: nowrap">savedCardsAnotherCardText</code>.</li>
+    <li><strong>Card inputs</strong>: <code style="white-space: nowrap">cardInformation_*</code> for card number, expiry, security code and cardholder: placeholders, colours, fonts, per-field icons, and the CVC tooltip.</li>
+    <li><strong>Billing info</strong>: <code style="white-space: nowrap">billingInformation_*</code> for email, phone, country, city, address (enable + icons + styling).</li>
+    <li><strong>Save-card checkbox</strong>: <code style="white-space: nowrap">saveCardCheckboxTintColor</code>, <code style="white-space: nowrap">saveCardLabelText</code> + font/colour.</li>
+    <li><strong>Bottom buttons</strong>: <code style="white-space: nowrap">bottomButtons_leftButtonLabel</code>, <code style="white-space: nowrap">bottomButtons_rightButtonLabel</code>, positive/negative background + text colours + fonts.</li>
+</ul>
+
+<h3>How you pass it, per platform</h3>
+
+<p><strong>iOS</strong>: build
+    <code style="white-space: nowrap">OderoPaymentBottomSheetAppearance</code> with all
+    seven page objects (use a page's no-arg initializer for defaults), then set the
+    parameters you want:</p>
+<div class="highlight"><pre class="highlight swift tab-swift"><code><span class="kd">let</span><span class="w"> </span><span class="nv">appearance</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">OderoPaymentBottomSheetAppearance</span><span class="p">(</span>
+<span class="w">    </span><span class="n">oderoPaymentDetailsPageAppearance</span><span class="p">:</span><span class="w"> </span><span class="n">OderoPaymentDetailsPageAppearance</span><span class="p">(</span>
+<span class="w">        </span><span class="n">pageTitle</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Checkout&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="n">pageTitleColorHex</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;#0B3D2E&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="n">bottomButtons_positiveButtonBgHex</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;#0B7A4B&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="n">bottomButtons_rightButtonLabel</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Pay now&quot;</span>
+<span class="w">    </span><span class="p">),</span>
+<span class="w">    </span><span class="n">oderoPaymentProcessingPageAppearance</span><span class="p">:</span><span class="w"> </span><span class="n">OderoPaymentProcessingPageAppearance</span><span class="p">(),</span>
+<span class="w">    </span><span class="n">oderoPaymentResultSuccessPageAppearance</span><span class="p">:</span><span class="w"> </span><span class="n">OderoPaymentResultSuccessPageAppearance</span><span class="p">(),</span>
+<span class="w">    </span><span class="n">oderoPaymentResultFailurePageAppearance</span><span class="p">:</span><span class="w"> </span><span class="n">OderoPaymentResultFailurePageAppearance</span><span class="p">(),</span>
+<span class="w">    </span><span class="n">oderoPaymentSummaryPageAppearance</span><span class="p">:</span><span class="w"> </span><span class="n">OderoPaymentSummaryPageAppearance</span><span class="p">(),</span>
+<span class="w">    </span><span class="n">oderoPayWithAnotherCardPageAppearance</span><span class="p">:</span><span class="w"> </span><span class="n">OderoPayWithAnotherCardPageAppearance</span><span class="p">(),</span>
+<span class="w">    </span><span class="n">oderoEnterCVCPageAppearance</span><span class="p">:</span><span class="w"> </span><span class="n">OderoEnterCVCPageAppearance</span><span class="p">()</span>
+<span class="p">)</span></code></pre></div>
+
+<p><strong>Android</strong>: start from
+    <code style="white-space: nowrap">OderoPaymentBottomSheetAppearance.default()</code>
+    and <code style="white-space: nowrap">.copy(...)</code> the pages you want; each
+    page is a data class with defaulted, named parameters:</p>
+<div class="highlight"><pre class="highlight kotlin tab-kotlin"><code><span class="kd">val</span><span class="w"> </span><span class="nv">appearance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OderoPaymentBottomSheetAppearance</span><span class="p">.</span><span class="na">default</span><span class="p">().</span><span class="na">copy</span><span class="p">(</span>
+<span class="w">    </span><span class="n">oderoPaymentDetailsPageAppearance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OderoPaymentDetailsPageAppearance</span><span class="p">(</span>
+<span class="w">        </span><span class="n">pageTitle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Checkout&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="n">pageTitleColorHex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;#0B3D2E&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="n">bottomButtons_positiveButtonBgHex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;#0B7A4B&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="n">bottomButtons_rightButtonLabel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Pay now&quot;</span>
+<span class="w">    </span><span class="p">)</span>
+<span class="p">)</span></code></pre></div>
+
+<p><strong>React Native</strong>: pass a partial
+    <code style="white-space: nowrap">OderoAppearance</code> object; anything omitted
+    uses the default. Set it per call, or as
+    <code style="white-space: nowrap">defaultAppearance</code> on the provider:</p>
+<div class="highlight"><pre class="highlight tsx tab-tsx"><code><span class="kd">const</span><span class="w"> </span><span class="nx">appearance</span><span class="o">:</span><span class="w"> </span><span class="kt">OderoAppearance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">oderoPaymentDetailsPageAppearance</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">pageTitle</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Checkout&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">pageTitleColorHex</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;#0B3D2E&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">paymentMethodOrText</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;OR PAY WITH CARD&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">bottomButtons_positiveButtonBgHex</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;#0B7A4B&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">bottomButtons_rightButtonLabel</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Pay now&#39;</span><span class="p">,</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nx">oderoPaymentResultSuccessPageAppearance</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">successText</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;All done!&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">returnToAppButtonText</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Back to store&#39;</span><span class="p">,</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="p">};</span>
+
+<span class="nx">showPaymentSheet</span><span class="p">(</span><span class="nx">sessionId</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">appearance</span><span class="w"> </span><span class="p">});</span></code></pre></div>
+
+<aside class="notice">
+    The field names are identical across platforms, so a design spec maps 1:1 to
+    iOS, Android and React Native. Start by theming the
+    <code style="white-space: nowrap">details</code> and result pages (titles, primary
+    button colour, button labels). That covers most branding needs.
+</aside>
