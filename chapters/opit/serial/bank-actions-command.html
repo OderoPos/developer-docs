@@ -1,0 +1,73 @@
+<p>
+    The <strong>Bank action</strong> commands run a bank operation that does not move money: a report
+    or a receipt reprint. The ECR sends an <code>InitTransaction</code> message with one of the
+    message IDs below; the POS executes the operation through the OderoPOS bank module and returns
+    the result. The bank module prints the report or the receipt.
+</p>
+
+<p>
+    <strong>Note:</strong> These message IDs are an Odero extension. They are not part of the
+    Hypercom specification.
+</p>
+
+<table>
+    <thead>
+    <tr>
+        <th>MessageID</th>
+        <th>Operation</th>
+        <th>Data (12 ASCII digits)</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><code>LST</code></td>
+        <td>Last settlement (prints the last settlement report again)</td>
+        <td><code>000000000000</code></td>
+    </tr>
+    <tr>
+        <td><code>XRS</code></td>
+        <td>Simple X report (totals only)</td>
+        <td><code>000000000000</code></td>
+    </tr>
+    <tr>
+        <td><code>XRD</code></td>
+        <td>Detailed X report</td>
+        <td><code>000000000000</code></td>
+    </tr>
+    <tr>
+        <td><code>RPN</code></td>
+        <td>Reprint receipt by number</td>
+        <td>Receipt number, zero-padded on the left</td>
+    </tr>
+    <tr>
+        <td><code>RPL</code></td>
+        <td>Reprint last receipt</td>
+        <td><code>000000000000</code></td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="highlight"><pre class="highlight tab-json">
+<code>Format:  STX | &lt;MessageID&gt; | 10 | . | &lt;data&gt; | ETX | LRC
+
+Example (reprint receipt #11):
+  STX  R  P  N  1  0  .  0  0  0  0  0  0  0  0  0  0  1  1  ETX  LRC
+  02   52 50 4E 31 30 2E 30 30 30 30 30 30 30 30 30 30 31 31 03   60</code></pre></div>
+
+<p><strong>Message sequence</strong> (the same as Void):</p>
+<ol>
+    <li>ECR sends <code>InitTransaction (&lt;MessageID&gt; / type 10)</code>.</li>
+    <li>POS replies with <code>ACK (0x06)</code>.</li>
+    <li>POS sends <code>InitResponse (&lt;MessageID&gt; / type 11)</code>.</li>
+    <li>POS executes the operation via the OderoPOS bank module.</li>
+    <li>POS sends <code>AuthResult (&lt;MessageID&gt; / type 12)</code> with the outcome.</li>
+    <li>ECR replies with <code>AuthResponse (&lt;MessageID&gt; / type 13)</code>.</li>
+    <li>POS sends final <code>ACK (0x06)</code>.</li>
+</ol>
+
+<p><strong>AuthResult frame (POS → ECR):</strong></p>
+<p>
+    Same structure as the Sale <code>AuthResult</code> frame, with the bank action as the
+    <code>MessageID</code>. Response code <code>"00"</code> indicates success;
+    <code>"96"</code> indicates failure. The card, invoice and approval fields carry no data.
+</p>
